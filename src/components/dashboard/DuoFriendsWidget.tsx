@@ -1,15 +1,19 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useAuthStore } from "@/src/lib/store/useAuthStore";
 import { useFriendStore } from "@/src/lib/store/useFriendStore";
-import { Users, Flame, Zap, HelpCircle, UserPlus, Copy, Check, MessageSquare, BookOpen } from "lucide-react";
+import { Users, Flame, UserPlus, Copy, Check, MessageSquare, BookOpen, Send, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 
 export function DuoFriendsWidget() {
   const { currentUser, partnerUser } = useAuthStore();
-  const { friends, sendPoke, sendCheer } = useFriendStore();
+  const { friends, sendPoke, sendCheer, sendQuestionToFriend, toastMessage, clearToast } = useFriendStore();
+
+  const [questionModalFriend, setQuestionModalFriend] = useState<string | null>(null);
+  const [questionInput, setQuestionInput] = useState("");
 
   const displayFriends = partnerUser 
     ? [
@@ -37,15 +41,41 @@ export function DuoFriendsWidget() {
     });
   };
 
-  const [copied, setCopied] = React.useState(false);
+  const [copied, setCopied] = useState(false);
   const handleCopy = () => {
     navigator.clipboard.writeText(currentUser.friendCode || "");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleSendQuestionSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!questionModalFriend || !questionInput.trim()) return;
+
+    sendQuestionToFriend(questionModalFriend, questionInput);
+    setQuestionModalFriend(null);
+    setQuestionInput("");
+  };
+
   return (
-    <div className="rounded-3xl glass-panel p-5 border border-white/10 shadow-xl space-y-4">
+    <div className="rounded-3xl glass-panel p-5 border border-white/10 shadow-xl space-y-4 relative">
+      {/* Toast Banner for actions */}
+      <AnimatePresence>
+        {toastMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="absolute top-3 right-3 z-30 rounded-2xl bg-indigo-950/95 text-white border border-indigo-500/40 px-3.5 py-2 shadow-2xl flex items-center space-x-2 text-xs font-semibold backdrop-blur-xl"
+          >
+            <span>{toastMessage}</span>
+            <button onClick={clearToast} className="text-gray-400 hover:text-white ml-1">
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="flex items-center justify-between border-b border-white/10 pb-3">
         <div className="flex items-center space-x-2">
           <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-300">
@@ -53,10 +83,10 @@ export function DuoFriendsWidget() {
           </div>
           <div>
             <h3 className="font-display font-bold text-white text-sm sm:text-base">
-              Duo Çalışma Ortakların
+              Duo Çalışma Ortakların ({displayFriends.length})
             </h3>
             <p className="text-[11px] text-gray-400">
-              Arkadaşlarınla etkileşime geç, canlı durumlarını gör ve dürt!
+              Arkadaşlarınla etkileşime geç, durumlarını gör ve dürt!
             </p>
           </div>
         </div>
@@ -125,20 +155,20 @@ export function DuoFriendsWidget() {
                 <Link
                   href="/mistakes"
                   className="rounded-xl bg-indigo-500/15 hover:bg-indigo-500/30 text-indigo-300 border border-indigo-500/30 py-1.5 text-[10px] font-bold transition-all active:scale-95 flex items-center justify-center space-x-1 text-center"
-                  title="Yanlış Soru Kartları"
+                  title="Yanlış Soru Kartlarını İncele"
                 >
                   <BookOpen className="w-3 h-3" />
                   <span>Yanlışlar</span>
                 </Link>
 
-                <Link
-                  href="/shared-qa"
-                  className="rounded-xl bg-purple-500/15 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 py-1.5 text-[10px] font-bold transition-all active:scale-95 flex items-center justify-center space-x-1 text-center"
-                  title="Canlı Soru Gönder"
+                <button
+                  onClick={() => setQuestionModalFriend(friend.name)}
+                  className="rounded-xl bg-purple-500/15 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 py-1.5 text-[10px] font-bold transition-all active:scale-95 flex items-center justify-center space-x-1"
+                  title="Arkadaşına Özel Soru Gönder"
                 >
                   <MessageSquare className="w-3 h-3" />
                   <span>Soru At</span>
-                </Link>
+                </button>
               </div>
             </div>
           ))}
@@ -148,7 +178,7 @@ export function DuoFriendsWidget() {
           <div>
             <p className="text-xs font-bold text-white">Henüz ekli çalışma arkadaşın yok!</p>
             <p className="text-[11px] text-gray-400 mt-0.5">
-              Arkadaş kodunu paylaş veya bir kod ekle, birlikte ders çalış ve birbirinizin yanlış kartlarını inceleyin!
+              Yukarıdaki 'Yönet' butonuna tıkla, bir arkadaş kodu gir, arkadaşın anında eklensin ve birlikte çalışın!
             </p>
           </div>
           <div className="flex items-center space-x-2 flex-shrink-0">
@@ -165,6 +195,63 @@ export function DuoFriendsWidget() {
           </div>
         </div>
       )}
+
+      {/* QUICK SEND QUESTION MODAL */}
+      <AnimatePresence>
+        {questionModalFriend && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="w-full max-w-md rounded-3xl glass-panel p-6 border border-white/20 shadow-2xl space-y-4"
+            >
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                <h4 className="font-display text-sm font-bold text-white">
+                  {questionModalFriend} Kullanıcısına Soru Gönder 📩
+                </h4>
+                <button
+                  onClick={() => setQuestionModalFriend(null)}
+                  className="rounded-xl glass-card p-1 text-gray-400 hover:text-white"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <form onSubmit={handleSendQuestionSubmit} className="space-y-3">
+                <div>
+                  <label className="block text-xs text-gray-300 mb-1">Sorunuz veya Mesajınız:</label>
+                  <textarea
+                    rows={3}
+                    required
+                    placeholder="Örn: Tarih 1921 Anayasası sorusuna bakabilir misin?"
+                    value={questionInput}
+                    onChange={(e) => setQuestionInput(e.target.value)}
+                    className="w-full rounded-xl bg-gray-900/90 p-3 text-xs text-white placeholder-gray-500 border border-white/10 focus:border-indigo-500 focus:outline-none"
+                  />
+                </div>
+
+                <div className="flex justify-end space-x-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => setQuestionModalFriend(null)}
+                    className="rounded-xl glass-card px-3.5 py-2 text-xs font-medium text-gray-300"
+                  >
+                    İptal
+                  </button>
+                  <button
+                    type="submit"
+                    className="rounded-xl glass-button px-4 py-2 text-xs font-bold text-white shadow-lg flex items-center space-x-1.5"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    <span>Gönder</span>
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

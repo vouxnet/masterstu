@@ -20,21 +20,36 @@ export interface FriendRequest {
   createdAt: string;
 }
 
+export interface AppNotification {
+  id: string;
+  type: "friend_add" | "poke" | "cheer" | "question";
+  senderName: string;
+  message: string;
+  createdAt: string;
+  read: boolean;
+}
+
 interface FriendState {
   friends: FriendUser[];
-  pendingRequests: FriendRequest[]; // Incoming requests
-  sentRequests: FriendRequest[];    // Outgoing requests
+  pendingRequests: FriendRequest[];
+  sentRequests: FriendRequest[];
+  notifications: AppNotification[];
+  toastMessage: string | null;
   notification: string | null;
 
   // Actions
   sendFriendRequest: (code: string) => boolean;
-  cancelSentRequest: (id: string) => void;
   acceptFriendRequest: (id: string) => void;
   rejectFriendRequest: (id: string) => void;
+  cancelSentRequest: (id: string) => void;
   removeFriend: (id: string) => void;
   sendPoke: (friendName: string) => void;
   sendCheer: (friendName: string) => void;
+  sendQuestionToFriend: (friendName: string, text: string) => void;
+  markNotificationsRead: () => void;
+  clearNotifications: () => void;
   clearNotification: () => void;
+  clearToast: () => void;
   resetFriends: () => void;
 }
 
@@ -44,102 +59,153 @@ export const useFriendStore = create<FriendState>()(
       friends: [],
       pendingRequests: [],
       sentRequests: [],
+      notifications: [
+        {
+          id: "notif-init-1",
+          type: "friend_add",
+          senderName: "Sistem",
+          message: "👋 Asimptot Duo sistemine hoş geldin! Kendi kodunu kopyalayıp arkadaş ekleyebilirsin.",
+          createdAt: "Şimdi",
+          read: false,
+        }
+      ],
+      toastMessage: null,
       notification: null,
 
       sendFriendRequest: (code: string) => {
         const cleanCode = code.trim().toUpperCase();
         if (!cleanCode) return false;
 
+        const formattedCode = cleanCode.startsWith("#") ? cleanCode : `#${cleanCode}`;
+
         // Check if already a friend
-        const exists = get().friends.some((f) => f.friendCode.toUpperCase() === cleanCode);
+        const exists = get().friends.some((f) => f.friendCode.toUpperCase() === formattedCode);
         if (exists) {
-          set({ notification: "⚠️ Bu kullanıcı zaten arkadaş listenizde ekli!" });
+          set({ toastMessage: "⚠️ Bu kullanıcı zaten arkadaş listenizde ekli!", notification: "⚠️ Bu kullanıcı zaten arkadaş listenizde ekli!" });
           return false;
         }
 
-        // Check if already sent
-        const alreadySent = get().sentRequests.some((r) => r.senderCode.toUpperCase() === cleanCode);
-        if (alreadySent) {
-          set({ notification: "⏳ Bu kullanıcıya zaten istek gönderdiniz. Yanıt bekleniyor." });
-          return false;
-        }
+        const friendName = formattedCode.replace('#', '') || "Çalışma Arkadaşı";
 
-        // Add to sentRequests (Outgoing)
-        const newRequest: FriendRequest = {
-          id: `sent-${Date.now()}`,
-          senderName: cleanCode.replace('#', ''),
-          senderCode: cleanCode,
-          senderAvatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
-          createdAt: new Date().toLocaleDateString("tr-TR"),
+        const newFriend: FriendUser = {
+          id: `friend-${Date.now()}`,
+          name: friendName,
+          friendCode: formattedCode,
+          roleLabel: "ÖSYM Önlisans Adayı",
+          avatarUrl: `https://api.dicebear.com/7.x/avataaars/svg?seed=${friendName}`,
+          statusText: "Canlı Ders Çalışıyor ⏳",
+          isOnline: true,
+          streakCount: Math.floor(Math.random() * 8) + 1,
+        };
+
+        const newNotification: AppNotification = {
+          id: `notif-${Date.now()}`,
+          type: "friend_add",
+          senderName: friendName,
+          message: `🎉 ${formattedCode} kodlu ${friendName} arkadaş listenize eklendi!`,
+          createdAt: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+          read: false,
         };
 
         set((state) => ({
-          sentRequests: [...state.sentRequests, newRequest],
-          notification: `✅ ${cleanCode} kodlu kullanıcıya arkadaşlık daveti gönderildi! Kabul etmesi bekleniyor.`,
+          friends: [newFriend, ...state.friends],
+          notifications: [newNotification, ...state.notifications],
+          toastMessage: `🎉 ${formattedCode} kodlu ${friendName} arkadaşınız eklendi!`,
+          notification: `🎉 ${formattedCode} kodlu ${friendName} arkadaşınız eklendi!`,
         }));
         return true;
       },
 
-      cancelSentRequest: (id: string) => {
-        set((state) => ({
-          sentRequests: state.sentRequests.filter((r) => r.id !== id),
-          notification: "İstek iptal edildi.",
-        }));
-      },
-
       acceptFriendRequest: (id: string) => {
-        const req = get().pendingRequests.find((r) => r.id === id);
-        if (!req) return;
-
-        const newFriend: FriendUser = {
-          id: `friend-${Date.now()}`,
-          name: req.senderName,
-          friendCode: req.senderCode,
-          roleLabel: "ÖSYM Adayı",
-          avatarUrl: req.senderAvatar,
-          statusText: "Yeni eklendi 🎉",
-          isOnline: true,
-          streakCount: 1,
-        };
-
         set((state) => ({
-          friends: [...state.friends, newFriend],
           pendingRequests: state.pendingRequests.filter((r) => r.id !== id),
-          notification: `🎉 ${req.senderName} arkadaş olarak eklendi!`,
         }));
       },
 
       rejectFriendRequest: (id: string) => {
         set((state) => ({
           pendingRequests: state.pendingRequests.filter((r) => r.id !== id),
-          notification: "Gelen istek reddedildi.",
+        }));
+      },
+
+      cancelSentRequest: (id: string) => {
+        set((state) => ({
+          sentRequests: state.sentRequests.filter((r) => r.id !== id),
         }));
       },
 
       removeFriend: (id: string) => {
         set((state) => ({
           friends: state.friends.filter((f) => f.id !== id),
+          toastMessage: "Arkadaş listeden çıkarıldı.",
           notification: "Arkadaş listeden çıkarıldı.",
         }));
       },
 
       sendPoke: (friendName: string) => {
-        set({
-          notification: `👉 ${friendName} kullanıcısına ders hatırlatma "Dürt" gönderildi!`,
-        });
+        const newNotif: AppNotification = {
+          id: `notif-poke-${Date.now()}`,
+          type: "poke",
+          senderName: friendName,
+          message: `👉 ${friendName} size ders hatırlatması gönderdi: "Hadi ders başına!"`,
+          createdAt: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+          read: false,
+        };
+
+        set((state) => ({
+          notifications: [newNotif, ...state.notifications],
+          toastMessage: `👉 ${friendName} kişisine "Dürt" bildirimi gönderildi!`,
+          notification: `👉 ${friendName} kişisine "Dürt" bildirimi gönderildi!`,
+        }));
       },
 
       sendCheer: (friendName: string) => {
-        set({
-          notification: `🎉 ${friendName} tebrik edildi! Konfeti patlatıldı!`,
-        });
+        const newNotif: AppNotification = {
+          id: `notif-cheer-${Date.now()}`,
+          type: "cheer",
+          senderName: friendName,
+          message: `🎉 ${friendName} başarınızı tebrik etti! (+10 XP)`,
+          createdAt: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+          read: false,
+        };
+
+        set((state) => ({
+          notifications: [newNotif, ...state.notifications],
+          toastMessage: `🎉 ${friendName} tebrik edildi! Bildirim gönderildi.`,
+          notification: `🎉 ${friendName} tebrik edildi! Bildirim gönderildi.`,
+        }));
       },
 
+      sendQuestionToFriend: (friendName: string, text: string) => {
+        const newNotif: AppNotification = {
+          id: `notif-q-${Date.now()}`,
+          type: "question",
+          senderName: friendName,
+          message: `📩 ${friendName} size bir soru gönderdi: "${text}"`,
+          createdAt: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+          read: false,
+        };
+
+        set((state) => ({
+          notifications: [newNotif, ...state.notifications],
+          toastMessage: `📩 ${friendName} kullanıcısına soru bildirimi iletildi!`,
+          notification: `📩 ${friendName} kullanıcısına soru bildirimi iletildi!`,
+        }));
+      },
+
+      markNotificationsRead: () => {
+        set((state) => ({
+          notifications: state.notifications.map((n) => ({ ...n, read: true })),
+        }));
+      },
+
+      clearNotifications: () => set({ notifications: [] }),
       clearNotification: () => set({ notification: null }),
-      resetFriends: () => set({ friends: [], pendingRequests: [], sentRequests: [], notification: null }),
+      clearToast: () => set({ toastMessage: null }),
+      resetFriends: () => set({ friends: [], pendingRequests: [], sentRequests: [], notifications: [], toastMessage: null, notification: null }),
     }),
     {
-      name: "asimptot_friends_v3",
+      name: "asimptot_friends_real_v5",
     }
   )
 );

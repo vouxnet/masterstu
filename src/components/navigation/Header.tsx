@@ -1,21 +1,35 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore, EXAM_METADATA, ExamType } from "@/src/lib/store/useAuthStore";
 import { useStudyLogStore } from "@/src/lib/store/useStudyLogStore";
 import { useLeagueStore, LEAGUE_CONFIG } from "@/src/lib/store/useLeagueStore";
-import { GraduationCap, Flame, Plus, LogOut, User } from "lucide-react";
+import { useFriendStore } from "@/src/lib/store/useFriendStore";
+import { GraduationCap, Flame, Plus, LogOut, Bell, Check, Trash2, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const Header: React.FC = () => {
   const router = useRouter();
-  const { currentUser, duoStreak, setActiveExam } = useAuthStore();
+  const { currentUser, setActiveExam } = useAuthStore();
   const streak = useStudyLogStore((state) => state.getStreakCount());
   const { currentTier } = useLeagueStore();
+  const { notifications, markNotificationsRead, clearNotifications } = useFriendStore();
+
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
 
   const selectedExams: ExamType[] = currentUser.selectedExams || ["kpss_lisans"];
   const activeExam: ExamType = currentUser.activeExam || "kpss_lisans";
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
+  const handleToggleNotif = () => {
+    setIsNotifOpen(!isNotifOpen);
+    if (!isNotifOpen && unreadCount > 0) {
+      markNotificationsRead();
+    }
+  };
 
   const handleLogout = async () => {
     await useAuthStore.getState().signOut();
@@ -80,7 +94,7 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Center Duo Streak Badge */}
-      <div className="hidden md:flex items-center space-x-2 rounded-2xl glass-card px-4 py-2 border border-amber-500/30 shadow-lg">
+      <div className="hidden lg:flex items-center space-x-2 rounded-2xl glass-card px-4 py-2 border border-amber-500/30 shadow-lg">
         <Flame className="h-5 w-5 text-amber-400 animate-pulse" />
         <div>
           <span className="text-xs font-bold text-amber-300">
@@ -95,8 +109,80 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Active User Card & Logout Button */}
+      {/* Right Controls: Notification Bell + User Profile + Logout */}
       <div className="flex items-center space-x-3">
+        {/* Notification Bell Dropdown */}
+        <div className="relative">
+          <button
+            onClick={handleToggleNotif}
+            className="relative rounded-2xl glass-card p-2.5 text-gray-300 hover:text-white border border-white/10 transition-transform active:scale-95"
+            title="Bildirimler"
+          >
+            <Bell className="h-5 w-5" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white shadow-md animate-pulse">
+                {unreadCount}
+              </span>
+            )}
+          </button>
+
+          {/* Notifications Modal Dropdown */}
+          <AnimatePresence>
+            {isNotifOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                className="absolute right-0 mt-3 w-80 sm:w-96 rounded-3xl glass-panel p-4 border border-white/20 shadow-2xl z-50 space-y-3"
+              >
+                <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
+                  <div className="flex items-center space-x-2">
+                    <Bell className="h-4 w-4 text-indigo-400" />
+                    <h3 className="font-display font-bold text-white text-xs">
+                      Bildirim Kutusu ({notifications.length})
+                    </h3>
+                  </div>
+                  {notifications.length > 0 && (
+                    <button
+                      onClick={clearNotifications}
+                      className="text-[10px] font-semibold text-rose-400 hover:text-rose-300 flex items-center space-x-1"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                      <span>Temizle</span>
+                    </button>
+                  )}
+                </div>
+
+                <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
+                  {notifications.length > 0 ? (
+                    notifications.map((n) => (
+                      <div
+                        key={n.id}
+                        className={`p-3 rounded-2xl border text-xs space-y-1 transition-all ${
+                          !n.read
+                            ? "bg-indigo-950/60 border-indigo-500/40"
+                            : "bg-black/30 border-white/5 opacity-80"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between text-[10px] text-gray-400 font-medium">
+                          <span className="font-bold text-indigo-300">{n.senderName}</span>
+                          <span>{n.createdAt}</span>
+                        </div>
+                        <p className="text-gray-200 font-medium">{n.message}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-xs text-gray-400 py-6 text-center">
+                      Henüz bildirim bulunmuyor.
+                    </p>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* User Card */}
         <div className="flex items-center space-x-2.5 glass-card px-3 py-1.5 rounded-2xl border border-white/10">
           <img
             src={currentUser.avatarUrl}
