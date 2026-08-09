@@ -1,6 +1,36 @@
+import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
+  let supabaseResponse = NextResponse.next({
+    request,
+  });
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet: { name: string; value: string; options?: Record<string, unknown> }[]) {
+          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value));
+          supabaseResponse = NextResponse.next({
+            request,
+          });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options)
+          );
+        },
+      },
+    }
+  );
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const { pathname } = request.nextUrl;
 
   // Protected routes list
@@ -17,14 +47,15 @@ export function middleware(request: NextRequest) {
     (route) => pathname === route || (route !== "/" && pathname.startsWith(route))
   );
 
-  // Check auth cookie / demo session cookie
+  // Check demo session cookie fallback
   const authCookie = request.cookies.get("kpss_session");
-  const isAuthenticated = Boolean(authCookie?.value);
+  const isDemoAuthenticated = Boolean(authCookie?.value);
+  const isAuthenticated = !!user || isDemoAuthenticated;
 
   // If user is trying to access protected route without being authenticated
   if (isProtectedRoute && !isAuthenticated) {
-    // In local development / preview mode, if cookie is not set yet, we allow demo access with session set
     if (process.env.NODE_ENV === "development") {
+      // In local development / preview mode, if cookie is not set yet, we allow demo access with session set
       const response = NextResponse.next();
       response.cookies.set("kpss_session", "demo-active-session", { path: "/" });
       return response;
@@ -42,7 +73,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  return NextResponse.next();
+  return supabaseResponse;
 }
 
 export const config = {

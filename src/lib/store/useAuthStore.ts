@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { createClient } from "@/src/lib/supabase/client";
+import type { User } from "@supabase/supabase-js";
 
 export type ExamType = "kpss_lisans" | "kpss_onlisans" | "kpss_ortaogretim" | "yds" | "ales" | "yks_tyt" | "yks_ayt";
 
@@ -124,6 +126,10 @@ interface AuthState {
   notificationMessage: string | null;
   isQuickActionOpen: boolean;
   
+  // New auth state
+  authMode: 'demo' | 'supabase';
+  supabaseUser: User | null;
+
   // Actions
   switchUserRole: (role: "lisans_alan" | "onlisans") => void;
   setSelectedExams: (exams: ExamType[]) => void;
@@ -137,6 +143,13 @@ interface AuthState {
   setQuickActionOpen: (open: boolean) => void;
   clearNotification: () => void;
   updateUserProfile: (name: string, email: string, avatarUrl: string) => void;
+  
+  // Supabase Actions
+  setAuthMode: (mode: 'demo' | 'supabase') => void;
+  signUpWithEmail: (email: string, password: string, name: string) => Promise<{error: string | null}>;
+  signInWithEmail: (email: string, password: string) => Promise<{error: string | null}>;
+  signOut: () => Promise<void>;
+  initAuth: () => Promise<void>;
 }
 
 const defaultUser1: UserProfile = {
@@ -179,6 +192,8 @@ export const useAuthStore = create<AuthState>()(
       duoStreak: 14,
       notificationMessage: null,
       isQuickActionOpen: false,
+      authMode: 'demo',
+      supabaseUser: null,
 
       sharedQuestions: [
         {
@@ -304,6 +319,115 @@ export const useAuthStore = create<AuthState>()(
           },
           notificationMessage: "✅ Profil bilgileriniz başarıyla güncellendi!",
         }));
+      },
+
+      setAuthMode: (mode) => set({ authMode: mode }),
+
+      signUpWithEmail: async (email, password, name) => {
+        const supabase = createClient();
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              name,
+            },
+          },
+        });
+        if (error) return { error: error.message };
+        
+        if (data.user) {
+          set({ 
+            authMode: 'supabase',
+            supabaseUser: data.user,
+            currentUser: {
+              ...defaultUser1,
+              id: data.user.id,
+              name: data.user.user_metadata?.name || name,
+              email: data.user.email || email,
+              roleLabel: `${data.user.user_metadata?.name || name} (Lisans + Alan)`,
+            }
+          });
+        }
+        return { error: null };
+      },
+
+      signInWithEmail: async (email, password) => {
+        const supabase = createClient();
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) return { error: error.message };
+        
+        if (data.user) {
+          set({ 
+            authMode: 'supabase',
+            supabaseUser: data.user,
+            currentUser: {
+              ...defaultUser1,
+              id: data.user.id,
+              name: data.user.user_metadata?.name || email.split('@')[0],
+              email: data.user.email || email,
+              roleLabel: `${data.user.user_metadata?.name || email.split('@')[0]} (Lisans + Alan)`,
+            }
+          });
+        }
+        return { error: null };
+      },
+
+      signOut: async () => {
+        const supabase = createClient();
+        await supabase.auth.signOut();
+        set({ 
+          authMode: 'demo',
+          supabaseUser: null,
+          currentUser: defaultUser1
+        });
+      },
+
+      initAuth: async () => {
+        const supabase = createClient();
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session?.user) {
+          set({
+            authMode: 'supabase',
+            supabaseUser: session.user,
+            currentUser: {
+              ...defaultUser1,
+              id: session.user.id,
+              name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || "User",
+              email: session.user.email || "",
+              roleLabel: `${session.user.user_metadata?.name || session.user.email?.split('@')[0] || "User"} (Lisans + Alan)`,
+            }
+          });
+        } else {
+          // If no session and we are not in demo mode, maybe switch to demo mode
+          // But we preserve whatever demo user was set before if we are in demo mode
+          const currentMode = get().authMode;
+          if (currentMode === 'supabase') {
+            set({ authMode: 'demo', supabaseUser: null });
+          }
+        }
+        
+        // Subscribe to auth changes
+        supabase.auth.onAuthStateChange((_event, session) => {
+          if (session?.user) {
+            set({
+              authMode: 'supabase',
+              supabaseUser: session.user,
+              currentUser: {
+                ...get().currentUser,
+                id: session.user.id,
+                email: session.user.email || "",
+                name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || "User",
+              }
+            });
+          } else {
+            set({ authMode: 'demo', supabaseUser: null });
+          }
+        });
       },
     }),
     {
