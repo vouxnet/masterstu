@@ -28,6 +28,7 @@ export interface CommentItem {
 export interface MistakeItem {
   id: string;
   userRole: "lisans_alan" | "onlisans";
+  examType?: string;
   subject: string;
   topic: string;
   reasonTag: "🧠 Bilgi Eksikliği" | "📐 İşlem Hatası" | "⚡ Dikkat Hatası" | "⏱️ Süre Yetişmedi";
@@ -122,6 +123,7 @@ export default function MistakesPage() {
     const newItem: MistakeItem = {
       id: "m-" + Date.now(),
       userRole: currentUser.role,
+      examType: activeExam,
       subject,
       topic,
       reasonTag,
@@ -201,7 +203,7 @@ export default function MistakesPage() {
     return <div className="p-8 text-center text-gray-400">Yükleniyor...</div>;
   }
 
-  const userMistakes = mistakes;
+  const userMistakes = mistakes.filter(m => !m.examType || m.examType === activeExam || courses.includes(m.subject));
 
   return (
     <div className="space-y-6">

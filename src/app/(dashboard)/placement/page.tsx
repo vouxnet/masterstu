@@ -13,8 +13,10 @@ import {
 } from "lucide-react";
 import { placementTargets } from "@/src/lib/data/placementData";
 import { useExamHistoryStore } from "@/src/lib/store/useExamHistoryStore";
+import { useAuthStore } from "@/src/lib/store/useAuthStore";
 
 export default function PlacementPage() {
+  const { currentUser } = useAuthStore();
   const { results } = useExamHistoryStore();
   
   // Calculate current net based on the last exam
@@ -36,11 +38,12 @@ export default function PlacementPage() {
   const displayNet = customNet ? parseFloat(customNet) || currentNet : currentNet;
 
   const filteredTargets = placementTargets.filter(target => {
+    const matchesExam = target.examType === (currentUser.activeExam || "kpss_lisans");
     const matchesSearch = target.institution.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           target.position.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = filterCategory === "all" || target.category === filterCategory;
     const matchesDifficulty = filterDifficulty === "all" || target.difficulty === filterDifficulty;
-    return matchesSearch && matchesCategory && matchesDifficulty;
+    return matchesExam && matchesSearch && matchesCategory && matchesDifficulty;
   });
 
   // Sort by gap to user's net (closest first)

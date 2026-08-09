@@ -157,12 +157,12 @@ const guestUser: UserProfile = {
   id: '',
   name: 'Misafir',
   email: '',
-  friendCode: '',
+  friendCode: '#ADAY2026',
   role: 'lisans_alan' as const,
   roleLabel: 'KPSS Lisans',
   selectedExams: ['kpss_lisans'],
   activeExam: 'kpss_lisans',
-  avatarUrl: '',
+  avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Misafir',
   dailyQuestionTarget: 100,
   completedQuestionsToday: 0,
   completedTopicsToday: 0,
@@ -184,6 +184,7 @@ function buildProfileFromUser(user: User, existing: UserProfile, fallbackName?: 
   const label = EXAM_METADATA[activeExam]?.shortLabel || 'KPSS';
   const roleLabel = `${name} (${label})`;
   const friendCode = meta.friendCode || existing.friendCode || `#${name.toUpperCase().replace(/[^A-Z0-9]/g, '') || 'ADAY'}2026`;
+  const avatarUrl = meta.avatar_url || existing.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}`;
 
   return {
     ...guestUser,
@@ -192,6 +193,7 @@ function buildProfileFromUser(user: User, existing: UserProfile, fallbackName?: 
     name,
     email: user.email || existing.email || "",
     friendCode,
+    avatarUrl,
     role: role as any,
     roleLabel,
     selectedExams,

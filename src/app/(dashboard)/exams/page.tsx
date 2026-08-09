@@ -35,7 +35,7 @@ export default function ExamsPage() {
   // P3 (Lisans): 40 + (GY_Net * 0.5) + (GK_Net * 0.45)
   // P93 (Önlisans): 38 + (GY_Net * 0.52) + (GK_Net * 0.48)
   // P37/P48 (A Grubu Alan): 30 + (GY_Net * 0.2) + (GK_Net * 0.2) + (Alan_Net * 0.6)
-  const isLisans = currentUser.role === "lisans_alan";
+  const isLisans = currentUser.activeExam === "kpss_lisans";
 
   const p3Estimated = (40 + gyNet * 0.5 + gkNet * 0.45).toFixed(2);
   const p93Estimated = (38 + gyNet * 0.52 + gkNet * 0.48).toFixed(2);

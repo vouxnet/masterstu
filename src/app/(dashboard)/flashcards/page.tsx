@@ -105,9 +105,14 @@ export default function FlashcardsPage() {
   const opacityLeft = useTransform(x, [-150, -20], [1, 0]);
   const opacityRight = useTransform(x, [20, 150], [0, 1]);
 
-  const subjectsLisans = ["Tüm Dersler", "Hukuk", "İktisat", "Maliye", "Uluslararası İlişkiler"];
-  const subjectsOnlisans = ["Tüm Dersler", "Türkçe", "Matematik", "Tarih", "Coğrafya", "Vatandaşlık"];
-  const subjects = targetRole === "lisans_alan" ? subjectsLisans : subjectsOnlisans;
+  const subjectsMap: Record<string, string[]> = {
+    kpss_lisans: ["Tüm Dersler", "Hukuk", "İktisat", "Maliye", "Uluslararası İlişkiler", "Türkçe", "Matematik", "Tarih", "Coğrafya", "Vatandaşlık"],
+    kpss_onlisans: ["Tüm Dersler", "Türkçe", "Matematik", "Tarih", "Coğrafya", "Vatandaşlık"],
+    kpss_ortaogretim: ["Tüm Dersler", "Türkçe", "Matematik", "Tarih"],
+    yds: ["Tüm Dersler", "Vocabulary", "Grammar", "Reading"],
+    ales: ["Tüm Dersler", "Sayısal", "Sözel"],
+  };
+  const subjects = subjectsMap[activeExam] || subjectsMap.kpss_lisans;
 
   // Filter deck by course
   const currentDeck = selectedSubject === "Tüm Dersler"
