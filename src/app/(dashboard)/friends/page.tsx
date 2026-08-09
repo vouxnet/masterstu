@@ -44,7 +44,7 @@ export default function FriendsPage() {
   }, []);
 
   const handleCopyCode = () => {
-    navigator.clipboard.writeText(currentUser.friendCode || "#BULENT2026");
+    navigator.clipboard.writeText(currentUser.friendCode || "");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -66,7 +66,7 @@ export default function FriendsPage() {
     });
   };
 
-  const partnerAsFriend: FriendUser = {
+  const partnerAsFriend: FriendUser | null = partnerUser ? {
     id: partnerUser.id,
     name: partnerUser.name,
     friendCode: partnerUser.friendCode,
@@ -75,11 +75,11 @@ export default function FriendsPage() {
     statusText: "Ders Çalışmaya Hazır ⏳",
     isOnline: true,
     streakCount: partnerUser.streakCount || 14
-  };
+  } : null;
 
   const displayFriends = [
-    partnerAsFriend,
-    ...friends.filter(f => f.name !== currentUser.name && f.name !== partnerUser.name)
+    ...(partnerAsFriend ? [partnerAsFriend] : []),
+    ...friends.filter(f => f.name !== currentUser.name && f.name !== partnerUser?.name)
   ];
 
   if (!isClient) {
@@ -135,7 +135,7 @@ export default function FriendsPage() {
           </span>
           <div className="flex items-center space-x-2">
             <span className="font-display text-lg font-bold text-white bg-white/5 px-3 py-1 rounded-xl">
-              {currentUser.friendCode || "#BULENT2026"}
+              {currentUser.friendCode || ""}
             </span>
             <button
               onClick={handleCopyCode}
@@ -161,7 +161,7 @@ export default function FriendsPage() {
               <input
                 type="text"
                 required
-                placeholder="Örn: #SENA2026"
+                placeholder="Örn: #ABC1234"
                 value={inputCode}
                 onChange={(e) => setInputCode(e.target.value)}
                 className="w-full rounded-2xl bg-gray-900/90 pl-9 pr-4 py-2.5 text-xs text-white placeholder-gray-500 border border-white/10 focus:border-indigo-500 focus:outline-none"

@@ -1,4 +1,4 @@
-export interface QuestionDistRow {
+﻿export interface QuestionDistRow {
   topic: string;
   y2016: number;
   y2018: number;
@@ -9,7 +9,7 @@ export interface QuestionDistRow {
   importance: "Yüksek" | "Orta" | "Standart";
 }
 
-export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
+export const kpssLisansDistributionData: Record<string, QuestionDistRow[]> = {
   "Türkçe": [
     {
       "topic": "Sözcükte Anlam",
@@ -42,7 +42,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Orta"
     },
     {
-      "topic": "Sözcükte Yapı",
+      "topic": "Sözcükte YapÄ±",
       "y2016": 3,
       "y2018": 2,
       "y2020": 1,
@@ -52,7 +52,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Orta"
     },
     {
-      "topic": "Cümlenin Ögeleri",
+      "topic": "Cümlenin İ–geleri",
       "y2016": 1,
       "y2018": 0,
       "y2020": 1,
@@ -72,7 +72,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Dil Bilgisi Ses Olayları",
+      "topic": "Dil Bilgisi Ses OlaylarÄ±",
       "y2016": 1,
       "y2018": 1,
       "y2020": 1,
@@ -82,7 +82,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Yazım Kuralları",
+      "topic": "YazÄ±m KurallarÄ±",
       "y2016": 1,
       "y2018": 1,
       "y2020": 1,
@@ -92,7 +92,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Noktalama İşaretleri",
+      "topic": "Noktalama Ä°şŸaretleri",
       "y2016": 1,
       "y2018": 1,
       "y2020": 1,
@@ -102,7 +102,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Anlatım Bozuklukları",
+      "topic": "AnlatÄ±m BozukluklarÄ±",
       "y2016": 0,
       "y2018": 1,
       "y2020": 1,
@@ -122,7 +122,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     },
     {
-      "topic": "Paragrafta Anlatım Biçim",
+      "topic": "Paragrafta AnlatÄ±m Biçim",
       "y2016": 1,
       "y2018": 1,
       "y2020": 1,
@@ -132,7 +132,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Sözel Mantık",
+      "topic": "Sözel MantÄ±k",
       "y2016": 4,
       "y2018": 4,
       "y2020": 4,
@@ -154,7 +154,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Orta"
     },
     {
-      "topic": "Rasyonel Sayılar- Ondalıklı Sayılar",
+      "topic": "Rasyonel SayÄ±lar- OndalÄ±klÄ± SayÄ±lar",
       "y2016": 2,
       "y2018": 2,
       "y2020": 2,
@@ -164,7 +164,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Orta"
     },
     {
-      "topic": "Basit Eşitsizlikler",
+      "topic": "Basit EşŸitsizlikler",
       "y2016": 2,
       "y2018": 1,
       "y2020": 1,
@@ -174,7 +174,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Mutlak Değer",
+      "topic": "Mutlak DeÄŸer",
       "y2016": 2,
       "y2018": 2,
       "y2020": 1,
@@ -184,7 +184,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Üslü Sayılar",
+      "topic": "İœslü SayÄ±lar",
       "y2016": 2,
       "y2018": 2,
       "y2020": 3,
@@ -194,7 +194,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Orta"
     },
     {
-      "topic": "Köklü Sayılar",
+      "topic": "Köklü SayÄ±lar",
       "y2016": 2,
       "y2018": 2,
       "y2020": 2,
@@ -204,7 +204,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Orta"
     },
     {
-      "topic": "Çarpanlara Ayırma",
+      "topic": "İ‡arpanlara AyÄ±rma",
       "y2016": 2,
       "y2018": 2,
       "y2020": 2,
@@ -214,7 +214,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Orta"
     },
     {
-      "topic": "Oran- Orantı",
+      "topic": "Oran- OrantÄ±",
       "y2016": 2,
       "y2018": 2,
       "y2020": 1,
@@ -224,7 +224,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Denklem Çözme",
+      "topic": "Denklem İ‡özme",
       "y2016": 1,
       "y2018": 2,
       "y2020": 2,
@@ -264,7 +264,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Orta"
     },
     {
-      "topic": "İşlem",
+      "topic": "Ä°şŸlem",
       "y2016": 1,
       "y2018": 1,
       "y2020": 1,
@@ -284,7 +284,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Olasılık",
+      "topic": "OlasÄ±lÄ±k",
       "y2016": 7,
       "y2018": 2,
       "y2020": 2,
@@ -294,7 +294,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Orta"
     },
     {
-      "topic": "Sayısal Mantık",
+      "topic": "SayÄ±sal MantÄ±k",
       "y2016": 3,
       "y2018": 3,
       "y2020": 6,
@@ -304,7 +304,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     },
     {
-      "topic": "Geometrik Kavramlar ve Açılar",
+      "topic": "Geometrik Kavramlar ve AçÄ±lar",
       "y2016": 1,
       "y2018": 2,
       "y2020": 1,
@@ -314,7 +314,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Çokgenler ve Dörtgenler",
+      "topic": "İ‡okgenler ve Dörtgenler",
       "y2016": 1,
       "y2018": 1,
       "y2020": 1,
@@ -324,7 +324,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Çember ve Daire",
+      "topic": "İ‡ember ve Daire",
       "y2016": 1,
       "y2018": 1,
       "y2020": 1,
@@ -344,7 +344,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Katı Cisimler",
+      "topic": "KatÄ± Cisimler",
       "y2016": 0,
       "y2018": 0,
       "y2020": 0,
@@ -356,7 +356,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
   ],
   "Tarih": [
     {
-      "topic": "İslamiyet Öncesi Türk Tarihi-İlk ve Orta Çağda Türk Dünyası",
+      "topic": "Ä°slamiyet İ–ncesi Türk Tarihi-Ä°lk ve Orta İ‡aÄŸda Türk DünyasÄ±",
       "y2016": 1,
       "y2018": 1,
       "y2020": 1,
@@ -366,7 +366,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "İslamiyet Öncesi Türk Devletlerinde Kültür ve Uygarlık",
+      "topic": "Ä°slamiyet İ–ncesi Türk Devletlerinde Kültür ve UygarlÄ±k",
       "y2016": 1,
       "y2018": 1,
       "y2020": 1,
@@ -376,7 +376,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "İlk Türk İslam Devletleri -Türklerin İslamiyeti Kabulü",
+      "topic": "Ä°lk Türk Ä°slam Devletleri -Türklerin Ä°slamiyeti Kabulü",
       "y2016": 1,
       "y2018": 2,
       "y2020": 0,
@@ -386,7 +386,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "İlk Türk İslam Devletlerinde Kültür ve Uygarlık",
+      "topic": "Ä°lk Türk Ä°slam Devletlerinde Kültür ve UygarlÄ±k",
       "y2016": 2,
       "y2018": 1,
       "y2020": 2,
@@ -396,7 +396,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Osmanlı Devleti Siyaseti",
+      "topic": "OsmanlÄ± Devleti Siyaseti",
       "y2016": 6,
       "y2018": 5,
       "y2020": 3,
@@ -406,7 +406,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     },
     {
-      "topic": "Osmanlı Devleti Kültür ve Uygarlık",
+      "topic": "OsmanlÄ± Devleti Kültür ve UygarlÄ±k",
       "y2016": 3,
       "y2018": 2,
       "y2020": 5,
@@ -416,7 +416,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     },
     {
-      "topic": "20. Yüzyıl Osmanlı Devleti",
+      "topic": "20. YüzyÄ±l OsmanlÄ± Devleti",
       "y2016": 3,
       "y2018": 3,
       "y2020": 4,
@@ -426,7 +426,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     },
     {
-      "topic": "Kurtuluş Savaşı",
+      "topic": "KurtuluşŸ SavaşŸÄ±",
       "y2016": 3,
       "y2018": 2,
       "y2020": 2,
@@ -436,7 +436,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Orta"
     },
     {
-      "topic": "İnkılap Tarihi",
+      "topic": "Ä°nkÄ±lap Tarihi",
       "y2016": 3,
       "y2018": 3,
       "y2020": 5,
@@ -446,7 +446,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     },
     {
-      "topic": "Atatürk Dönemi İç ve Dış Politikalar",
+      "topic": "Atatürk Dönemi Ä°ç ve DÄ±şŸ Politikalar",
       "y2016": 1,
       "y2018": 4,
       "y2020": 2,
@@ -456,7 +456,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Orta"
     },
     {
-      "topic": "Atatürk'ün İlke ve İnkılapları",
+      "topic": "Atatürk'ün Ä°lke ve Ä°nkÄ±laplarÄ±",
       "y2016": 2,
       "y2018": 1,
       "y2020": 2,
@@ -466,7 +466,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Orta"
     },
     {
-      "topic": "Çağdaş Türk ve Dünya Edebiyatı",
+      "topic": "İ‡aÄŸdaşŸ Türk ve Dünya EdebiyatÄ±",
       "y2016": 3,
       "y2018": 3,
       "y2020": 2,
@@ -476,9 +476,9 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Orta"
     }
   ],
-  "Coğrafya": [
+  "CoÄŸrafya": [
     {
-      "topic": "Türkiye'nin İklimi ve Bitki Örtüsü",
+      "topic": "Türkiye'nin Ä°klimi ve Bitki İ–rtüsü",
       "y2016": 2,
       "y2018": 2,
       "y2020": 2,
@@ -488,7 +488,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Orta"
     },
     {
-      "topic": "Türkiye'nin Fiziki Özellikleri",
+      "topic": "Türkiye'nin Fiziki İ–zellikleri",
       "y2016": 5,
       "y2018": 5,
       "y2020": 4,
@@ -498,7 +498,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     },
     {
-      "topic": "Türkiye'de Nüfus ve Yerleşme",
+      "topic": "Türkiye'de Nüfus ve YerleşŸme",
       "y2016": 3,
       "y2018": 1,
       "y2020": 2,
@@ -508,7 +508,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Orta"
     },
     {
-      "topic": "Tarım",
+      "topic": "TarÄ±m",
       "y2016": 1,
       "y2018": 1,
       "y2020": 1,
@@ -518,7 +518,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Hayvancılık",
+      "topic": "HayvancÄ±lÄ±k",
       "y2016": 1,
       "y2018": 1,
       "y2020": 1,
@@ -528,7 +528,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Madenler ve Enerji Kaynakları",
+      "topic": "Madenler ve Enerji KaynaklarÄ±",
       "y2016": 1,
       "y2018": 2,
       "y2020": 3,
@@ -548,7 +548,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Ulaşım",
+      "topic": "UlaşŸÄ±m",
       "y2016": 1,
       "y2018": 1,
       "y2020": 1,
@@ -578,7 +578,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Bölgeler Coğrafyası",
+      "topic": "Bölgeler CoÄŸrafyasÄ±",
       "y2016": 0,
       "y2018": 1,
       "y2020": 1,
@@ -588,9 +588,9 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     }
   ],
-  "Vatandaşlık": [
+  "VatandaşŸlÄ±k": [
     {
-      "topic": "Temel Hukuk Kavramları",
+      "topic": "Temel Hukuk KavramlarÄ±",
       "y2016": 1,
       "y2018": 2,
       "y2020": 3,
@@ -620,7 +620,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Temel Hak Ödevler",
+      "topic": "Temel Hak İ–devler",
       "y2016": 1,
       "y2018": 1,
       "y2020": 0,
@@ -650,7 +650,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "Yargı",
+      "topic": "YargÄ±",
       "y2016": 1,
       "y2018": 1,
       "y2020": 2,
@@ -660,7 +660,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Standart"
     },
     {
-      "topic": "İdare Hukuku",
+      "topic": "Ä°dare Hukuku",
       "y2016": 3,
       "y2018": 2,
       "y2020": 2,
@@ -682,7 +682,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     },
     {
-      "topic": "İdare Hukuku & İdari Yargı",
+      "topic": "Ä°dare Hukuku & Ä°dari YargÄ±",
       "y2016": 7,
       "y2018": 7,
       "y2020": 7,
@@ -692,7 +692,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     },
     {
-      "topic": "Ceza Hukuku (Genel & Özel)",
+      "topic": "Ceza Hukuku (Genel & İ–zel)",
       "y2016": 6,
       "y2018": 6,
       "y2020": 5,
@@ -712,7 +712,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     },
     {
-      "topic": "Ticaret Hukuku & İcra İflas",
+      "topic": "Ticaret Hukuku & Ä°cra Ä°flas",
       "y2016": 5,
       "y2018": 6,
       "y2020": 6,
@@ -722,9 +722,9 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     }
   ],
-  "İktisat": [
+  "Ä°ktisat": [
     {
-      "topic": "Mikro İktisat (Fayda, Üretici, Piyasalar)",
+      "topic": "Mikro Ä°ktisat (Fayda, İœretici, Piyasalar)",
       "y2016": 12,
       "y2018": 12,
       "y2020": 12,
@@ -734,7 +734,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     },
     {
-      "topic": "Makro İktisat (IS-LM, Milli Gelir)",
+      "topic": "Makro Ä°ktisat (IS-LM, Milli Gelir)",
       "y2016": 10,
       "y2018": 10,
       "y2020": 10,
@@ -744,7 +744,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     },
     {
-      "topic": "Para-Banka & Merkez Bankacılığı",
+      "topic": "Para-Banka & Merkez BankacÄ±lÄ±ÄŸÄ±",
       "y2016": 4,
       "y2018": 4,
       "y2020": 4,
@@ -754,7 +754,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Orta"
     },
     {
-      "topic": "Uluslararası İktisat & Büyüme",
+      "topic": "UluslararasÄ± Ä°ktisat & Büyüme",
       "y2016": 5,
       "y2018": 5,
       "y2020": 5,
@@ -764,7 +764,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     },
     {
-      "topic": "İktisadi Düşünceler & Türkiye Ekonomisi",
+      "topic": "Ä°ktisadi DüşŸünceler & Türkiye Ekonomisi",
       "y2016": 5,
       "y2018": 5,
       "y2020": 5,
@@ -786,7 +786,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     },
     {
-      "topic": "Kamu Harcamaları & Gelirleri",
+      "topic": "Kamu HarcamalarÄ± & Gelirleri",
       "y2016": 7,
       "y2018": 7,
       "y2020": 7,
@@ -816,9 +816,9 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     }
   ],
-  "Uluslararası İlişkiler": [
+  "UluslararasÄ± Ä°lişŸkiler": [
     {
-      "topic": "Siyasi Tarih (Vestfalya, Savaşlar)",
+      "topic": "Siyasi Tarih (Vestfalya, SavaşŸlar)",
       "y2016": 12,
       "y2018": 12,
       "y2020": 12,
@@ -828,7 +828,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     },
     {
-      "topic": "Uluslararası İlişkiler Teorileri",
+      "topic": "UluslararasÄ± Ä°lişŸkiler Teorileri",
       "y2016": 10,
       "y2018": 10,
       "y2020": 10,
@@ -838,7 +838,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     },
     {
-      "topic": "Türk Dış Politikası",
+      "topic": "Türk DÄ±şŸ PolitikasÄ±",
       "y2016": 9,
       "y2018": 9,
       "y2020": 9,
@@ -848,7 +848,7 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
       "importance": "Yüksek"
     },
     {
-      "topic": "Uluslararası Hukuk & Örgütler",
+      "topic": "UluslararasÄ± Hukuk & İ–rgütler",
       "y2016": 9,
       "y2018": 9,
       "y2020": 9,
@@ -859,3 +859,4 @@ export const bulentExactKitapSecData: Record<string, QuestionDistRow[]> = {
     }
   ]
 };
+

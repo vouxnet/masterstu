@@ -106,7 +106,7 @@ export const PomodoroWidget: React.FC = () => {
         {/* Live Partner Status */}
         <div className="hidden sm:flex items-center space-x-2 rounded-full bg-pink-500/10 px-3 py-1 border border-pink-500/30 text-xs font-semibold text-pink-300">
           <span className="h-2 w-2 rounded-full bg-pink-400 animate-ping" />
-          <span>{partnerUser.name}: 18. Dk Pomodoro ⏳</span>
+          <span>{partnerUser?.name || 'Partner'}: 18. Dk Pomodoro ⏳</span>
         </div>
       </div>
 

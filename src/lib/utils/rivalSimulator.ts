@@ -1,4 +1,4 @@
-import { bulentExactKitapSecData } from "@/src/lib/data/bulentFullDistribution";
+import { kpssLisansDistributionData } from "@/src/lib/data/kpssLisansDistribution";
 import { StudyLog } from "@/src/lib/store/useStudyLogStore";
 
 export interface RivalActivity {
@@ -29,7 +29,7 @@ const activityTypes: ('study' | 'exam' | 'flashcard')[] = ['study', 'study', 'st
 function getWeightedSubjects() {
   const subjects: { name: string; weight: number }[] = [];
   
-  Object.entries(bulentExactKitapSecData).forEach(([lesson, topics]) => {
+  Object.entries(kpssLisansDistributionData).forEach(([lesson, topics]) => {
     // Treat the lesson as the subject, or we can use topics as subject.
     // The requirement says subject: 'İdare Hukuku', which is a topic in Hukuk or Vatandaşlık.
     topics.forEach(topic => {

@@ -73,7 +73,7 @@ export const useCurriculumStore = create<CurriculumState>()(
 
         try {
           // Arka planda Supabase servisine yaz
-          await dbService.updateTopicStatus(userId, id, nextStatus);
+          await dbService.updateTopicStatus(userId, topic.userRole || 'kpss_lisans', topic.topic, nextStatus);
         } catch (error) {
           console.error("Bulut güncelleme hatası:", error);
           // Hata olursa işlemi geri al (Rollback)

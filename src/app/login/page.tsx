@@ -3,16 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/src/lib/store/useAuthStore";
-import { Lock, User, ShieldCheck, ArrowRight, AlertCircle, Mail } from "lucide-react";
+import { Lock, User, ShieldCheck, ArrowRight, AlertCircle, Mail, Infinity } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { switchUserRole, signInWithEmail, signUpWithEmail, initAuth } = useAuthStore();
-
-  const [activeTab, setActiveTab] = useState<"demo" | "real">("demo");
-  const [username, setUsername] = useState("Bülent");
-  const [password, setPassword] = useState("123456");
-  const [selectedRole, setSelectedRole] = useState<"lisans_alan" | "onlisans">("lisans_alan");
+  const { signInWithEmail, signUpWithEmail, initAuth } = useAuthStore();
   
   const [realEmail, setRealEmail] = useState("");
   const [realPassword, setRealPassword] = useState("");
@@ -24,19 +19,6 @@ export default function LoginPage() {
   useEffect(() => {
     initAuth();
   }, [initAuth]);
-
-  const handleDemoLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password !== "123456") {
-      setErrorMessage("⚠️ Hatalı Şifre! Lütfen şifrenizi '123456' olarak giriniz.");
-      return;
-    }
-
-    setErrorMessage(null);
-    switchUserRole(selectedRole);
-    document.cookie = "kpss_session=active-user-session; path=/; max-age=86400";
-    router.push("/");
-  };
 
   const handleRealLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,16 +45,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleQuickSelect = (role: "lisans_alan" | "onlisans") => {
-    setSelectedRole(role);
-    setErrorMessage(null);
-    if (role === "lisans_alan") {
-      setUsername("Bülent");
-    } else {
-      setUsername("Sena");
-    }
-  };
-
   return (
     <main className="relative flex min-h-screen items-center justify-center p-4 bg-[#0B0F19] overflow-hidden">
       <div className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full bg-indigo-600/20 blur-3xl" />
@@ -81,29 +53,14 @@ export default function LoginPage() {
       <div className="w-full max-w-md rounded-3xl glass-panel p-6 sm:p-8 border border-white/10 shadow-2xl relative z-10">
         <div className="text-center mb-6">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-600 font-display text-2xl font-black text-white shadow-xl shadow-indigo-500/30">
-            M
+            <Infinity className="h-8 w-8 text-white" />
           </div>
           <h1 className="mt-4 font-display text-2xl font-bold text-white tracking-tight sm:text-3xl">
-            Master<span className="text-indigo-400">ÖSYM</span> AI
+            Asimptot
           </h1>
           <p className="mt-1 text-xs text-gray-400">
-            Kullanıcı Giriş Paneli
+            Sınırlarını zorla, başarıya yaklaş.
           </p>
-        </div>
-
-        <div className="flex bg-gray-900/50 rounded-xl p-1 mb-6 border border-white/5">
-          <button
-            onClick={() => { setActiveTab("demo"); setErrorMessage(null); }}
-            className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${activeTab === 'demo' ? 'bg-indigo-600/30 text-white shadow-lg shadow-indigo-500/20 border border-indigo-500/50' : 'text-gray-400 hover:text-gray-200'}`}
-          >
-            Demo Giriş
-          </button>
-          <button
-            onClick={() => { setActiveTab("real"); setErrorMessage(null); }}
-            className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${activeTab === 'real' ? 'bg-indigo-600/30 text-white shadow-lg shadow-indigo-500/20 border border-indigo-500/50' : 'text-gray-400 hover:text-gray-200'}`}
-          >
-            Gerçek Giriş
-          </button>
         </div>
 
         {/* Error Notification */}
@@ -114,163 +71,77 @@ export default function LoginPage() {
           </div>
         )}
 
-        {activeTab === "demo" ? (
-          <>
-            {/* Quick Profile Selection */}
-            <div className="mb-6 rounded-2xl glass-card p-3 border border-white/5">
-              <p className="text-[11px] font-semibold text-gray-400 mb-2 uppercase tracking-wider text-center">
-                Giriş Yapılacak Kullanıcı
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleQuickSelect("lisans_alan")}
-                  className={`flex flex-col items-center rounded-xl p-3 text-xs font-semibold transition-all border ${
-                    selectedRole === "lisans_alan"
-                      ? "bg-indigo-600/30 border-indigo-500 text-white shadow-lg shadow-indigo-500/20"
-                      : "bg-white/5 border-transparent text-gray-400 hover:text-gray-200"
-                  }`}
-                >
-                  <span className="font-bold text-indigo-300">Bülent</span>
-                  <span className="text-[10px] text-gray-400 mt-0.5">Lisans + Alan</span>
-                  <span className="mt-1 rounded-full bg-indigo-500/20 px-2 py-0.5 text-[9px] text-indigo-300 font-display font-bold">
-                    Şifre: 123456
-                  </span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleQuickSelect("onlisans")}
-                  className={`flex flex-col items-center rounded-xl p-3 text-xs font-semibold transition-all border ${
-                    selectedRole === "onlisans"
-                      ? "bg-pink-600/30 border-pink-500 text-white shadow-lg shadow-pink-500/20"
-                      : "bg-white/5 border-transparent text-gray-400 hover:text-gray-200"
-                  }`}
-                >
-                  <span className="font-bold text-pink-300">Sena</span>
-                  <span className="text-[10px] text-gray-400 mt-0.5">Önlisans</span>
-                  <span className="mt-1 rounded-full bg-pink-500/20 px-2 py-0.5 text-[9px] text-pink-300 font-display font-bold">
-                    Şifre: 123456
-                  </span>
-                </button>
-              </div>
-            </div>
-
-            <form onSubmit={handleDemoLogin} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                  Kullanıcı Adı
-                </label>
-                <div className="relative">
-                  <User className="absolute left-3.5 top-3 h-4 w-4 text-gray-500" />
-                  <input
-                    type="text"
-                    required
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className="w-full rounded-xl bg-gray-900/90 pl-10 pr-4 py-2.5 text-xs text-white placeholder-gray-500 border border-white/10 focus:border-indigo-500 focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                  Şifre (123456)
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3.5 top-3 h-4 w-4 text-gray-500" />
-                  <input
-                    type="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full rounded-xl bg-gray-900/90 pl-10 pr-4 py-2.5 text-xs text-white placeholder-gray-500 border border-white/10 focus:border-indigo-500 focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full rounded-xl glass-button py-3 text-xs font-bold text-white shadow-xl flex items-center justify-center space-x-2 transition-all hover:scale-[1.01]"
-              >
-                <span>Güvenli Giriş Yap</span>
-                <ArrowRight className="h-4 w-4" />
-              </button>
-            </form>
-          </>
-        ) : (
-          <form onSubmit={handleRealLogin} className="space-y-4">
-            {isSignUp && (
-              <div>
-                <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                  Adınız
-                </label>
-                <div className="relative">
-                  <User className="absolute left-3.5 top-3 h-4 w-4 text-gray-500" />
-                  <input
-                    type="text"
-                    required
-                    value={realName}
-                    onChange={(e) => setRealName(e.target.value)}
-                    className="w-full rounded-xl bg-gray-900/90 pl-10 pr-4 py-2.5 text-xs text-white placeholder-gray-500 border border-white/10 focus:border-indigo-500 focus:outline-none"
-                    placeholder="Adınız Soyadınız"
-                  />
-                </div>
-              </div>
-            )}
+        <form onSubmit={handleRealLogin} className="space-y-4">
+          {isSignUp && (
             <div>
               <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                E-posta Adresi
+                Adınız
               </label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-3 h-4 w-4 text-gray-500" />
+                <User className="absolute left-3.5 top-3 h-4 w-4 text-gray-500" />
                 <input
-                  type="email"
+                  type="text"
                   required
-                  value={realEmail}
-                  onChange={(e) => setRealEmail(e.target.value)}
+                  value={realName}
+                  onChange={(e) => setRealName(e.target.value)}
                   className="w-full rounded-xl bg-gray-900/90 pl-10 pr-4 py-2.5 text-xs text-white placeholder-gray-500 border border-white/10 focus:border-indigo-500 focus:outline-none"
-                  placeholder="ornek@email.com"
+                  placeholder="Adınız Soyadınız"
                 />
               </div>
             </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                Şifre
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3.5 top-3 h-4 w-4 text-gray-500" />
-                <input
-                  type="password"
-                  required
-                  value={realPassword}
-                  onChange={(e) => setRealPassword(e.target.value)}
-                  className="w-full rounded-xl bg-gray-900/90 pl-10 pr-4 py-2.5 text-xs text-white placeholder-gray-500 border border-white/10 focus:border-indigo-500 focus:outline-none"
-                  placeholder="******"
-                />
-              </div>
+          )}
+          <div>
+            <label className="block text-xs font-semibold text-gray-300 mb-1.5">
+              E-posta Adresi
+            </label>
+            <div className="relative">
+              <Mail className="absolute left-3.5 top-3 h-4 w-4 text-gray-500" />
+              <input
+                type="email"
+                required
+                value={realEmail}
+                onChange={(e) => setRealEmail(e.target.value)}
+                className="w-full rounded-xl bg-gray-900/90 pl-10 pr-4 py-2.5 text-xs text-white placeholder-gray-500 border border-white/10 focus:border-indigo-500 focus:outline-none"
+                placeholder="ornek@email.com"
+              />
             </div>
+          </div>
 
+          <div>
+            <label className="block text-xs font-semibold text-gray-300 mb-1.5">
+              Şifre
+            </label>
+            <div className="relative">
+              <Lock className="absolute left-3.5 top-3 h-4 w-4 text-gray-500" />
+              <input
+                type="password"
+                required
+                value={realPassword}
+                onChange={(e) => setRealPassword(e.target.value)}
+                className="w-full rounded-xl bg-gray-900/90 pl-10 pr-4 py-2.5 text-xs text-white placeholder-gray-500 border border-white/10 focus:border-indigo-500 focus:outline-none"
+                placeholder="******"
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full rounded-xl glass-button py-3 text-xs font-bold text-white shadow-xl flex items-center justify-center space-x-2 transition-all hover:scale-[1.01]"
+          >
+            <span>{isSignUp ? 'Kayıt Ol' : 'Giriş Yap'}</span>
+            <ArrowRight className="h-4 w-4" />
+          </button>
+
+          <div className="text-center mt-4">
             <button
-              type="submit"
-              className="w-full rounded-xl glass-button py-3 text-xs font-bold text-white shadow-xl flex items-center justify-center space-x-2 transition-all hover:scale-[1.01]"
+              type="button"
+              onClick={() => setIsSignUp(!isSignUp)}
+              className="text-xs text-indigo-400 hover:text-indigo-300"
             >
-              <span>{isSignUp ? 'Kayıt Ol' : 'Giriş Yap'}</span>
-              <ArrowRight className="h-4 w-4" />
+              {isSignUp ? 'Zaten hesabınız var mı? Giriş yapın' : 'Hesabınız yok mu? Hesap oluşturun'}
             </button>
-
-            <div className="text-center mt-4">
-              <button
-                type="button"
-                onClick={() => setIsSignUp(!isSignUp)}
-                className="text-xs text-indigo-400 hover:text-indigo-300"
-              >
-                {isSignUp ? 'Zaten hesabınız var mı? Giriş yapın' : 'Hesabınız yok mu? Hesap oluşturun'}
-              </button>
-            </div>
-          </form>
-        )}
+          </div>
+        </form>
 
         <div className="mt-6 flex items-center justify-center space-x-2 text-[11px] text-gray-500">
           <ShieldCheck className="h-4 w-4 text-emerald-400" />

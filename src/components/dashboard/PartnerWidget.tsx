@@ -7,10 +7,10 @@ import confetti from "canvas-confetti";
 import { useStudyLogStore } from "@/src/lib/store/useStudyLogStore";
 import { useExamHistoryStore } from "@/src/lib/store/useExamHistoryStore";
 import { useCurriculumStore, examTypeToRole } from "@/src/lib/store/useCurriculumStore";
-import { calculatePerformanceScore, simulatePartnerScore } from "@/src/lib/utils/performanceNormalizer";
+import { calculatePerformanceScore } from "@/src/lib/utils/performanceNormalizer";
 
 export const PartnerWidget: React.FC = () => {
-  const { currentUser, partnerUser, duoStreak, sendPokeToPartner, sendCheerToPartner, setQuickActionOpen } =
+  const { currentUser, partnerUser, duoStreak, setQuickActionOpen } =
     useAuthStore();
 
   const studyLogs = useStudyLogStore((state) => state.logs);
@@ -25,7 +25,21 @@ export const PartnerWidget: React.FC = () => {
     currentUser.activeExam
   );
 
-  const partnerScore = simulatePartnerScore(partnerUser.name, "kpss_onlisans");
+  if (!partnerUser) {
+    return (
+      <div className="rounded-3xl glass-panel p-6 border border-white/10 shadow-xl text-center flex flex-col items-center justify-center min-h-[300px]">
+        <h3 className="font-display font-bold text-white text-lg mb-2">Henüz Partneriniz Yok</h3>
+        <p className="text-sm text-gray-400 mb-6">Partner ekleyerek asimetrik rekabete başlayın!</p>
+        <button
+          className="rounded-xl glass-button px-6 py-3 text-sm font-bold text-white bg-indigo-600/30 border border-indigo-500/30 hover:bg-indigo-600/50 transition-all"
+        >
+          Partner Ekle
+        </button>
+      </div>
+    );
+  }
+
+  const partnerScore = { totalScore: 0, netImprovementPercent: 0, studyConsistency: 0, curriculumProgress: 0, duelWinRate: 0 };
 
   const totalCombinedScore = currentUserScore.totalScore + partnerScore.totalScore;
   const userRatio = totalCombinedScore > 0 ? (currentUserScore.totalScore / totalCombinedScore) * 100 : 50;
@@ -49,7 +63,7 @@ export const PartnerWidget: React.FC = () => {
   );
 
   const handleCheerWithConfetti = () => {
-    sendCheerToPartner();
+    // Cheer animation only (function removed in cleanup)
     // Fire confetti cannon
     confetti({
       particleCount: 80,
@@ -124,7 +138,7 @@ export const PartnerWidget: React.FC = () => {
       {/* Action Buttons */}
       <div className="grid grid-cols-3 gap-2">
         <button
-          onClick={sendPokeToPartner}
+          onClick={() => {}}
           className="flex items-center justify-center space-x-1.5 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/30 py-2.5 px-3 text-xs font-semibold transition-all active:scale-95"
         >
           <Hand className="h-4 w-4 text-indigo-400" />

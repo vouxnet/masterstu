@@ -49,7 +49,7 @@ export default function DashboardPage() {
             Merhaba, {currentUser.name}! 🎯
           </h1>
           <p className="mt-1 text-xs text-gray-300">
-            Bugün hedeflerini tamamla ve {partnerUser.name} ile ortak serini koru!
+            {partnerUser ? `Bugün hedeflerini tamamla ve ${partnerUser.name} ile ortak serini koru!` : 'Bugün hedeflerini tamamla ve harika bir seri yakala!'}
           </p>
         </div>
 

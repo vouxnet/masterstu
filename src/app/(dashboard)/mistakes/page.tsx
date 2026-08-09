@@ -37,60 +37,7 @@ export interface MistakeItem {
   comments: CommentItem[];
 }
 
-const initialMistakes: MistakeItem[] = [
-  {
-    id: "m-1",
-    userRole: "lisans_alan",
-    subject: "Hukuk",
-    topic: "Borçlar Hukuku - Haksız Fiil Sorumluluğu",
-    reasonTag: "🧠 Bilgi Eksikliği",
-    imageUrl: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&auto=format&fit=crop&q=80",
-    notes: "Kusursuz sorumluluk halleri ile tehlike sorumluluğunu karıştırdım.",
-    solved: false,
-    createdAt: "2026-08-07",
-    comments: [
-      {
-        id: "c-1",
-        author: "Sena",
-        authorRole: "Önlisans",
-        text: "Bülent Bey bu soruda tehlike sorumluluğu için işletenin fedakarlığın denkleştirilmesi ilkesi geçerli, unutma! 💡",
-        createdAt: "2026-08-07 14:30",
-      },
-    ],
-  },
-  {
-    id: "m-2",
-    userRole: "onlisans",
-    subject: "Türkçe",
-    topic: "Paragrafta Yapı - Akışı Bozan Cümle",
-    reasonTag: "⚡ Dikkat Hatası",
-    imageUrl: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&auto=format&fit=crop&q=80",
-    notes: "3. ve 4. cümle arasındaki geçiş kelimesini dikkat etmeden atladım.",
-    solved: true,
-    createdAt: "2026-08-07",
-    comments: [
-      {
-        id: "c-2",
-        author: "Bülent",
-        authorRole: "Lisans + Alan",
-        text: "Sena harikasın, 'Oysa' bağlacına dikkat edince cevap hemen çıkıyor 👏",
-        createdAt: "2026-08-07 16:15",
-      },
-    ],
-  },
-  {
-    id: "m-3",
-    userRole: "onlisans",
-    subject: "Matematik",
-    topic: "Yüzde ve Kâr-Zarar Problemleri",
-    reasonTag: "📐 İşlem Hatası",
-    imageUrl: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&auto=format&fit=crop&q=80",
-    notes: "Maliyet üzerinden %20 indirim yaparken çarpmada sadeleştirme hatası yaptım.",
-    solved: false,
-    createdAt: "2026-08-07",
-    comments: [],
-  },
-];
+const initialMistakes: MistakeItem[] = [];
 
 export default function MistakesPage() {
   const { currentUser } = useAuthStore();

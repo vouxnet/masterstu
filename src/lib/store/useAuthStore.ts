@@ -119,7 +119,7 @@ export interface TodoItem {
 
 interface AuthState {
   currentUser: UserProfile;
-  partnerUser: UserProfile;
+  partnerUser: UserProfile | null;
   duoStreak: number;
   sharedQuestions: SharedQuestionItem[];
   todos: TodoItem[];
@@ -131,11 +131,8 @@ interface AuthState {
   supabaseUser: User | null;
 
   // Actions
-  switchUserRole: (role: "lisans_alan" | "onlisans") => void;
   setSelectedExams: (exams: ExamType[]) => void;
   setActiveExam: (exam: ExamType) => void;
-  sendPokeToPartner: () => void;
-  sendCheerToPartner: () => void;
   toggleTodo: (id: string) => void;
   addTodo: (title: string, subject: string) => void;
   addSharedQuestion: (subject: string, text: string, imageUrl?: string) => void;
@@ -152,103 +149,46 @@ interface AuthState {
   initAuth: () => Promise<void>;
 }
 
-const defaultUser1: UserProfile = {
-  id: "user-1",
-  name: "Bülent",
-  email: "bulent@osym.com",
-  friendCode: "#BULENT2026",
-  role: "lisans_alan",
-  roleLabel: "Bülent (Lisans + Alan)",
-  selectedExams: ["kpss_lisans", "yds"],
-  activeExam: "kpss_lisans",
-  avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-  dailyQuestionTarget: 150,
-  completedQuestionsToday: 85,
-  completedTopicsToday: 3,
-  streakCount: 14,
-};
-
-const defaultUser2: UserProfile = {
-  id: "user-2-sena",
-  name: "Sena",
-  email: "sena@osym.com",
-  friendCode: "#SENA2026",
-  role: "onlisans",
-  roleLabel: "Sena (Önlisans)",
-  selectedExams: ["kpss_onlisans"],
-  activeExam: "kpss_onlisans",
-  avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
-  dailyQuestionTarget: 120,
-  completedQuestionsToday: 95,
-  completedTopicsToday: 4,
-  streakCount: 14,
+const guestUser: UserProfile = {
+  id: '',
+  name: 'Misafir',
+  email: '',
+  friendCode: '',
+  role: 'lisans_alan' as const,
+  roleLabel: 'KPSS Lisans',
+  selectedExams: ['kpss_lisans'],
+  activeExam: 'kpss_lisans',
+  avatarUrl: '',
+  dailyQuestionTarget: 100,
+  completedQuestionsToday: 0,
+  completedTopicsToday: 0,
+  streakCount: 0,
 };
 
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
-      currentUser: defaultUser1,
-      partnerUser: defaultUser2,
-      duoStreak: 14,
+      currentUser: guestUser,
+      partnerUser: null,
+      duoStreak: 0,
       notificationMessage: null,
       isQuickActionOpen: false,
-      authMode: 'demo',
+      authMode: 'supabase',
       supabaseUser: null,
 
-      sharedQuestions: [
-        {
-          id: "q-1",
-          senderName: "Sena",
-          senderRole: "Sena",
-          subject: "Tarih",
-          questionText: "2. Göktürk Devleti'nin kurucusu Kutluk Kağan'a verilen unvan nedir? Bülent bakabilir misin?",
-          imageUrl: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=500&auto=format&fit=crop&q=80",
-          answerText: "İlteriş Kağan unvanı verilmiştir! (İli/devleti derleyen toplayan anlamına gelir)",
-          isResolved: true,
-          createdAt: "10 dakika önce",
-        },
-      ],
-
-      todos: [
-        { id: "t-1", title: "Hukuk - Anayasa Mahkemesi Üye Sayısı Tekrarı", subject: "Hukuk", completed: true },
-        { id: "t-2", title: "İktisat - IS-LM Eğrileri 40 Soru Çözümü", subject: "İktisat", completed: false },
-      ],
-
-      switchUserRole: (role) => {
-        if (role === "lisans_alan") {
-          set({ currentUser: defaultUser1, partnerUser: defaultUser2 });
-        } else {
-          set({ currentUser: defaultUser2, partnerUser: defaultUser1 });
-        }
-      },
+      sharedQuestions: [],
+      todos: [],
 
       setSelectedExams: (exams) => {
-        const current = get().currentUser;
-        const activeExam = exams.includes(current.activeExam) ? current.activeExam : (exams[0] || "kpss_lisans");
-        set({
-          currentUser: { ...current, selectedExams: exams, activeExam },
-        });
+        set((state) => ({
+          currentUser: { ...state.currentUser, selectedExams: exams },
+        }));
       },
 
-      setActiveExam: (activeExam) => {
-        const current = get().currentUser;
-        set({
-          currentUser: { ...current, activeExam },
-        });
-      },
-
-      sendPokeToPartner: () => {
-        const partnerName = get().partnerUser.name;
-        set({
-          notificationMessage: `👉 ${partnerName} kullanıcısına neşeli ders hatırlatması "Dürt" gönderildi!`,
-        });
-      },
-
-      sendCheerToPartner: () => {
-        const partnerName = get().partnerUser.name;
-        set({
-          notificationMessage: `🎉 ${partnerName} tebrik edildi! Harika bir çalışma serisi devam ediyor!`,
-        });
+      setActiveExam: (exam) => {
+        set((state) => ({
+          currentUser: { ...state.currentUser, activeExam: exam },
+        }));
       },
 
       toggleTodo: (id) => {
@@ -284,7 +224,7 @@ export const useAuthStore = create<AuthState>()(
         };
         set((state) => ({
           sharedQuestions: [newItem, ...state.sharedQuestions],
-          notificationMessage: `📸 Soru ${partner.name} kullanıcısının panosuna başarıyla yüklendi!`,
+          notificationMessage: partner ? `📸 Soru ${partner.name} kullanıcısının panosuna başarıyla yüklendi!` : `📸 Soru eklendi!`,
         }));
       },
 
@@ -341,7 +281,7 @@ export const useAuthStore = create<AuthState>()(
             authMode: 'supabase',
             supabaseUser: data.user,
             currentUser: {
-              ...defaultUser1,
+              ...guestUser,
               id: data.user.id,
               name: data.user.user_metadata?.name || name,
               email: data.user.email || email,
@@ -365,7 +305,7 @@ export const useAuthStore = create<AuthState>()(
             authMode: 'supabase',
             supabaseUser: data.user,
             currentUser: {
-              ...defaultUser1,
+              ...guestUser,
               id: data.user.id,
               name: data.user.user_metadata?.name || email.split('@')[0],
               email: data.user.email || email,
@@ -380,9 +320,10 @@ export const useAuthStore = create<AuthState>()(
         const supabase = createClient();
         await supabase.auth.signOut();
         set({ 
-          authMode: 'demo',
+          authMode: 'supabase',
           supabaseUser: null,
-          currentUser: defaultUser1
+          currentUser: guestUser,
+          partnerUser: null
         });
       },
 
@@ -395,7 +336,7 @@ export const useAuthStore = create<AuthState>()(
             authMode: 'supabase',
             supabaseUser: session.user,
             currentUser: {
-              ...defaultUser1,
+              ...guestUser,
               id: session.user.id,
               name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || "User",
               email: session.user.email || "",
@@ -403,12 +344,7 @@ export const useAuthStore = create<AuthState>()(
             }
           });
         } else {
-          // If no session and we are not in demo mode, maybe switch to demo mode
-          // But we preserve whatever demo user was set before if we are in demo mode
-          const currentMode = get().authMode;
-          if (currentMode === 'supabase') {
-            set({ authMode: 'demo', supabaseUser: null });
-          }
+          set({ authMode: 'supabase', supabaseUser: null });
         }
         
         // Subscribe to auth changes
@@ -425,7 +361,7 @@ export const useAuthStore = create<AuthState>()(
               }
             });
           } else {
-            set({ authMode: 'demo', supabaseUser: null });
+            set({ authMode: 'supabase', supabaseUser: null });
           }
         });
       },

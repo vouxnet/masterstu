@@ -1,43 +1,28 @@
-// Mock Database Service - Supabase'e geçmeden önceki Asenkron Simülasyon Katmanı
-// Gerçek anahtarlar girildiğinde bu dosya doğrudan supabase.from('...').select() vb. işlemleri yapacak.
+import { createClient } from '@/src/lib/supabase/client';
 
 export const dbService = {
-  // 1. Fetch Curriculum Progress
-  fetchCurriculumProgress: async (userId: string, examType: string) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        // Gerçekte burada supabase'den veri dönecek.
-        // Şimdilik LocalStorage'da tutulan yapıyı bozmamak için null dönüyoruz,
-        // Store kendi içindeki veriyi kullanmaya devam edecek.
-        resolve(null);
-      }, 500); // 500ms ağ (network) gecikmesi simülasyonu
-    });
+  async fetchCurriculumProgress(userId: string, examType: string) {
+    const supabase = createClient();
+    const { data, error } = await supabase
+      .from('curriculum_progress')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('exam_type', examType);
+    if (error) return null;
+    return data;
   },
-
-  // 2. Update Topic Status
-  updateTopicStatus: async (userId: string, topicId: string, newStatus: string) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ success: true, topicId, newStatus });
-      }, 300); // 300ms ağ gecikmesi
-    });
-  },
-
-  // 3. Fetch Mistakes
-  fetchMistakes: async (userId: string) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(null);
-      }, 600);
-    });
-  },
-
-  // 4. Fetch Feed Posts
-  fetchFeedPosts: async (visibilityTier: string) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(null);
-      }, 800);
-    });
+  
+  async updateTopicStatus(userId: string, examType: string, topicName: string, status: string) {
+    const supabase = createClient();
+    const { error } = await supabase
+      .from('curriculum_progress')
+      .upsert({
+        user_id: userId,
+        exam_type: examType,
+        topic_name: topicName,
+        status: status,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id,exam_type,topic_name' });
+    return { success: !error };
   }
 };

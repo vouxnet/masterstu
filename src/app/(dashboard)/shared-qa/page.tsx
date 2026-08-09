@@ -27,33 +27,8 @@ export interface FeedPostItem {
   createdAt: string;
 }
 
-// Only Sena and Bülent posts (No fake users like Ahmet Hakan)
-const initialPosts: FeedPostItem[] = [
-  {
-    id: "post-1",
-    authorName: "Sena",
-    authorRole: "Önlisans",
-    visibility: "private_friends",
-    subject: "Tarih",
-    questionText: "2. Göktürk Devleti'nin kurucusu Kutluk Kağan'a verilen unvan nedir? Bülent bakabilir misin?",
-    imageUrl: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&auto=format&fit=crop&q=80",
-    answerText: "İlteriş Kağan unvanı verilmiştir! (İli/devleti derleyen toplayan anlamına gelir)",
-    isResolved: true,
-    createdAt: "10 dakika önce",
-  },
-  {
-    id: "post-2",
-    authorName: "Bülent",
-    authorRole: "Lisans + Alan",
-    visibility: "admin_support",
-    subject: "Hukuk",
-    questionText: "Anayasa Mahkemesi İptal Davalarında 60 günlük hak düşürücü süre hesabında tatil günleri nasıl işler? Yanıtlayabilir misiniz?",
-    imageUrl: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&auto=format&fit=crop&q=80",
-    answerText: "🛡️ Yönetim & Uzman Öğretmen Yanıtı: İYUK Madde 8 gereğince tatil günleri süreye dahildir, son gün tatile denk gelirse ilk mesai gününe uzar.",
-    isResolved: true,
-    createdAt: "1 saat önce",
-  },
-];
+// Initial posts empty for real data
+const initialPosts: FeedPostItem[] = [];
 
 export default function SharedQAPage() {
   const { currentUser } = useAuthStore();

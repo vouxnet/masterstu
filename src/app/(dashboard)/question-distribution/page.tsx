@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { useAuthStore } from "@/src/lib/store/useAuthStore";
-import { senaExactKitapSecData } from "@/src/lib/data/senaFullDistribution";
-import { bulentExactKitapSecData } from "@/src/lib/data/bulentFullDistribution";
+import { kpssOnlisansDistributionData } from "@/src/lib/data/kpssOnlisansDistribution";
+import { kpssLisansDistributionData } from "@/src/lib/data/kpssLisansDistribution";
 import { ortaogretimDistribution } from "@/src/lib/data/ortaogretimDistribution";
 import { ydsDistribution } from "@/src/lib/data/ydsDistribution";
 import { alesDistribution } from "@/src/lib/data/alesDistribution";
@@ -25,12 +25,12 @@ export default function QuestionDistributionPage() {
   switch (activeExam) {
     case "kpss_onlisans":
       courses = ["Türkçe", "Matematik", "Tarih", "Coğrafya", "Vatandaşlık"];
-      currentDataset = senaExactKitapSecData;
-      title = "Sena - ÖSYM Önlisans Soru Dağılımları";
-      description = "Sena için Önlisans sayfasındaki TÜM derslerin (2016-2024) 10 yıllık ÖSYM soru sayıları";
-      successText = "Sena için ÖSYM Önlisans Tabloları %100 Hazır!";
+      currentDataset = kpssOnlisansDistributionData;
+      title = `${currentUser.name || "Kullanıcı"} - ÖSYM Önlisans Soru Dağılımları`;
+      description = `${currentUser.name || "Kullanıcı"} için Önlisans sayfasındaki TÜM derslerin (2016-2024) 10 yıllık ÖSYM soru sayıları`;
+      successText = `${currentUser.name || "Kullanıcı"} için ÖSYM Önlisans Tabloları %100 Hazır!`;
       successSubtext = "ÖSYM Önlisans Türkçe, Matematik, Tarih, Coğrafya ve Vatandaşlık soru verileri eksiksiz işlendi.";
-      badgeText = "Sena (Önlisans)";
+      badgeText = `${currentUser.name || "Kullanıcı"} (Önlisans)`;
       break;
     case "kpss_ortaogretim":
       courses = ["Türkçe", "Matematik", "Tarih", "Coğrafya", "Vatandaşlık", "Güncel Bilgiler"];
@@ -64,12 +64,12 @@ export default function QuestionDistributionPage() {
     case "kpss_lisans":
     default:
       courses = ["Türkçe", "Matematik", "Tarih", "Coğrafya", "Vatandaşlık", "Hukuk", "İktisat", "Maliye", "Uluslararası İlişkiler"];
-      currentDataset = bulentExactKitapSecData;
-      title = "Bülent - ÖSYM Lisans Soru Dağılımları";
-      description = "Bülent için Lisans sayfasındaki TÜM derslerin (2015-2024) 10 yıllık ÖSYM soru sayıları";
-      successText = "Bülent için ÖSYM Lisans Tabloları %100 Hazır!";
+      currentDataset = kpssLisansDistributionData;
+      title = `${currentUser.name || "Kullanıcı"} - ÖSYM Lisans Soru Dağılımları`;
+      description = `${currentUser.name || "Kullanıcı"} için Lisans sayfasındaki TÜM derslerin (2015-2024) 10 yıllık ÖSYM soru sayıları`;
+      successText = `${currentUser.name || "Kullanıcı"} için ÖSYM Lisans Tabloları %100 Hazır!`;
       successSubtext = "ÖSYM Lisans Türkçe, Matematik, Tarih, Coğrafya, Vatandaşlık ve A Grubu soru verileri eksiksiz işlendi.";
-      badgeText = "Bülent (Lisans + A Grubu)";
+      badgeText = `${currentUser.name || "Kullanıcı"} (Lisans + A Grubu)`;
       break;
   }
 

@@ -47,19 +47,10 @@ export async function middleware(request: NextRequest) {
     (route) => pathname === route || (route !== "/" && pathname.startsWith(route))
   );
 
-  // Check demo session cookie fallback
-  const authCookie = request.cookies.get("kpss_session");
-  const isDemoAuthenticated = Boolean(authCookie?.value);
-  const isAuthenticated = !!user || isDemoAuthenticated;
+  const isAuthenticated = !!user;
 
   // If user is trying to access protected route without being authenticated
   if (isProtectedRoute && !isAuthenticated) {
-    if (process.env.NODE_ENV === "development") {
-      // In local development / preview mode, if cookie is not set yet, we allow demo access with session set
-      const response = NextResponse.next();
-      response.cookies.set("kpss_session", "demo-active-session", { path: "/" });
-      return response;
-    }
 
     const url = request.nextUrl.clone();
     url.pathname = "/login";

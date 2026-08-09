@@ -1,6 +1,6 @@
 import { CurriculumTopic } from "@/src/lib/data/curriculumData";
-import { bulentExactKitapSecData } from "@/src/lib/data/bulentFullDistribution";
-import { senaExactKitapSecData } from "@/src/lib/data/senaFullDistribution";
+import { kpssLisansDistributionData } from "@/src/lib/data/kpssLisansDistribution";
+import { kpssOnlisansDistributionData } from "@/src/lib/data/kpssOnlisansDistribution";
 
 export interface TriyajResult {
   topic: string;
@@ -19,7 +19,7 @@ export function computeTriyaj(
   examType: string,
   curriculumTopics: CurriculumTopic[]
 ): TriyajResult[] {
-  const distributionData = examType === 'kpss_onlisans' ? senaExactKitapSecData : bulentExactKitapSecData;
+  const distributionData = examType === 'kpss_onlisans' ? kpssOnlisansDistributionData : kpssLisansDistributionData;
   const results: TriyajResult[] = [];
 
   for (const [course, topics] of Object.entries(distributionData)) {

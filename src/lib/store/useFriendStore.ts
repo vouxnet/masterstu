@@ -34,25 +34,12 @@ interface FriendState {
   clearNotification: () => void;
 }
 
-// Only Sena is default friend for Bülent (No fake users)
-// When Sena logs in, this will be replaced with Bülent as friend in Faz 5 (Supabase)
-const realFriendsOnly: FriendUser[] = [
-  {
-    id: "user-2-sena",
-    name: "Sena",
-    friendCode: "#SENA2026",
-    roleLabel: "Sena (Önlisans)",
-    avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
-    statusText: "Ders Çalışmaya Hazır ⏳",
-    isOnline: true,
-    streakCount: 14,
-  },
-];
+// No hardcoded realFriendsOnly
 
 export const useFriendStore = create<FriendState>()(
   persist(
     (set, get) => ({
-      friends: realFriendsOnly,
+      friends: [],
       pendingRequests: [], // No fake pending requests
       notification: null,
 
@@ -74,8 +61,7 @@ export const useFriendStore = create<FriendState>()(
           return false;
         }
 
-        // Add to pending sent requests (simulate - in Faz 5 this will be a real DB call)
-        // For demo: if code matches #BULENT2026, auto-add as pending received
+        // Add to pending sent requests
         const newRequest: FriendRequest = {
           id: `req-${Date.now()}`,
           senderName: cleanCode.replace('#', ''),

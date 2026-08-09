@@ -51,7 +51,7 @@ export const QuickActionModal: React.FC = () => {
             <div>
               <h3 className="font-display font-bold text-white text-lg">Hızlı Eylem Ekle</h3>
               <p className="text-xs text-gray-400">
-                {partnerUser.name} ile canlı paylaş veya panoya ekle
+                {partnerUser?.name || 'Partner'} ile canlı paylaş veya panoya ekle
               </p>
             </div>
           </div>
@@ -85,7 +85,7 @@ export const QuickActionModal: React.FC = () => {
               </label>
               <textarea
                 rows={3}
-                placeholder={`${partnerUser.name} kullanıcısına soru sor veya not yaz...`}
+                placeholder={`${partnerUser?.name || 'Partner'} kullanıcısına soru sor veya not yaz...`}
                 value={questionText}
                 onChange={(e) => setQuestionText(e.target.value)}
                 className="w-full rounded-xl bg-gray-900/90 p-3 text-xs text-white placeholder-gray-500 border border-white/10 focus:border-indigo-500 focus:outline-none"
@@ -130,7 +130,7 @@ export const QuickActionModal: React.FC = () => {
                 className="w-full rounded-xl glass-button py-3 text-xs font-bold text-white shadow-lg flex items-center justify-center space-x-2"
               >
                 <Upload className="h-4 w-4" />
-                <span>{partnerUser.name} Panosuna Gönder 🚀</span>
+                <span>{partnerUser?.name || 'Partner'} Panosuna Gönder 🚀</span>
               </button>
             </div>
           </form>

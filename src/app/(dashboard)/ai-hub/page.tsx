@@ -6,8 +6,8 @@ import { useStudyLogStore } from "@/src/lib/store/useStudyLogStore";
 import { useExamHistoryStore } from "@/src/lib/store/useExamHistoryStore";
 import { useCurriculumStore } from "@/src/lib/store/useCurriculumStore";
 import { getRandomQuestions, DuelQuestion } from "@/src/lib/data/duelQuestions";
-import { bulentExactKitapSecData } from "@/src/lib/data/bulentFullDistribution";
-import { senaExactKitapSecData } from "@/src/lib/data/senaFullDistribution";
+import { kpssLisansDistributionData } from "@/src/lib/data/kpssLisansDistribution";
+import { kpssOnlisansDistributionData } from "@/src/lib/data/kpssOnlisansDistribution";
 import { computeTriyaj, calculateExpectedGain } from "@/src/lib/utils/triyajEngine";
 import {
   Bot,
@@ -185,7 +185,7 @@ export default function AIHubPage() {
   };
 
   // Compute Konu Tahmini
-  const distributionData = activeExam === "kpss_onlisans" ? senaExactKitapSecData : bulentExactKitapSecData;
+  const distributionData = activeExam === "kpss_onlisans" ? kpssOnlisansDistributionData : kpssLisansDistributionData;
   
   const allTopics = Object.entries(distributionData).flatMap(([subject, topics]) =>
     topics.map(t => ({ 
