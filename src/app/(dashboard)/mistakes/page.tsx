@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAuthStore } from "@/src/lib/store/useAuthStore";
 import {
   Camera,
@@ -13,6 +13,7 @@ import {
   Edit3,
   ChevronRight,
   Maximize2,
+  Upload,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -42,17 +43,40 @@ const initialMistakes: MistakeItem[] = [];
 export default function MistakesPage() {
   const { currentUser } = useAuthStore();
 
+  const activeExam = currentUser.activeExam || "kpss_lisans";
+  const getExamCourses = (exam: string) => {
+    switch (exam) {
+      case "kpss_onlisans":
+        return ["Türkçe", "Matematik", "Tarih", "Coğrafya", "Vatandaşlık"];
+      case "kpss_ortaogretim":
+        return ["Türkçe", "Matematik", "Tarih", "Coğrafya", "Vatandaşlık", "Güncel Bilgiler"];
+      case "yds":
+        return ["İngilizce"];
+      case "ales":
+        return ["Sayısal", "Sözel"];
+      case "kpss_lisans":
+      default:
+        return ["Türkçe", "Matematik", "Tarih", "Coğrafya", "Vatandaşlık", "Hukuk", "İktisat", "Maliye", "Uluslararası İlişkiler"];
+    }
+  };
+
+  const courses = getExamCourses(activeExam);
+
   const [mistakes, setMistakes] = useState<MistakeItem[]>([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedMistake, setSelectedMistake] = useState<MistakeItem | null>(null);
   const [isClient, setIsClient] = useState(false);
 
   // Form State for Add
-  const [subject, setSubject] = useState("Türkçe");
+  const [subject, setSubject] = useState(courses[0] || "Türkçe");
   const [topic, setTopic] = useState("");
   const [reasonTag, setReasonTag] = useState<MistakeItem["reasonTag"]>("🧠 Bilgi Eksikliği");
   const [notes, setNotes] = useState("");
-  const [imageUrl, setImageUrl] = useState("https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&auto=format&fit=crop&q=80");
+  const [imageUrl, setImageUrl] = useState("");
+
+  // Refs for File & Camera Upload
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   // Comment & Note State for Detail View
   const [newCommentText, setNewCommentText] = useState("");
@@ -76,6 +100,19 @@ export default function MistakesPage() {
   const saveToStorage = (newList: MistakeItem[]) => {
     setMistakes(newList);
     localStorage.setItem("kpss_mistakes_v2", JSON.stringify(newList));
+  };
+
+  const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      if (event.target?.result) {
+        setImageUrl(event.target.result as string);
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleAddMistake = (e: React.FormEvent) => {
@@ -164,11 +201,7 @@ export default function MistakesPage() {
     return <div className="p-8 text-center text-gray-400">Yükleniyor...</div>;
   }
 
-  const userMistakes = mistakes.filter((m) => m.userRole === currentUser.role);
-
-  const coursesOnlisans = ["Türkçe", "Matematik", "Tarih", "Coğrafya", "Vatandaşlık"];
-  const coursesLisans = ["Hukuk", "İktisat", "Maliye", "Uluslararası İlişkiler", "Türkçe", "Matematik", "Tarih", "Coğrafya", "Vatandaşlık"];
-  const courses = currentUser.role === "lisans_alan" ? coursesLisans : coursesOnlisans;
+  const userMistakes = mistakes;
 
   return (
     <div className="space-y-6">
@@ -512,15 +545,65 @@ export default function MistakesPage() {
                   </select>
                 </div>
 
+                {/* Hidden File Inputs */}
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleImageFileChange}
+                  className="hidden"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  ref={cameraInputRef}
+                  onChange={handleImageFileChange}
+                  className="hidden"
+                />
+
                 <div>
-                  <label className="block text-xs font-semibold text-gray-300 mb-1">Fotoğraf URL (veya Örnek Soru)</label>
-                  <input
-                    type="text"
-                    placeholder="Görsel bağlantısı (boş bırakılırsa örnek fotoğraf)"
-                    value={imageUrl}
-                    onChange={(e) => setImageUrl(e.target.value)}
-                    className="w-full rounded-xl bg-gray-900/90 px-3.5 py-2.5 text-xs text-white placeholder-gray-500 border border-white/10 focus:border-indigo-500 focus:outline-none"
-                  />
+                  <label className="block text-xs font-semibold text-gray-300 mb-1.5">Soru Fotoğrafı Yükle / Çek</label>
+                  <div className="grid grid-cols-2 gap-2 mb-2">
+                    <button
+                      type="button"
+                      onClick={() => cameraInputRef.current?.click()}
+                      className="rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-500/40 p-3 text-xs font-bold text-white flex items-center justify-center space-x-2 transition-transform active:scale-95"
+                    >
+                      <Camera className="h-4 w-4 text-indigo-300" />
+                      <span>📸 Kamera İle Çek</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="rounded-xl bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/40 p-3 text-xs font-bold text-white flex items-center justify-center space-x-2 transition-transform active:scale-95"
+                    >
+                      <Upload className="h-4 w-4 text-emerald-300" />
+                      <span>📁 Dosya / PC Seç</span>
+                    </button>
+                  </div>
+
+                  {imageUrl ? (
+                    <div className="relative rounded-2xl overflow-hidden border border-emerald-500/40 max-h-40 bg-black/60 p-1">
+                      <img src={imageUrl} alt="Soru Önizleme" className="h-36 w-full object-contain mx-auto rounded-xl" />
+                      <button
+                        type="button"
+                        onClick={() => setImageUrl("")}
+                        className="absolute top-2 right-2 rounded-full bg-rose-600 text-white p-1 shadow-md hover:bg-rose-500"
+                        title="Fotoğrafı Kaldır"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <input
+                      type="text"
+                      placeholder="veya Görsel URL bağlantısı yapıştırın..."
+                      value={imageUrl}
+                      onChange={(e) => setImageUrl(e.target.value)}
+                      className="w-full rounded-xl bg-gray-900/90 px-3.5 py-2 text-xs text-white placeholder-gray-500 border border-white/10 focus:border-indigo-500 focus:outline-none"
+                    />
+                  )}
                 </div>
 
                 <div>
