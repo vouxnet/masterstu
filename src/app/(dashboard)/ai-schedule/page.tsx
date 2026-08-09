@@ -269,22 +269,22 @@ export default function AiSchedulePage() {
         </div>
       </div>
 
-      {/* 7-Day Grid Schedule */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-3.5">
+      {/* 7-Day Kanban Schedule Container (Scrollable on Desktop & Mobile) */}
+      <div className="flex gap-4 overflow-x-auto pb-6 pt-1 scrollbar-thin snap-x">
         {schedule.map((day, dIdx) => (
           <div
             key={day.dayName}
-            className="rounded-3xl glass-panel p-4 border border-white/10 shadow-xl flex flex-col justify-between space-y-3 bg-black/40"
+            className="min-w-[240px] max-w-[280px] flex-1 shrink-0 snap-start rounded-3xl glass-panel p-4 border border-white/10 shadow-xl flex flex-col justify-between space-y-3 bg-black/40"
           >
             <div>
-              {/* Day Title */}
-              <div className="flex items-center justify-between border-b border-white/10 pb-2.5 mb-3">
-                <h3 className="font-display font-black text-white text-sm tracking-tight">
+              {/* Day Title & Add Button */}
+              <div className="flex items-center justify-between border-b border-white/10 pb-2.5 mb-3 gap-2">
+                <h3 className="font-display font-black text-white text-sm tracking-tight whitespace-nowrap">
                   {day.dayName}
                 </h3>
                 <button
                   onClick={() => handleAddBlock(dIdx)}
-                  className="rounded-lg bg-indigo-600/30 hover:bg-indigo-600/60 text-indigo-300 p-1 text-[10px] font-bold border border-indigo-500/30 flex items-center space-x-1"
+                  className="rounded-lg bg-indigo-600/30 hover:bg-indigo-600/60 text-indigo-300 px-2 py-1 text-[10px] font-bold border border-indigo-500/30 flex items-center space-x-1 whitespace-nowrap shrink-0 transition-colors"
                   title="Bu Güne Yeni Ders Bloğu Ekle"
                 >
                   <Plus className="w-3.5 h-3.5" />
@@ -305,7 +305,7 @@ export default function AiSchedulePage() {
                       }`}
                     >
                       {/* Top Bar: Checkbox + Course Name + Action Buttons */}
-                      <div className="flex items-center justify-between mb-1.5">
+                      <div className="flex items-center justify-between mb-1.5 gap-1">
                         <div
                           onClick={() => toggleBlockCompleted(dIdx, bIdx)}
                           className="flex items-center space-x-2 cursor-pointer flex-1 min-w-0"
@@ -325,7 +325,7 @@ export default function AiSchedulePage() {
                         </div>
 
                         {/* Edit & Delete Action Buttons */}
-                        <div className="flex items-center space-x-1 opacity-80 group-hover:opacity-100 transition-opacity ml-1">
+                        <div className="flex items-center space-x-1 opacity-80 group-hover:opacity-100 transition-opacity shrink-0">
                           <button
                             onClick={() => setEditingBlock({ dayIndex: dIdx, blockIndex: bIdx, block: { ...block } })}
                             className="p-1 rounded-md text-gray-400 hover:text-indigo-300 hover:bg-white/10"
@@ -351,7 +351,7 @@ export default function AiSchedulePage() {
                       {/* Target Questions Badge */}
                       {block.targetQuestions > 0 && (
                         <div className="mt-2 pl-6">
-                          <span className="text-[9px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
+                          <span className="inline-block whitespace-nowrap text-[9.5px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20 shadow-sm">
                             🎯 {block.targetQuestions} Soru Hedefi
                           </span>
                         </div>
