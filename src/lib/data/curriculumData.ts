@@ -9,7 +9,7 @@ export interface CurriculumTopic {
 }
 
 export const initialCurriculumData: CurriculumTopic[] = [
-  // ==================== SENA (KPSS ÖNLİSANS - 54 MİKRO KONU - SIFIR İLERLEME) ====================
+  // ==================== KPSS ÖNLİSANS (54 MİKRO KONU) ====================
   // 1. TÜRKÇE (30 SORU)
   { id: "sen-tr-1", userRole: "onlisans", course: "Türkçe", unit: "Sözcükte Anlam", topic: "Sözcükte Anlam, Gerçek/Mecaz/Yan Anlam ve Terim Anlam", questionWeight: 1, status: "not_started" },
   { id: "sen-tr-2", userRole: "onlisans", course: "Türkçe", unit: "Sözcükte Anlam", topic: "Sözcük Grupları, İkilemeler, Deyimler ve Atasözleri", questionWeight: 1, status: "not_started" },
@@ -52,7 +52,7 @@ export const initialCurriculumData: CurriculumTopic[] = [
   { id: "sen-vat-1", userRole: "onlisans", course: "Vatandaşlık", unit: "Hukuka Giriş", topic: "Hukukun Temel Kavramları ve Sosyal Hayat Kuralları", questionWeight: 1, status: "not_started" },
   { id: "sen-vat-2", userRole: "onlisans", course: "Vatandaşlık", unit: "Devlet Organları", topic: "1982 Anayasası Yasama ve Yürütme Organları", questionWeight: 2, status: "not_started" },
 
-  // ==================== BÜLENT (KPSS LİSANS + ALAN) ====================
+  // ==================== KPSS LİSANS + ALAN ====================
   { id: "h-1", userRole: "lisans_alan", course: "Hukuk", unit: "Anayasa Hukuku", topic: "Anayasa Hukukunun Temel Kavramları ve Devlet Biçimleri", questionWeight: 2, status: "not_started" },
   { id: "h-2", userRole: "lisans_alan", course: "Hukuk", unit: "Anayasa Hukuku", topic: "1982 Anayasası Temel Haklar ve Ödevler Tablosu", questionWeight: 2, status: "not_started" },
   { id: "h-3", userRole: "lisans_alan", course: "Hukuk", unit: "İdare Hukuku", topic: "İdari Teşkilat: Merkezden Yönetim ve Yerinden Yönetim", questionWeight: 3, status: "not_started" },

@@ -92,7 +92,7 @@ export const QuickActionModal: React.FC = () => {
               />
             </div>
 
-            {/* Photo Mock Picker */}
+            {/* Photo Picker */}
             <div>
               <label className="block text-xs font-semibold text-gray-300 mb-1.5">
                 Soru Fotoğrafı Yükle / Çek

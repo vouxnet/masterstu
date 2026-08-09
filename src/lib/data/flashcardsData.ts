@@ -163,7 +163,7 @@ export const flashcardsDatabase: FlashcardItem[] = [
     memoryTip: "💡 1952 / Türkiye + Yunanistan.",
   },
 
-  // ==================== ÖNLİSANS (KULLANICI 2 - SENA) ====================
+  // ==================== ÖNLİSANS ====================
   {
     id: "fc-sen-1",
     userRole: "onlisans",

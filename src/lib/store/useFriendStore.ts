@@ -40,7 +40,7 @@ export const useFriendStore = create<FriendState>()(
   persist(
     (set, get) => ({
       friends: [],
-      pendingRequests: [], // No fake pending requests
+      pendingRequests: [],
       notification: null,
 
       sendFriendRequest: (code: string) => {

@@ -127,7 +127,7 @@ interface AuthState {
   isQuickActionOpen: boolean;
   
   // New auth state
-  authMode: 'demo' | 'supabase';
+  authMode: 'supabase';
   supabaseUser: User | null;
 
   // Actions
@@ -142,7 +142,7 @@ interface AuthState {
   updateUserProfile: (name: string, email: string, avatarUrl: string) => void;
   
   // Supabase Actions
-  setAuthMode: (mode: 'demo' | 'supabase') => void;
+  setAuthMode: (mode: 'supabase') => void;
   signUpWithEmail: (email: string, password: string, name: string) => Promise<{error: string | null}>;
   signInWithEmail: (email: string, password: string) => Promise<{error: string | null}>;
   signOut: () => Promise<void>;

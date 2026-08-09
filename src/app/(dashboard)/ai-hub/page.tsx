@@ -215,7 +215,7 @@ export default function AIHubPage() {
     return "opacity-50";
   };
 
-  const mockPodcasts = [
+  const podcastEpisodes = [
     { id: "p1", title: "Anayasa Hukuku Özet", subject: "Hukuk", duration: "24:30", plays: 142, isOfficial: true },
     { id: "p2", title: "İktisat Temel Kavramlar", subject: "İktisat", duration: "31:15", plays: 98, isOfficial: true },
     { id: "p3", title: "Türk Tarihi - Kurtuluş Savaşı", subject: "Tarih", duration: "18:45", plays: 210, isOfficial: true },
@@ -566,7 +566,7 @@ export default function AIHubPage() {
           </div>
           
           <div className="space-y-3">
-            {mockPodcasts.map(podcast => (
+            {podcastEpisodes.map(podcast => (
               <div key={podcast.id} className="rounded-2xl glass-card p-4 border border-white/5 flex items-center space-x-4 hover:bg-white/5 transition-colors cursor-pointer group">
                 <div className="flex-shrink-0 h-10 w-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition-colors">
                   <Play className="h-4 w-4 ml-0.5" fill="currentColor" />

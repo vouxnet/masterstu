@@ -42,7 +42,7 @@ export const useCurriculumStore = create<CurriculumState>()(
           if (data) {
             // set({ topics: data });
           }
-          // Şimdilik LocalStorage'dan (persist) gelen 'topics'i ezmiyoruz ki demo çalışsın.
+          // LocalStorage'dan (persist) gelen 'topics'i kullanıyoruz.
         } catch (error) {
           console.error("Veri çekme hatası:", error);
         } finally {
@@ -114,8 +114,6 @@ export const useCurriculumStore = create<CurriculumState>()(
       },
     }),
     {
-      // KEY DEĞİŞTİRİLDİ: kpss_curriculum_storage_v3 → asimptot_curriculum_v1 (2026-08-08)
-      // NOT: Bu değişiklik mevcut kullanıcıların localStorage'ını temizler. Demo modunda sorun değil.
       name: "asimptot_curriculum_v1",
     }
   )
