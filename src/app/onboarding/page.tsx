@@ -21,10 +21,12 @@ import { motion } from "framer-motion";
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const { currentUser, setSelectedExams, setActiveExam } = useAuthStore();
+  const { currentUser, setSelectedExams, setActiveExam, updateUserProfile } = useAuthStore();
   const { resetAllTopics } = useCurriculumStore();
 
-  const [name, setName] = useState(currentUser.name);
+  const [name, setName] = useState(currentUser.name || "Aday");
+  const initialCode = currentUser.friendCode || `#${(currentUser.name || "ADAY").toUpperCase().replace(/[^A-Z0-9]/g, '') || 'ADAY'}2026`;
+  const [friendCode, setFriendCodeState] = useState(initialCode);
   const [selectedExams, setSelectedExamsState] = useState<ExamType[]>(
     currentUser.selectedExams && currentUser.selectedExams.length > 0
       ? currentUser.selectedExams
@@ -54,6 +56,9 @@ export default function OnboardingPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    const cleanCode = friendCode.trim().startsWith("#") ? friendCode.trim().toUpperCase() : `#${friendCode.trim().toUpperCase()}`;
+    updateUserProfile(name, currentUser.email, currentUser.avatarUrl, cleanCode);
     setSelectedExams(selectedExams);
     setActiveExam(selectedExams[0]);
 
@@ -100,28 +105,39 @@ export default function OnboardingPage() {
           </p>
         </div>
 
-        {/* User Info Preview */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl glass-card p-4 border border-white/10">
+        {/* User Info & Friend Code Editor */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 rounded-2xl glass-card p-5 border border-white/10">
           <div className="flex items-center space-x-3">
-            <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-lg shadow-lg">
+            <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-lg shadow-lg flex-shrink-0">
               {name.charAt(0)}
             </div>
-            <div>
-              <p className="text-xs text-gray-400 font-medium">Profil Kullanıcı Adın</p>
+            <div className="w-full">
+              <p className="text-[10px] text-gray-400 font-semibold uppercase">Profil Adın</p>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="bg-transparent font-display font-bold text-white text-base border-b border-white/20 focus:border-indigo-500 focus:outline-none"
+                className="w-full bg-transparent font-display font-bold text-white text-base border-b border-white/20 focus:border-indigo-500 focus:outline-none py-0.5"
+                placeholder="Adınız Soyadınız"
               />
             </div>
           </div>
 
-          <div className="text-right">
-            <p className="text-[10px] text-gray-400 uppercase font-semibold">Arkadaş Davet Kodun</p>
-            <span className="font-mono text-xs font-extrabold text-amber-300 bg-amber-500/10 px-2.5 py-1 rounded-lg border border-amber-500/30">
-              {currentUser.friendCode || "#OSYM2026"}
-            </span>
+          <div>
+            <p className="text-[10px] text-amber-300 font-semibold uppercase mb-1">
+              ✨ Kendi Arkadaş Kodunu Belirle:
+            </p>
+            <div className="flex items-center space-x-1 bg-gray-900/80 px-3 py-1.5 rounded-xl border border-amber-500/30">
+              <span className="text-amber-400 font-bold text-sm">#</span>
+              <input
+                type="text"
+                value={friendCode.replace('#', '')}
+                onChange={(e) => setFriendCodeState(`#${e.target.value.toUpperCase().replace(/\s+/g, '')}`)}
+                className="w-full bg-transparent font-mono font-bold text-amber-300 text-sm focus:outline-none uppercase tracking-wider"
+                placeholder="AHMET2026"
+              />
+            </div>
+            <p className="text-[9px] text-gray-400 mt-1">Başkaları bu kod ile seni arkadaş ekleyebilecek.</p>
           </div>
         </div>
 

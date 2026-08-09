@@ -141,7 +141,8 @@ interface AuthState {
   answerSharedQuestion: (id: string, text: string, imageUrl?: string) => void;
   setQuickActionOpen: (open: boolean) => void;
   clearNotification: () => void;
-  updateUserProfile: (name: string, email: string, avatarUrl: string) => void;
+  updateUserProfile: (name: string, email: string, avatarUrl: string, friendCode?: string) => void;
+  setFriendCode: (code: string) => void;
   
   // Supabase Actions
   setAuthMode: (mode: 'supabase') => void;
@@ -264,16 +265,26 @@ export const useAuthStore = create<AuthState>()(
 
       clearNotification: () => set({ notificationMessage: null }),
 
-      updateUserProfile: (name, email, avatarUrl) => {
+      updateUserProfile: (name, email, avatarUrl, friendCode) => {
         set((state) => ({
           currentUser: {
             ...state.currentUser,
             name,
             email,
             avatarUrl,
+            friendCode: friendCode 
+              ? (friendCode.startsWith('#') ? friendCode.toUpperCase() : `#${friendCode.toUpperCase()}`)
+              : state.currentUser.friendCode,
             roleLabel: `${name} (${state.currentUser.role === 'lisans_alan' ? 'Lisans + Alan' : 'Önlisans'})`,
           },
           notificationMessage: "✅ Profil bilgileriniz başarıyla güncellendi!",
+        }));
+      },
+
+      setFriendCode: (code) => {
+        const cleanCode = code.trim().startsWith('#') ? code.trim().toUpperCase() : `#${code.trim().toUpperCase()}`;
+        set((state) => ({
+          currentUser: { ...state.currentUser, friendCode: cleanCode }
         }));
       },
 

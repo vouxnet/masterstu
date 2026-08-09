@@ -18,6 +18,7 @@ import {
   UserCheck,
   Clock,
   X,
+  Trash2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
@@ -29,6 +30,7 @@ export default function FriendsPage() {
     pendingRequests,
     sendFriendRequest,
     acceptFriendRequest,
+    removeFriend,
     sendPoke,
     sendCheer,
     notification,
@@ -234,82 +236,102 @@ export default function FriendsPage() {
           <span>Ekli Arkadaşların & Canlı Durumları</span>
         </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {displayFriends.map((friend) => (
-            <div
-              key={friend.id}
-              className="rounded-3xl glass-panel p-6 border border-white/10 shadow-2xl space-y-4 relative overflow-hidden"
-            >
-              {/* Top User Info */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3.5">
-                  <div className="relative">
-                    <img
-                      src={friend.avatarUrl}
-                      alt={friend.name}
-                      className="h-12 w-12 rounded-2xl object-cover border-2 border-indigo-500/40 shadow-lg"
-                    />
-                    {friend.isOnline && (
-                      <span className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 border-2 border-gray-900 shadow-md" />
-                    )}
-                  </div>
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      <h4 className="font-display font-bold text-white text-base">
-                        {friend.name}
-                      </h4>
-                      <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-bold text-amber-300 border border-amber-500/30">
-                        {friend.friendCode}
-                      </span>
+        {displayFriends.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {displayFriends.map((friend) => (
+              <div
+                key={friend.id}
+                className="rounded-3xl glass-panel p-6 border border-white/10 shadow-2xl space-y-4 relative overflow-hidden"
+              >
+                {/* Top User Info */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3.5">
+                    <div className="relative">
+                      <img
+                        src={friend.avatarUrl}
+                        alt={friend.name}
+                        className="h-12 w-12 rounded-2xl object-cover border-2 border-indigo-500/40 shadow-lg"
+                      />
+                      {friend.isOnline && (
+                        <span className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 border-2 border-gray-900 shadow-md" />
+                      )}
                     </div>
-                    <p className="text-xs text-indigo-300 font-medium">{friend.roleLabel}</p>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <h4 className="font-display font-bold text-white text-base">
+                          {friend.name}
+                        </h4>
+                        <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-bold text-amber-300 border border-amber-500/30">
+                          {friend.friendCode}
+                        </span>
+                      </div>
+                      <p className="text-xs text-indigo-300 font-medium">{friend.roleLabel}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-1.5 rounded-xl bg-amber-500/10 px-2.5 py-1 border border-amber-500/30 text-xs font-bold text-amber-400">
+                      <Flame className="h-4 w-4 text-amber-400 animate-bounce" />
+                      <span>{friend.streakCount} Gün</span>
+                    </div>
+
+                    <button
+                      onClick={() => removeFriend(friend.id)}
+                      className="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 transition-all hover:scale-105 active:scale-95"
+                      title="Arkadaşı Sil"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-1.5 rounded-xl bg-amber-500/10 px-2.5 py-1 border border-amber-500/30 text-xs font-bold text-amber-400">
-                  <Flame className="h-4 w-4 text-amber-400 animate-bounce" />
-                  <span>{friend.streakCount} Gün</span>
+                {/* Live Status Widget */}
+                <div className="rounded-2xl bg-black/40 p-3.5 border border-white/5 space-y-1">
+                  <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wider flex items-center space-x-1">
+                    <Clock className="h-3 w-3 text-indigo-400" />
+                    <span>CANLI ÇALIŞMA DURUMU</span>
+                  </p>
+                  <p className="text-xs text-emerald-300 font-bold">{friend.statusText}</p>
+                </div>
+
+                {/* Duo Co-Op Action Buttons */}
+                <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/5">
+                  <button
+                    onClick={() => sendPoke(friend.name)}
+                    className="rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 px-3 py-2 text-xs font-bold border border-indigo-500/40 transition-transform active:scale-95 flex items-center justify-center space-x-1"
+                  >
+                    <Zap className="h-4 w-4 text-amber-300" />
+                    <span>Dürt 👉</span>
+                  </button>
+
+                  <button
+                    onClick={() => triggerCheerWithConfetti(friend.name)}
+                    className="rounded-xl bg-emerald-600/30 hover:bg-emerald-600/50 text-emerald-300 px-3 py-2 text-xs font-bold border border-emerald-500/40 transition-transform active:scale-95 flex items-center justify-center space-x-1"
+                  >
+                    <Sparkles className="h-4 w-4 text-emerald-400" />
+                    <span>Tebrik 🎉</span>
+                  </button>
+
+                  <Link
+                    href="/mistakes"
+                    className="rounded-xl bg-pink-600/30 hover:bg-pink-600/50 text-pink-300 px-3 py-2 text-xs font-bold border border-pink-500/40 transition-transform active:scale-95 flex items-center justify-center space-x-1 text-center"
+                  >
+                    <Lock className="h-3.5 w-3.5 text-pink-400" />
+                    <span>Yanlışlar 🔒</span>
+                  </Link>
                 </div>
               </div>
-
-              {/* Live Status Widget */}
-              <div className="rounded-2xl bg-black/40 p-3.5 border border-white/5 space-y-1">
-                <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wider flex items-center space-x-1">
-                  <Clock className="h-3 w-3 text-indigo-400" />
-                  <span>CANLI ÇALIŞMA DURUMU</span>
-                </p>
-                <p className="text-xs text-emerald-300 font-bold">{friend.statusText}</p>
-              </div>
-
-              {/* Duo Co-Op Action Buttons */}
-              <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/5">
-                <button
-                  onClick={() => sendPoke(friend.name)}
-                  className="rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 px-3 py-2 text-xs font-bold border border-indigo-500/40 transition-transform active:scale-95 flex items-center justify-center space-x-1"
-                >
-                  <Zap className="h-4 w-4 text-amber-300" />
-                  <span>Dürt 👉</span>
-                </button>
-
-                <button
-                  onClick={() => triggerCheerWithConfetti(friend.name)}
-                  className="rounded-xl bg-emerald-600/30 hover:bg-emerald-600/50 text-emerald-300 px-3 py-2 text-xs font-bold border border-emerald-500/40 transition-transform active:scale-95 flex items-center justify-center space-x-1"
-                >
-                  <Sparkles className="h-4 w-4 text-emerald-400" />
-                  <span>Tebrik 🎉</span>
-                </button>
-
-                <Link
-                  href="/mistakes"
-                  className="rounded-xl bg-pink-600/30 hover:bg-pink-600/50 text-pink-300 px-3 py-2 text-xs font-bold border border-pink-500/40 transition-transform active:scale-95 flex items-center justify-center space-x-1 text-center"
-                >
-                  <Lock className="h-3.5 w-3.5 text-pink-400" />
-                  <span>Yanlışlar 🔒</span>
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-3xl glass-panel p-8 text-center space-y-3 border border-white/10">
+            <Users className="h-10 w-10 text-gray-500 mx-auto" />
+            <h4 className="font-display font-bold text-white text-base">Henüz Ekli Bir Arkadaşınız Yok</h4>
+            <p className="text-xs text-gray-400 max-w-md mx-auto">
+              Yukarıdaki "Arkadaş Ekle" kutusundan arkadaşının davet kodunu (Örn: #AHMET2026) girerek istek gönderebilirsin.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
