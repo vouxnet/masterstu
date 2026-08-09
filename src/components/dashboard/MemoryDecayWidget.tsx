@@ -20,8 +20,21 @@ export default function MemoryDecayWidget() {
     return computeMemoryMap(topics, logs, activeExam);
   }, [topics, logs, activeExam]);
 
-  // Max 8 topics to display
-  const displayTopics = memoryMap.slice(0, 8);
+  // Pick top critical/decaying topic per course for a balanced view across all subjects
+  const displayTopics = useMemo(() => {
+    const courseMap = new Map<string, typeof memoryMap[0]>();
+    memoryMap.forEach((item) => {
+      if (!courseMap.has(item.course)) {
+        courseMap.set(item.course, item);
+      }
+    });
+    const result = Array.from(courseMap.values());
+    if (result.length < 8) {
+      const remaining = memoryMap.filter((item) => !result.includes(item));
+      result.push(...remaining.slice(0, 8 - result.length));
+    }
+    return result.slice(0, 8);
+  }, [memoryMap]);
 
   const criticalCount = memoryMap.filter((t) => t.status === "critical").length;
   const decayingCount = memoryMap.filter((t) => t.status === "decaying").length;
