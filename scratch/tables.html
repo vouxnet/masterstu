@@ -1,0 +1,2417 @@
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tr>
+		<td>
+                    <a href="https://www.kitapsec.com/" class="Logo" title="KitapSe�"><img src="//cdn.kitapsec.com/temalar/KitapSec2017/img/logo.jpg" width="292" height="70" border="0"/ alt="Kitapse�"></a>
+                    
+</td>
+		<td>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tr>
+		<td>
+			<a class="link_menu_arama black" href="https://www.kitapsec.com/tum-kategoriler/" title="Kategoriler">Kategoriler</a>
+			<a class="link_menu_arama black" href="https://www.kitapsec.com/Products/KPSS-Kitaplari/" title="KPSS Kitaplar�">KPSS Kitaplar�</a>
+			<a class="link_menu_arama black" href="https://www.kitapsec.com/Products/MEB-AGS-Kitaplari/" title="AGS Kitaplar�">AGS Kitaplar�</a>
+			<a class="link_menu_arama black" href="https://www.kitapsec.com/Yayinevleri/" title="Yay�nevleri">Yay�nevleri</a>
+			<a class="link_menu_arama black" href="https://www.kitapsec.com/Yazar/" title="Yazarlar">Yazarlar</a>
+			<a class="link_menu_arama black" href="https://www.kitapsec.com/BankaHesaplari.php" title="Banka Hesaplar�m�z">Banka Hesaplar�m�z</a>
+			<a class="link_menu_arama black" href="https://www.kitapsec.com/Iletisim.php" title="�leti�im Formu">�leti�im Formu</a>
+			<a class="link_menu_arama black" href="https://www.kitapsec.com/Konu/Hakkimizda.html" title="Hakk�m�zda">Hakk�m�zda</a>
+			<a class="link_menu_arama black" href="https://www.kitapsec.com/siparis-baslat/?Git=giris" title="�ipari� Takibi">Sipari� Takibi</a></td>
+	</tr>
+	<tr>
+		<td><div class="Ks_Arama">
+							<form action="https://www.kitapsec.com/Arama/index.php" method="get"  name="SearchNewForm1" id="SearchNewForm1">
+								<div class="inputDiv"><input  name="a" data-arama="1"  value="" id="yeniAramaInput" autocomplete="off"  type="text" placeholder="Kitap, Yazar, Yay�nevi Ara ?" /></div>
+								<a href="javascript:void(0);" onclick="SearchNewForm1.submit();"  class="submitKs loadClick">ARA</a>
+							</form> 
+							<a href="javascript:void(0);" onclick="$('#sonuclardiv').hide().html(''); $('.src-kapat').hide();" class="src-kapat"></a>
+							<div class="sonuclar-div" id="sonuclardiv"></div>
+						</div><script type="text/javascript">
+$(function(){
+
+var searchLong	= 0;
+
+$("#yeniAramaInput").keyup( function(){
+		var val = $(this).val();
+		searchLong	= parseInt(val.length);
+		
+		if(searchLong>1){
+			
+			$.ajax({
+					type: "GET",
+					url: "https://www.kitapsec.com/Mch.php?a="+val,
+					success: function(ajaxcevap){
+							if(ajaxcevap==""){
+								$('#sonuclardiv').html("").hide();
+								$(".src-kapat").hide();
+								
+							}else{
+								$(".src-kapat").show();
+								$('#sonuclardiv').html(ajaxcevap).show();
+							}
+						
+
+					}
+				 });
+		}else{
+			$(".sonuclar-div").hide().html("");
+			$(".src-kapat").hide();
+			
+		}
+	})
+});
+</script>
+ <!--SepetLoginDiv ba�lang�c-->
+	                <div class="SepetLoginDiv">
+                    			 
+                                 <!--Login Ba�lang��-->
+                    	  	<div class="Ks_HdLoginSepet ">
+                        		<ul>
+                        			<li><a class="a loadClick" href="https://www.kitapsec.com/siparis-baslat/"><span class="text">�ye Giri�i</span></a>
+                                            <a class="a loadClick" href="https://www.kitapsec.com/siparis-baslat/?Git=uyelik"><span class="text1">Yeni �yelik Olu�tur</span></a><div class="LoginPanel">
+                                           	<div class="Ust"></div>
+                                           	<div class="Content">
+											<table border="0" width="100%" cellspacing="0" cellpadding="0">
+												<form method="POST" name="formHdLogin" id="formHdLogin" action="">
+												<input type="hidden" name="loginNumber" value="434183">
+	
+													<tr>
+														<td>
+														<table border="0" width="100%" cellspacing="0" cellpadding="0">		
+															<tr>
+																<td style="padding-bottom:5px;"><input  class="input-v2 icon-login-input icon-login-email" type="email" style="width:250px;" id="uyegirisi_Email" name="Email" placeholder="E-Posta Adresiniz" size="20"></td>
+															</tr>		
+															<tr>
+																<td style="padding-bottom:5px;"><input  class="input-v2 icon-login-input icon-login-pass" type="password" style="width:250px;" id="uyegirisi_Sifre"  name="Sifre" placeholder="�ifreniz"  size="20"></td>
+															</tr>	
+															<tr>
+																<td style="padding-bottom:5px;">
+																<table border="0" width="100%" cellspacing="0" cellpadding="0">
+																<tr>
+																	<td width="70"><img src="https://www.kitapsec.com/guvenlik_kodu.jpg"></td>
+																	<td style="padding-bottom:5px; padding-left:5px;"><input  class="input-v2 icon-login-input icon-login-gkodu" style="width:145px;" type="text" id="gk_code"  name="Gkodu" placeholder="G�venlik Kodu"  size="20"></td>
+																</tr>
+																</table>
+
+<hr>
+
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+                                                            <tr>
+                                                                <td style="padding-top:10px;"><a href="https://www.kitapsec.com/Store.php?Git=Uyelik" class="a2"> <u>Hemen �ye Olun</u></a></td>
+																<td style="padding-top:10px;"><a href="https://www.kitapsec.com/Store.php?Git=Uyelik&Sayfa=SifremiUnuttum" class="a2"><u>�ifremi Unuttum</u></a></td>
+                                                            </tr>
+															 <tr>
+                                                                <td  style="padding-top:10px;" colspan="2"><a href="javascript:void(0);" onclick="FcLogin('https://www.kitapsec.com/');"  class="facebbokLoginBtn formText">
+                                                                <img border="0" src="//cdn.kitapsec.com/temalar/KitapSec2017/img/faceBookLogin.png" width="185" height="36"></a></td>
+                                                            </tr>
+                                              </table>
+
+<hr>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td width="9%" class="araSolid2">
+				<ul class="katMenuUL"><li data-id="1" onclick="katClick(1)"  class="li"><a class="a" href="javascript:void(0);" title="SINAV K�TAPLARI">SINAV K�TAPLARI</a>
+				<div id="menuKategoriDiv1" data-durum="0" class="menuKategoriDiv"><table border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tr>
+		<td style="padding-right: 1px" valign="top">
+		
+		<table border="0" cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="390">
+				<div class="KategoriListeDiv">
+<div class="katbaslik" title="�SYM S�navlar�">�SYM S�navlar�</div>
+<a href="https://www.kitapsec.com/Konu/2027-YKS-Kitaplari.html" class="ustkat" title="�niversite Haz�rl�k (2027-YKS)">�niversite Haz�rl�k (2027-YKS)</a>
+<a href="https://www.kitapsec.com/Products/YKS-Kitaplari/TYT-Konu-Anlatim/" class="altkat" title="TYT Konu Anlat�m">TYT Konu Anlat�m</a>
+<a href="https://www.kitapsec.com/Products/YKS-Kitaplari/TYT-Soru-Bankalari/" class="altkat" title="TYT Soru Bankas�">TYT Soru Bankas�</a>
+<a href="https://www.kitapsec.com/Products/YKS-Kitaplari/TYT-Denemeler/" class="altkat" title="TYT Deneme S�nav�">TYT Deneme S�nav�</a>
+<a href="https://www.kitapsec.com/Products/YKS-Kitaplari/AYT-Konu-Anlatim/" class="altkat" title="AYT Konu Anlat�m">AYT Konu Anlat�m</a>
+<a href="https://www.kitapsec.com/Products/YKS-Kitaplari/AYT-Soru-Bankalari/" class="altkat" title="AYT Soru Bankas�">AYT Soru Bankas�</a>
+<a href="https://www.kitapsec.com/Products/YKS-Kitaplari/AYT-Denemeler/" class="altkat" title="AYT Deneme S�nav�">AYT Deneme S�nav�</a>
+<a href="https://www.kitapsec.com/Products/YKS-Kitaplari/MSU-Kitaplari/" class="altkat" title="MS� Kitaplar�">MS� Kitaplar�</a>
+                                        
+<div class="Pixel-Menu">&nbsp;</div>
+
+<a href="https://www.kitapsec.com/Konu/2026-KPSS-Kitaplari.html" class="ustkat" title="MEB AGS / KPSSS / �ABT (2026)">MEB AGS / KPSSS / �ABT (2026)</a>
+<a href="https://www.kitapsec.com/Products/MEB-AGS-Kitaplari/" class="altkat" title="MEB AGS Kitaplar�">MEB AGS Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/KPSS-Kitaplari/" class="altkat" title="KPSS Kitaplar�">KPSS Lisans GY-GK</a>
+<a href="https://www.kitapsec.com/Products/KPSS-Egitim-Bilimleri/" class="altkat" title="KPSS E�itim Bilimleri">KPSS E�itim Bilimleri</a>
+<a href="https://www.kitapsec.com/Konu/Kitapsec-OABT-Kitap-Fuari.html" class="altkat" title="KPSS ��retmenlik �ABT Kitaplar�">KPSS ��retmenlik �ABT</a>
+<a href="https://www.kitapsec.com/Products/KPSS-A-Grubu/" class="altkat" title="KPSS A-Grubu">KPSS A-Grubu</a>
+<a href="https://www.kitapsec.com/Products/KPSS-Lise-Onlisans/" class="altkat" title="KPSS Lise-�nlisans">KPSS Lise-�nlisans</a>
+
+<div class="Pixel-Menu">&nbsp;</div>
+                    
+<a href="#" class="ustkat" title="S�navlara Haz�rl�k (2026-�SYM)">S�navlara Haz�rl�k (2026-�SYM)</a>
+<a href="https://www.kitapsec.com/Products/DGS-Kitaplari/" class="altkat" title="DGS Kitaplar�">DGS Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/ALES-Kitaplari/" class="altkat" title="ALES Kitaplar�">ALES Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/YDS-Kitaplari/" class="altkat" title="YDS Kitaplar�">YDS Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/YOK-Dil-Kitaplari/" class="altkat" title="Y�KD�L Kitaplar�">Y�KD�L Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/DHBT-Diyanet-Kitaplari/" class="altkat" title="DHBT Kitaplar�">DHBT Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/MBSTS-ve-Yeterlilik-Sinavi/" class="altkat" title="D�B-MBSTS Kitaplar�">D�B-MBSTS Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Is-Sagligi-ve-Guvenligi-Kitaplari/" class="altkat" title="�SG Kitaplar�">�SG Kitaplar�</a>
+
+<div class="Pixel-Menu">&nbsp;</div>
+
+					
+
+
+					
+				</div>
+				
+				
+				
+				</td>
+				<td valign="top" width="350">
+				
+				<div class="KategoriListeDiv">
+		<div class="katbaslik"></div>
+					<div class="Pixel-Menu">&nbsp;</div>
+
+				<div class="Pixel-Menu">&nbsp;</div>
+
+<a href="https://www.kitapsec.com/Konu/LGS-Kamp-Firsatlari.html" class="ustkat" title="Liselere Giri� (2027-LGS)">Liselere Giri� (2027-LGS)</a>
+<a href="https://www.kitapsec.com/Products/LGS-Kitaplari/LGS-Konu-Anlatimli/" class="altkat" title="LGS Konu Anlat�m">LGS Konu Anlat�m</a>
+<a href="https://www.kitapsec.com/Products/LGS-Kitaplari/LGS-Soru-Bankasi/" class="altkat" title="LGS Soru Bankas�">LGS Soru Bankas�</a>
+<a href="https://www.kitapsec.com/Products/LGS-Kitaplari/LGS-Denemeler/" class="altkat" title="LGS Deneme S�nav�">LGS Deneme S�nav�</a>
+<a href="https://www.kitapsec.com/Products/LGS-Kitaplari/" class="altkat" title="LGS �ok Satanlar">LGS �ok Satanlar</a>
+
+<div class="Pixel-Menu">&nbsp;</div>
+
+<a href="https://www.kitapsec.com/Konu/Kurum-Sinavlari.html" class="ustkat" title="Kurum S�navlar�">Kurum S�navlar�</a>
+<a href="https://www.kitapsec.com/Products/GYS-Kitaplari/" class="altkat" title="GYS Kitaplar�">GYS Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/MEB-EKYS-Kitaplari/" class="altkat" title="MEB EKYS Kitaplar�">MEB EKYS Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Adli-Idari-Hakimlik/" class="altkat" title="Adli �dari Hakimlik">Adli �dari Hakimlik</a>
+<a href="https://www.kitapsec.com/Products/Kaymakamlik-Kitaplari/" class="altkat" title="Kaymakaml�k Kitaplar�">Kaymakaml�k Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Polis-Meslekici-Kitaplari/" class="altkat" title="Polis Mesleki�i Kitaplar�">Polis Mesleki�i Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/SPK-Kitaplari/" class="altkat" title="SPK Kitaplar�">SPK Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Icra-Mudur-ve-Yardimciligi/" class="altkat" title="�cra M�d�r ve Yard�mc�l���">�cra M�d�r ve Yard�mc�l���</a>
+<a href="https://www.kitapsec.com/Products/Sayistay/" class="altkat" title="Sat��tay Kitaplar�">Sat��tay Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Arabuluculuk-Kitabi/" class="altkat" title="Arabuluculuk Kitaplar�">Arabuluculuk Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Tipta-Uzmanlik-Sinavi/" class="altkat" title="T�pta Uzmanl�k S�nav�">T�pta Uzmanl�k S�nav�</a>
+
+<div class="Pixel-Menu">&nbsp;</div>
+<a href="https://www.kitapsec.com/tum-kategoriler/" class="tumkat" title="T�m Kategoriler">T�m Kategoriler � </a>
+
+                                        
+				
+				</td>
+				
+				
+				
+			</tr>
+		</table>
+
+<hr>
+
+<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 20px" >
+	<tr>
+		<td valign="top">
+	
+	
+	<img src="//cdn.kitapsec.com/temalar/KitapSec2017/kat_banner/Sinav-Kitaplari.jpg" class="lazy" width="541" height="362" usemap="#SinavKitaplari" id="SinavKitaplari"/>
+<map name="SinavKitaplari">
+  <area shape="rect" coords="6,168,256,265" href="https://www.kitapsec.com/Products/ALES-Kitaplari/" alt="Ales Kitaplar�" title="Ales Kitaplar�">
+  <area shape="rect" coords="5,3,252,152" href="https://www.kitapsec.com/Konu/2027-YKS-Kitaplari.html" alt="�niversiteye Haz�rl�k" title="�niversiteye Haz�rl�k">
+  <area shape="rect" coords="283,3,535,83" href="https://www.kitapsec.com/Products/YDS-Kitaplari/" alt="Yds Kitaplar�" title="Yds Kitaplar�">
+  <area shape="rect" coords="285,99,532,265" href="https://www.kitapsec.com/Products/KPSS-Kitaplari/" alt="Kpss Kitaplar�" title="Kpss Kitaplar�">
+  <area shape="rect" coords="284,286,533,356" href="https://www.kitapsec.com/Konu/LGS-Kamp-Firsatlari.html" alt="Lgs Kitaplar�" title="Lgs Kitaplar�">
+  <area shape="rect" coords="6,288,257,355" href="https://www.kitapsec.com/Konu/Kurum-Sinavlari.html" alt="Kurum Kitaplar�" title="Kurum Kitaplar�">
+</map>
+
+		</td>
+	</tr>
+</table>
+
+<hr>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tr>
+		<td style="padding-right: 1px" valign="top">
+		
+		<table border="0" cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="360">
+				<div class="KategoriListeDiv">
+					<div class="Pixel-Menu">&nbsp;</div>
+
+<a href="https://www.kitapsec.com/Products/Okul-Oncesi-Egitim/" class="ustkat" title="Okul �ncesi E�itim">Okul �ncesi E�itim</a>
+<a href="https://www.kitapsec.com/Konu/Okula-Yardimci-Kitaplar.html" class="ustkat" title="�lk��retim Kitaplar�">�lk��retim Yard�mc� Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Ilkokul-Yardimci-Kitaplar/1-Sinif-Ilkogretim/" class="altkat" title="1.S�n�f Yard�mc� Kitaplar">1.S�n�f Yard�mc� Kitaplar</a>
+<a href="https://www.kitapsec.com/Products/Ilkokul-Yardimci-Kitaplar/2-Sinif-Ilkogretim/" class="altkat" title="2.S�n�f Yard�mc� Kitaplar">2.S�n�f Yard�mc� Kitaplar</a>
+<a href="https://www.kitapsec.com/Products/Ilkokul-Yardimci-Kitaplar/3-Sinif-Ilkogretim/" class="altkat" title="3.S�n�f Yard�mc� Kitaplar">3.S�n�f Yard�mc� Kitaplar</a>
+<a href="https://www.kitapsec.com/Products/Ilkokul-Yardimci-Kitaplar/4-Sinif-Ilkogretim/" class="altkat" title="4.S�n�f Yard�mc� Kitaplar">4.S�n�f Yard�mc� Kitaplar</a>
+<a href="https://www.kitapsec.com/Products/Ilkokul-Yardimci-Kitaplar/Bilsem-Kitaplari/" class="altkat" title="Bilsem Kitaplar�">Bilsem Kitaplar�</a>
+
+                                        
+<div class="Pixel-Menu">&nbsp;</div>
+					
+<a href="https://www.kitapsec.com/Konu/Okula-Yardimci-Kitaplar.html" class="ustkat" title="Orta Okul Kitaplar�">Ortaokul Yard�mc� Kitaplar</a>
+<a href="https://www.kitapsec.com/Products/5-Sinif-Yardimci-Kitaplar/" class="altkat" title="5.S�n�f Yard�mc� Kitaplar">5.S�n�f Yard�mc� Kitaplar</a>
+<a href="https://www.kitapsec.com/Products/6-Sinif-Yardimci-Kitaplar/" class="altkat" title="6.S�n�f Yard�mc� Kitaplar">6.S�n�f Yard�mc� Kitaplar</a>
+<a href="https://www.kitapsec.com/Products/7-Sinif-Yardimci-Kitaplar/" class="altkat" title="7.S�n�f Yard�mc� Kitaplar">7.S�n�f Yard�mc� Kitaplar</a>
+<a href="https://www.kitapsec.com/Products/8-Sinif-Yardimci-Kitaplar/" class="altkat" title="8.S�n�f Yard�mc� Kitaplar">8.S�n�f Yard�mc� Kitaplar</a>
+<a href="https://www.kitapsec.com/Konu/LGS-Kamp-Firsatlari.html" class="altkat" title="LGS Haz�rl�k Kitaplar�">LGS Haz�rl�k Kitaplar�</a>
+
+<div class="Pixel-Menu">&nbsp;</div>
+                    
+<a href="https://www.kitapsec.com/Konu/Lise-Yardimci-Kitaplar.html" class="ustkat" title="Lise Yard�mc� Kitaplar">Lise Yard�mc� Kitaplar</a>
+<a href="https://www.kitapsec.com/Konu/9-Sinif-Yardimci-Kitaplar.html" class="altkat" title="9.S�n�f Lise Yard�mc� Kitaplar">9.S�n�f Lise Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/10-Sinif-Yardimci-Kitaplar/" class="altkat" title="10.S�n�f Lise Yard�mc� Kitaplar">10.S�n�f Lise Kitaplar�</a>
+<a href="https://www.kitapsec.com/Konu/11Sinif-Yardimci-Kitaplar.html" class="altkat" title="11.S�n�f Lise Yard�mc� Kitaplar">11.S�n�f Lise Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/12-Sinif-Yardimci-Kitaplar/" class="altkat" title="12.S�n�f Lise Yard�mc� Kitaplar">12.S�n�f Lise Kitaplar�</a>
+<a href="https://www.kitapsec.com/Konu/2025-YKS-Kitaplari.html" class="altkat" title="TYT - AYT Kitaplar�">TYT - AYT Kitaplar�</a>
+
+<div class="Pixel-Menu">&nbsp;</div>
+				</div>
+				
+					
+				</td>
+				<td valign="top" width="270">
+				
+				<div class="KategoriListeDiv">
+										<div class="Pixel-Menu">&nbsp;</div>
+
+<div class="katbaslik">�niversite Ders Kitaplar�</div>
+<a href="https://www.kitapsec.com/Products/Universite-Ders-Kitaplari/Tip/" class="ustkat" title="T�p Kitaplar">T�p Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Universite-Ders-Kitaplari/Hukuk/" class="ustkat" title="Hukuk Kitaplar�">Hukuk Kitaplar�</a>
+
+<a href="https://www.kitapsec.com/Products/Universite-Ders-Kitaplari/Ekonomi-Iktisat-Kitaplari/" class="ustkat" title="Ekonomi - �ktisat Kitaplar�">Ekonomi - �ktisat Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Universite-Ders-Kitaplari/Egitim-Kitaplari/" class="ustkat" title="E�itim Kitaplar�">E�itim Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Universite-Ders-Kitaplari/Muhasebe-Maliye-Kitaplari/" class="ustkat" title="Muhasebe - Maliye Kitaplar�">Muhasebe - Maliye Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Universite-Ders-Kitaplari/Matematik-Kitaplari/" class="ustkat" title="Matematik Kitaplar�">Matematik Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Universite-Ders-Kitaplari/Fen-Bilimleri/" class="ustkat" title="Fen Bilimleri Kitaplar�">Fen Bilimleri Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Universite-Ders-Kitaplari/Isletme/" class="ustkat" title="��letme Kitaplar�">��letme Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Universite-Ders-Kitaplari/Sosyal-Bilimler/" class="ustkat" title="Sosyal Bilimler Kitaplar�">Sosyal Bilimler Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Universite-Ders-Kitaplari/Muhendislik/" class="ustkat" title="M�hendislik Kitaplar�">M�hendislik Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Universite-Ders-Kitaplari/Elektrik-Elektronik/" class="ustkat" title="Elektrik - Elektronik Kitaplar�">Elektrik - Elektronik Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Universite-Ders-Kitaplari/Mimarlik/" class="ustkat" title="Mimarl�k Kitaplar�">Mimarl�k Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Universite-Ders-Kitaplari/Veterinerlik/" class="ustkat" title="Veterinerlik Kitaplar�">Veterinerlik Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Universite-Ders-Kitaplari/Kamu-Yonetimi/" class="ustkat" title="Kamu Y�netimi Kitaplar�">Kamu Y�netimi Kitaplar�</a>
+
+<div class="Pixel-Menu">&nbsp;</div>
+<a href="https://www.kitapsec.com/tum-kategoriler/" class="tumkat" title="T�m Kategoriler">T�m Kategoriler � </a>
+				</div>
+				</td>
+				
+			</tr>
+		</table>
+
+<hr>
+
+<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 20px" >
+	<tr>
+		<td valign="top">
+		
+	
+<img data-original="//cdn.kitapsec.com/temalar/KitapSec2017/kat_banner/Okula-Yardimci.jpg" alt="" class="lazy" width="541" height="362" usemap="#OkulaYardimci"/>
+<map name="OkulaYardimci">
+  <area shape="rect" coords="8,7,257,80" href="https://www.kitapsec.com/Products/Okul-Oncesi-Egitim/" alt="Okul �ncesi Kitaplar�" title="Okul �ncesi Kitaplar�">
+  <area shape="rect" coords="283,5,536,73" href="https://www.kitapsec.com/Konu/Okula-Yardimci-Kitaplar.html" alt="Ortaokul Kitaplar�" title="Ortaokul Kitaplar�">
+  <area shape="rect" coords="10,103,257,187" href="https://www.kitapsec.com/Products/Ilkokul-Yardimci-Kitaplar/" 
+  alt="�lk��retim Kitaplar�" title="�lk��retim Kitaplar�">
+  <area shape="rect" coords="284,89,535,168" href="https://www.kitapsec.com/Konu/Lise-Yardimci-Kitaplar.html" alt="Lise Yard�mc� Kitaplar" title="Lise Yard�mc� Kitaplar">
+  <area shape="rect" coords="282,185,531,354" href="https://www.kitapsec.com/Products/Universite-Ders-Kitaplari/" alt="�niversite Ders Kitaplar�" title="�niversite Ders Kitaplar�">
+  <area shape="rect" coords="12,210,252,352" href="https://www.kitapsec.com/Products/Ilkokul-Yardimci-Kitaplar/Bilsem-Kitaplari/" alt="Bilsem Kitaplar�" title="Bilsem Kitaplar�">
+</map>
+
+		
+		</td>
+	</tr>
+</table>
+
+<hr>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tr>
+		<td style="padding-right: 1px" valign="top">
+		
+		<table border="0" cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="360">
+				<div class="KategoriListeDiv">
+										<div class="Pixel-Menu">&nbsp;</div>
+					<div class="Pixel-Menu">&nbsp;</div>
+
+
+<a href="https://www.kitapsec.com/Products/Edebiyat/" class="ustkat" title="Edebiyat Kitaplar�">Edebiyat</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Cok-Satan-Kitaplar/" class="altkat" title="�ok Satan Kitaplar">�ok Satan Kitaplar</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Cok-Satan-Edebiyat-Setleri/" class="altkat" title="�ok Satan Edebiyat Setleri">�ok Satan Edebiyat Setleri</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Gezi-ve-Rehber-Kitaplari/" class="altkat" title="Gezi ve Rehber Kitaplar�">Gezi ve Rehber Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Ani/" class="altkat" title="An�">An�</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Arastirma-Inceleme/" class="altkat" title="Ara�t�rma - �nceleme">Ara�t�rma - �nceleme</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Belgesel-Roman/" class="altkat" title="Belgesel - Roman">Belgesel - Roman</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Bilimkurgu/" class="altkat" title="Bilim Kurgu Kitaplar�">Bilim Kurgu Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Biyografi/" class="altkat" title="Biyografi Kitaplar�">Biyografi Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Cizgi-Roman/" class="altkat" title="�izgi Roman">�izgi Roman</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Cocuk-ve-Genclik/" class="altkat" title="�ocuk ve Gen�lik Kitaplar�">�ocuk ve Gen�lik Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Deneme-Oyku/" class="altkat" title="Deneme - �yk�">Deneme - �yk�</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Denemeler/" class="altkat" title="Denemeler">Denemeler</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Dunya-Edebiyati/" class="altkat" title="D�nya Edebiyat�">D�nya Edebiyat�</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Dogu-Klasikleri/" class="altkat" title="Do�u Klasikleri">Do�u Klasikleri</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Edebiyat-Tarihi/" class="altkat" title="Edebiyat Tarihi">Edebiyat Tarihi</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Edebiyat-Yazilari/" class="altkat" title="Edebiyat Yaz�lar�">Edebiyat Yaz�lar�</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Elestiri-Kuram/" class="altkat" title="Ele�tiri - Kuram">Ele�tiri - Kuram</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Fantastik/" class="altkat" title="Fantastik">Fantastik</a>
+
+<div class="Pixel-Menu">&nbsp;</div>
+				</div>
+				
+				</td>
+				<td valign="top" width="270">
+				
+				<div class="KategoriListeDiv">
+										<div class="Pixel-Menu">&nbsp;</div>
+					<div class="Pixel-Menu">&nbsp;</div>
+
+<a href="https://www.kitapsec.com/Products/Edebiyat/Halk-Edebiyati/" class="altkat" title="Halk Edebiyat�">Halk Edebiyat�</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Hikaye-ceviri/" class="altkat" title="Hikaye (�eviri)">Hikaye (�eviri)</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Hikaye-yerli/" class="altkat" title="Hikaye (yerli)">Hikaye (yerli)</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Korku-Gerilim/" class="altkat" title="Korku - Gerilim Kitaplar�">Korku - Gerilim Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Macera/" class="altkat" title="Macera Kitaplar�">Macera Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Oyku/" class="altkat" title="�yk�">�yk�</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Polisiye/" class="altkat" title="Polisiye Kitaplar">Polisiye Kitaplar</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Roman-ceviri/" class="altkat" title="Roman (�eviri)">Roman (�eviri)</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Roman-yerli/" class="altkat" title="Roman (yerli)">Roman (yerli)</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Senaryo-Oyun/" class="altkat" title="Senaryo - Oyun">Senaryo - Oyun</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Siir-ceviri/" class="altkat" title="�iir (�eviri)">�iir (�eviri)</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Siir-yerli/" class="altkat" title="�iir (yerli)">�iir (yerli)</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Tarihi-Roman/" class="altkat" title="Tarihi Roman">Tarihi Roman</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Hasan-Ali-Yucel-Klasikleri/" class="altkat" title="Hasan Ali Y�cel Klasikleri">Hasan Ali Y�cel Klasikleri</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Modern-Klasikler/" class="altkat" title="Modern Klasikler">Modern Klasikler</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Turk-Edebiyati/" class="altkat" title="T�rk Edebiyat�">T�rk Edebiyat�</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Wattpad/" class="altkat" title="Wattpad">Wattpad</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Dunya-Klasikleri/" class="altkat" title="D�nya Klasikleri">D�nya Klasikleri</a>
+<a href="https://www.kitapsec.com/Products/Edebiyat/Turk-Klasik/" class="altkat" title="T�rk Klasikleri">T�rk Klasikleri</a>
+
+	
+					
+
+<div class="Pixel-Menu">&nbsp;</div>
+<a href="https://www.kitapsec.com/tum-kategoriler/" class="tumkat" title="T�m Kategoriler">T�m Kategoriler � </a>
+				</div>
+				</td>
+				
+			</tr>
+		</table>
+
+<hr>
+
+<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 20px" >
+	<tr>
+		<td valign="top">
+		
+	
+ <img src="//cdn.kitapsec.com/temalar/KitapSec2017/kat_banner/Edebiyat.jpg" alt="" width="541" height="362" usemap="#Edebiyat" class="lazy" data-original="//cdn.kitapsec.com/temalar/KitapSec2017/kat_banner/Edebiyat.jpg"/>
+<map name="Edebiyat">
+
+  <area shape="rect" coords="8,7,257,156" href="https://www.kitapsec.com/Yayinevleri/Is-Bankasi-Kultur-Yayinlari/" alt="�� Bankas� K�lt�r Yay�nlar�" title="�� Bankas� K�lt�r Yay�nlar�">
+  <area shape="rect" coords="2,166,259,272" href="https://www.kitapsec.com/Yayinevleri/Yapi-Kredi-Yayinlari/" alt="Yap� Kredi Yay�nlar�" title="Yap� Kredi Yay�nlar�">
+  <area shape="rect" coords="3,287,259,357" href="https://www.kitapsec.com/Yayinevleri/Ithaki-Yayinlari/" alt="�thaki Yay�nlar�" title="�thaki Yay�nlar�">
+	<area shape="rect" coords="280,4,538,83" href="https://www.kitapsec.com/Yayinevleri/Timas-Yayinlari/" alt="Tima� Yay�nlar�" title="Tima� Yay�nlar�">
+	<area shape="rect" coords="280,94,536,268" href="https://www.kitapsec.com/Yayinevleri/Can-Yayinlari/" alt="Can Yay�nlar�" title="Can Yay�nlar�">
+	<area shape="rect" coords="283,280,534,359" href="https://www.kitapsec.com/Yayinevleri/Otuken-Yayinlari/" alt="�t�ken Yay�nlar�" title="�t�ken Yay�nlar�">
+
+		
+		</td>
+	</tr>
+</table>
+
+<hr>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tr>
+		<td style="padding-right: 1px" valign="top">
+		
+		<table border="0" cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="360">
+				<div class="KategoriListeDiv">
+					<div class="Pixel-Menu">&nbsp;</div>
+
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/" class="ustkat" title="�ocuk ve Gen�lik Kitaplar�">�ocuk ve Gen�lik Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Cok-Satan-Kitaplar/" class="altkat" title="�ok Satan Kitaplar">�ok Satan Kitaplar</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Roman/" class="altkat" title="Roman">Roman</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Edebiyat/" class="altkat" title="Edebiyat">Edebiyat</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Kaynak-Kitaplar/" class="altkat" title="Kaynak Kitaplar">Kaynak Kitaplar</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Fikra-Eglence-Oyun/" class="altkat" title="F�kra - E�lence - Oyun Kitaplar�">F�kra - E�lence - Oyun Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Anne-Baba-Kitaplari/" class="altkat" title="Anne-Baba Kitaplar�">Anne-Baba Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Cizgi-Roman/" class="altkat" title="�izgi Roman">�izgi Roman</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/100-Temel-Eser/" class="altkat" title="100 Temel Eser">100 Temel Eser</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Zeka-Gelisimi/" class="altkat" title="Zeka Geli�imi">Zeka Geli�imi</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Hobi-Oyun-Muzik/" class="altkat" title="Hobi - Oyun - M�zik">Hobi - Oyun - M�zik</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Dini-Egitim/" class="altkat" title="Dini E�itim Kitaplar�">Dini E�itim Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Siir/" class="altkat" title="�iir Kitaplar�">�iir Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Hikaye/" class="altkat" title="Hikaye Kitaplar�">Hikaye Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Kucuk-Prens/" class="altkat" title="K���k Prens Kitaplar�">K���k Prens Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Harry-Potter/" class="altkat" title="Harry Potter Kitaplar�">Harry Potter Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Huzunlu-Oykuler-Gezegeni/" class="altkat" title="H�z�nl� �yk�ler Gezegeni">H�z�nl� �yk�ler Gezegeni</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Uzay-Maceralari/" class="altkat" title="Uzay Maceralar�">Uzay Maceralar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Hava-Su-Toprak-Oyku/" class="altkat" title="Hava, Su, Toprak, �yk�">Hava, Su, Toprak, �yk�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Cepheden-Cepheye/" class="altkat" title="Cepheden Cepheye">Cepheden Cepheye</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Bizim-Kahramanlarimiz/" class="altkat" title="Bizim Kahramanlar�m�z">Bizim Kahramanlar�m�z</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Sessiz-Sakin/" class="altkat" title="Sessiz Sakin">Sessiz Sakin</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Seruven-Pesinde/" class="altkat" title="Ser�ven Pe�inde">Ser�ven Pe�inde</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Gulduren-Dusunceler/" class="altkat" title="G�ld�ren D���nceler">G�ld�ren D���nceler</a>
+				
+
+
+<div class="Pixel-Menu">&nbsp;</div>
+				</div>
+				
+					
+				</td>
+				<td valign="top" width="270">
+				
+				<div class="KategoriListeDiv">
+										<div class="Pixel-Menu">&nbsp;</div>
+				<div class="Pixel-Menu">&nbsp;</div>
+
+
+					
+
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Dusmeden-Dusun/" class="altkat" title="D��meden D���n">D��meden D���n</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Macera-Gecidi/" class="altkat" title="Macera Ge�idi">Macera Ge�idi</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Saftirik-Gregin-Gunlugu/" class="altkat" title="Saftirik Gregin G�nl���">Saftirik Gregin G�nl���</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Turk-Klasikleri/" class="altkat" title="T�rk Klasikleri">T�rk Klasikleri</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Winx-Club-Serisi/" class="altkat" title="Winx Club Serisi">Winx Club Serisi</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Dunya-klasikleri/" class="altkat" title="D�nya Klasikleri">D�nya Klasikleri</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Cocuk-Boyama-Kitaplari/" class="altkat" title="�ocuk Boyama Kitaplar�">�ocuk Boyama Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Masal-ve-Oyku-kitaplari/" class="altkat" title="Masal ve �yk� Kitaplar�">Masal ve �yk� Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Fantastik-ve-macera-kitaplari/" class="altkat" title="Fantastik ve Macera Kitaplar�">Fantastik ve Macera Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Cocuk-ve-Genclik-Kampanyali/" class="altkat" title="�ocuk ve Gen�lik Kampanyal�">�ocuk ve Gen�lik Kampanyal�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Kampanyali-Kitap-Setleri/" class="altkat" title="Kampanyal� Kitap Setleri">Kampanyal� Kitap Setleri</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Tatil-Kitaplari/" class="altkat" title="Tatil Kitaplar�">Tatil Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Oyun-Kartlari/" class="altkat" title="Oyun Kartlar�">Oyun Kartlar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/Cocuklar-Icin-Mandala/" class="altkat" title="�ocuklar ��in Mandala">�ocuklar ��in Mandala</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/2-yas-cocuk-kitaplari/" class="altkat" title="2 Ya� �ocuk Kitaplar�">2 Ya� �ocuk Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/3-yas-cocuk-kitaplari/" class="altkat" title="3 Ya� �ocuk Kitaplar�">3 Ya� �ocuk Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/4-yas-cocuk-kitaplari/" class="altkat" title="4 Ya� �ocuk Kitaplar�">4 Ya� �ocuk Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/5-yas-cocuk-kitaplari/" class="altkat" title="5 Ya� �ocuk Kitaplar�">5 Ya� �ocuk Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/6-yas-cocuk-kitaplari/" class="altkat" title="6 Ya� �ocuk Kitaplar�">6 Ya� �ocuk Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/7-yas-cocuk-kitaplari/" class="altkat" title="7 Ya� �ocuk Kitaplar�">7 Ya� �ocuk Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/8-yas-cocuk-kitaplari/" class="altkat" title="8 Ya� �ocuk Kitaplar�">8 Ya� �ocuk Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/9-yas-cocuk-kitaplari/" class="altkat" title="9 Ya� �ocuk Kitaplar�">9 Ya� �ocuk Kitaplar�</a>
+<a href="https://www.kitapsec.com/Products/Cocuk-ve-Genclik-Kitaplari/10-yas-cocuk-kitaplari/" class="altkat" title="10+ Ya� �ocuk Kitaplar�">10+ Ya� �ocuk Kitaplar�</a>
+
+									
+
+<div class="Pixel-Menu">&nbsp;</div>
+<a href="https://www.kitapsec.com/tum-kategoriler/" class="tumkat" title="T�m Kategoriler">T�m Kategoriler � </a>
+				</div>
+				</td>
+				
+			</tr>
+		</table>
+
+<hr>
+
+<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 20px" >
+	<tr>
+		<td valign="top">
+		
+	
+<img src="//cdn.kitapsec.com/temalar/KitapSec2017/kat_banner/Cocuk-Kitap.jpg" alt="" width="541" height="362" usemap="#CocukKitap" class="lazy" data-original="//cdn.kitapsec.com/temalar/KitapSec2017/kat_banner/Cocuk-Kitap.jpg"/>
+<map name="CocukKitap">
+  <area shape="rect" coords="8,7,257,158" href="https://www.kitapsec.com/Yayinevleri/Gunisigi-Kitapligi/" alt="G�n I���� Kitapl���" title="G�n I���� Kitapl���">
+  <area shape="rect" coords="282,5,536,83" href="https://www.kitapsec.com/Yayinevleri/Can-Cocuk-Yayinlari/" alt="Can �ocuk Yay�nlar�" title="Can �ocuk Yay�nlar�">
+  <area shape="rect" coords="5,169,257,269" href="https://www.kitapsec.com/Yayinevleri/Genc-Timas-Yayinlari/" 
+  alt="Gen&ccedil; Tima� Yay�nlar�" title="�lk��retim Kitaplar�">
+  <area shape="rect" coords="283,97,538,266" href="https://www.kitapsec.com/Yayinevleri/Eksik-Parca-Yayinlari/" alt="Eksik Par�a Yay�nlar�" title="Eksik Par�a Yay�nlar�">
+  <area shape="rect" coords="279,282,538,357" href="https://www.kitapsec.com/Yayinevleri/Yapi-Kredi-Yayinlari/" alt="Yap� Kredi Yay�nlar�" title="Yap� Kredi Yay�nlar�">
+  <area shape="rect" coords="4,286,259,360" href="https://www.kitapsec.com/Yayinevleri/Epsilon-Yayinevi/" alt="Epsilon Yay�nevi" title="Epsilon Yay�nevi">
+</map>
+
+		
+		</td>
+	</tr>
+</table>
+
+<hr>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tr>
+		<td style="padding-right: 10px" valign="top">
+		
+		<table border="0" cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="350">
+				<div class="KategoriListeDiv">
+					<div class="katbaslik">K�rtasiye ve Ofis</div>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Okul-Urunleri/" class="ustkat3" title="Okul �r�nleri">Okul �r�nleri</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Boyalar-ve-Boya-kalemleri/" class="altkat3" title="Boyalar ve Boya Kalemleri">Boyalar ve Boya kalemleri</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Defter-ve-Kitap-Kaplari/" class="altkat3" title="Defter ve Kitap Kaplar�">Defter ve Kitap Kaplar�</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Kalemlik-ve-Mataralar/" class="altkat3" title="Kalemlik ve Mataralar"> Kalemlik ve Mataralar</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Makaslar-ve-Maket-bicaklari/" class="altkat3" title="Makaslar ve Maket b��aklar�">Makaslar ve Maket b��aklar�</a>
+                    <a href="https://www.kitapsec.com/Products/Kirtasiye/Olcu-Cizim-ve-Matematik-Gerecleri/Cetveller/" class="altkat3" title="Cetveller">Cetveller</a>
+                    <a href="https://www.kitapsec.com/Products/Kirtasiye/Olcu-Cizim-ve-Matematik-Gerecleri/Pergeller/" class="altkat3" title="Pergeller">Pergeller</a>
+                    <a href="https://www.kitapsec.com/Products/Kirtasiye/Silgi-ve-Kalemtiraslar/" class="altkat3" title="Kalemt�ra�lar">Kalemt�ra�lar</a>
+                     <a href="https://www.kitapsec.com/Products/Kirtasiye/Silgi-ve-Kalemtiraslar/Silgiler/" class="altkat3" title="Silgiler">Silgiler</a>
+                      <a href="https://www.kitapsec.com/Products/Kirtasiye/Yapistiricilar/" class="altkat3" title="Yap��t�r�c�lar">Yap��t�r�c�lar</a>
+                                        <div class="Pixel-Menu">&nbsp;</div>
+
+
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Masa-Ustu-Gerecleri/" class="ustkat3" title="Masa �st� Gere�leri">Masa �st� Gere�leri</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Zimba-Delgec-ve-Zimba-Telleri/" class="altkat3" title="Z�mba, Delge� ve Z�mba Telleri">Z�mba, Delge� ve Z�mba Telleri</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Daksil-ve-Serit-Duzelticiler/" class="altkat3" title="Daksil ve �erit D�zelticiler">Daksil ve �erit D�zelticiler</a>
+                    <a href="https://www.kitapsec.com/Products/Kirtasiye/Bantlar-ve-Bant-makineleri/" class="altkat3" title="Bantlar ve Bant makineleri">Bantlar ve Bant makineleri</a>
+                    <a href="https://www.kitapsec.com/Products/Kirtasiye/Ajandalar/" class="altkat3" title="Ajandalar">Ajandalar</a>
+                                                            <div class="Pixel-Menu">&nbsp;</div>
+
+   
+                    <a href="https://www.kitapsec.com/Products/Kirtasiye/Dosyalama-ve-Sunum-planlama/" class="ustkat3" title="Dosyalama Ar�ivleme">Dosyalama Ar�ivleme</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Dosyalama-ve-Sunum-planlama/Poset-Dosyalar/" class="altkat3" title="Po�et Dosyalar">Po�et Dosyalar</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Dosyalama-ve-Sunum-planlama/Telli-Dosyalar/" class="altkat3" title="Telli Dosyalar">Telli Dosyalar</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Dosyalama-ve-Sunum-planlama/Sunum-Dosyalari/" class="altkat3" title="Sunum Dosyalar�">Sunum Dosyalar�</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Dosyalama-ve-Sunum-planlama/Zarf-Dosyalar/" class="altkat3" title="Zarf Dosyalar">Zarf Dosyalar</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Dosyalama-ve-Sunum-planlama/Plastik-Klasorler/" class="altkat3" title="Plastik Klas�rler">Plastik Klas�rler</a>
+				</div>
+				
+				</td>
+				<td valign="top" width="270">
+				
+                
+				<div class="KategoriListeDiv">
+					<br /> <br />
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Kagit-Etiketler/" class="ustkat3" title="Not Ka��tlar� ve Ka��t Etiketler">Not Ka��tlar� ve Ka��t Etiketler</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Yapiskanli-Not-Kagitlari/" class="altkat3" title="Yap��kanl� Not Ka��tlar�">Yap��kanl� Not Ka��tlar�</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Kagit-Etiketler/Okul-Etiketleri/" class="altkat3" title="Okul Etiketleri">Okul Etiketleri</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Kagit-Etiketler/Karton-ve-El-Isi-Kagitlari/" class="altkat3" title="Karton ve El ��i Ka��tlar�">Karton ve El ��i Ka��tlar�</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Not-KagitlariNot-Defterleri-ve-Bloknotlar/Kup-Notluklar/" class="altkat3" title="K�p Notluklar">K�p Notluklar</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Not-KagitlariNot-Defterleri-ve-Bloknotlar/Fotokopi-Kagitlari/" class="altkat3" title="Fotokopi Ka��tlar�">Fotokopi Ka��tlar�</a>
+                   
+                    <span class="Pixel">&nbsp;</span>
+                        
+   					<a href="https://www.kitapsec.com/Products/Kirtasiye/Kalem-ve-Yazi-Gerecleri/" class="ustkat3" title="Kalem ve Yaz� Gere�leri">Kalem ve Yaz� Gere�leri</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Kalem-ve-Yazi-Gerecleri/Asetat-Kalemleri/" class="altkat3" title="Asetat Kalemleri">Asetat Kalemleri</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Kalem-ve-Yazi-Gerecleri/Kursun-Kalemler/" class="altkat3" title="Kur�un Kalemler">Kur�un Kalemler</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Kalem-ve-Yazi-Gerecleri/Uclu-Kalemler/" class="altkat3" title="U�lu Kalemler">U�lu Kalemler</a>
+					<a href="https://www.kitapsec.com/Products/Kirtasiye/Kalem-ve-Yazi-Gerecleri/Kece-Uclu-Kalemler/" class="altkat3" title="Ke�e U�lu Kalemler">Ke�e U�lu Kalemler</a>
+               <a href="https://www.kitapsec.com/Products/Kirtasiye/Kalem-ve-Yazi-Gerecleri/Tukenmez-Dolma-Pilot-Kalemler/" class="altkat3" title="T�kenmez, Dolma, Pilot Kalemler">T�kenmez, Dolma, Pilot Kalemler</a>
+                 <a href="https://www.kitapsec.com/Products/Kirtasiye/Kalem-ve-Yazi-Gerecleri/Fosforlu-Kalemler/" class="altkat3" title="Fosforlu Kalemler">Fosforlu Kalemler</a>
+                <a href="https://www.kitapsec.com/Products/Kirtasiye/Kalem-ve-Yazi-Gerecleri/Fiber-Uclu-Kalemler/" class="altkat3" title="Fiber U�lu Kalemler">Fiber U�lu Kalemler</a>
+               <a href="https://www.kitapsec.com/Products/Kirtasiye/Kalem-ve-Yazi-Gerecleri/Tahta-Kalemleri-ve-Markorler/" class="altkat3" title="Tahta Kalemleri ve Mark�rler">Tahta Kalemleri ve Mark�rler</a>
+           <a href="https://www.kitapsec.com/Products/Kirtasiye/Kalem-ve-Yazi-Gerecleri/Jel-Kalemler/" class="altkat3" title="Jel Kalemler">Jel Kalemler</a>
+            <a href="https://www.kitapsec.com/Products/Kirtasiye/Kalem-ve-Yazi-Gerecleri/Murekkep-Kartus/" class="altkat3" title="M�rekkep - Kartu�">M�rekkep - Kartu�</a>
+             <a href="https://www.kitapsec.com/Products/Kirtasiye/Kalem-ve-Yazi-Gerecleri/Kalem-Uclari/" class="altkat3" title="Kalem U�lar�">Kalem U�lar�</a>
+        
+					<br />
+                    <span class="Pixel">&nbsp;</span>
+                    <a href="https://www.kitapsec.com/tum-kategoriler/" class="tumkat" title="T�m Kategoriler">T�m Kategoriler � </a>
+
+
+					
+				</div>
+				
+				</td>
+					
+			</tr>
+		</table>
+
+<hr>
+
+<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 20px">
+	<tr>
+		<td valign="top">
+		
+		<img data-original="//cdn.kitapsec.com/temalar/KitapSec2017/kat_banner/Kirtasiye.jpg" class="lazy" src="" alt="" width="502" height="357" usemap="#Kirtasiye" border="0" />
+<map name="Kirtasiye" id="Kirtasiye">
+  <area shape="rect" coords="2,6,235,353" href="https://www.kitapsec.com/Products/Kirtasiye/Okul-Urunleri/" title="Okul �r�nleri" />
+  <area shape="rect" coords="259,5,497,111" href="https://www.kitapsec.com/Products/Kirtasiye/Kalem-ve-Yazi-Gerecleri/" title="Yaz�m ve �izim Gere�leri" />
+  <area shape="rect" coords="259,124,368,355" href="https://www.kitapsec.com/Products/Kirtasiye/Kagit-Etiketler/" title="Ka��t Etiketler"  />
+  <area shape="rect" coords="391,125,498,355" href="https://www.kitapsec.com/Products/Kirtasiye/Masa-Ustu-Gerecleri/" title="Masa�st� Gere�leri" />
+</map>
+
+		
+		</td>
+	</tr>
+</table>
+
+<hr>
+
+<table align="center" border="1" cellpadding="1" cellspacing="1" id="KitapSecTable" width="99%">
+		<thead>
+			<tr>
+				<th>
+					KPSS &Ouml;nlisans T&uuml;rk&ccedil;e Konu Da��l�m�</th>
+				<th>
+					2012</th>
+				<th>
+					2014</th>
+				<th>
+					2016</th>
+				<th>
+					2018</th>
+				<th>
+					2020</th>
+				<th>
+					2022</th>
+				<th>
+					2023</th>
+				<th>
+					2024</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<td>
+					<strong>TOPLAM SORU SAYISI</strong></td>
+				<td>
+					<strong>30</strong></td>
+				<td>
+					<strong>30</strong></td>
+				<td>
+					<strong>30</strong></td>
+				<td>
+					<strong>30</strong></td>
+				<td>
+					<strong>30</strong></td>
+				<td>
+					<strong>30</strong></td>
+				<td>
+					<strong>30</strong></td>
+				<td>
+					<strong>30</strong></td>
+			</tr>
+		</tfoot>
+		<tbody>
+			<tr>
+				<td>
+					S&ouml;zc&uuml;kte Anlam</td>
+				<td>
+					2</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					2</td>
+				<td>
+					1</td>
+				<td>
+					2</td>
+				<td>
+					2</td>
+				<td>
+					2</td>
+			</tr>
+			<tr>
+				<td>
+					C&uuml;mlede Anlam</td>
+				<td>
+					4</td>
+				<td>
+					3</td>
+				<td>
+					2</td>
+				<td>
+					1</td>
+				<td>
+					2</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+			</tr>
+			<tr>
+				<td>
+					S&ouml;zc&uuml;k T&uuml;rleri</td>
+				<td>
+					1</td>
+				<td>
+					2</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+			</tr>
+			<tr>
+				<td>
+					S&ouml;zc&uuml;kte Yap�</td>
+				<td>
+					1</td>
+				<td>
+					2</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+			</tr>
+			<tr>
+				<td>
+					C&uuml;mlenin &Ouml;geleri</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+			</tr>
+			<tr>
+				<td>
+					C&uuml;mle T&uuml;rleri</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					&ndash;</td>
+				<td>
+					1</td>
+				<td>
+					&ndash;</td>
+				<td>
+					&ndash;</td>
+				<td>
+					&ndash;</td>
+			</tr>
+			<tr>
+				<td>
+					Dil Bilgisi Ses Olaylar�</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+			</tr>
+			<tr>
+				<td>
+					Yaz�m Kurallar�</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					<span style="background-color: rgb(242, 242, 242);">1</span></td>
+				<td>
+					1</td>
+				<td>
+					<span style="background-color: rgb(242, 242, 242);">1</span></td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+			</tr>
+			<tr>
+				<td>
+					Noktalama ��aretleri</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+			</tr>
+			<tr>
+				<td>
+					Anlat�m Bozukluklar�</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					<span style="background-color: rgb(242, 242, 242);">1</span></td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+			</tr>
+			<tr>
+				<td>
+					Paragrafta Anlam</td>
+				<td>
+					14</td>
+				<td>
+					13</td>
+				<td>
+					14</td>
+				<td>
+					15</td>
+				<td>
+					14</td>
+				<td>
+					15</td>
+				<td>
+					15</td>
+				<td>
+					15</td>
+			</tr>
+			<tr>
+				<td>
+					Paragrafta Anlat�m Bi&ccedil;im</td>
+				<td>
+					1</td>
+				<td>
+					&ndash;</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+			</tr>
+			<tr>
+				<td>
+					S&ouml;zel Mant�k</td>
+				<td>
+					&ndash;</td>
+				<td>
+					4</td>
+				<td>
+					4</td>
+				<td>
+					1</td>
+				<td>
+					4</td>
+				<td>
+					4</td>
+				<td>
+					4</td>
+				<td>
+					4</td>
+			</tr>
+		</tbody>
+	</table>
+
+<hr>
+
+<table align="center" border="1" cellpadding="1" cellspacing="1" id="KitapSecTable" width="99%">
+			<thead>
+				<tr>
+					<th>
+						KPSS &Ouml;nlisans Matematik Konu Da��l�m�</th>
+					<th>
+						2012</th>
+					<th>
+						2014</th>
+					<th>
+						2016</th>
+					<th>
+						2018</th>
+					<th>
+						2020</th>
+					<th>
+						2022</th>
+					<th>
+						2023</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<td>
+						<strong>TOPLAM SORU SAYISI</strong></td>
+					<td>
+						<strong>27</strong></td>
+					<td>
+						<strong>27</strong></td>
+					<td>
+						<strong>27</strong></td>
+					<td>
+						<strong>26</strong></td>
+					<td>
+						<strong>25</strong></td>
+					<td>
+						<strong>25</strong></td>
+					<td>
+						<strong>25</strong></td>
+				</tr>
+			</tfoot>
+			<tbody>
+				<tr>
+					<td>
+						Temel Kavamlar</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						-</td>
+					<td>
+						&ndash;</td>
+				</tr>
+				<tr>
+					<td>
+						Say�lar- Ebob-Ekok</td>
+					<td>
+						5</td>
+					<td>
+						3</td>
+					<td>
+						3</td>
+					<td>
+						3</td>
+					<td>
+						3</td>
+					<td>
+						3</td>
+					<td>
+						3</td>
+				</tr>
+				<tr>
+					<td>
+						Rasyonel Say�lar- Ondal�kl� Say�lar</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+				</tr>
+				<tr>
+					<td>
+						Basit E�itsizlikler</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+				</tr>
+				<tr>
+					<td>
+						Mutlak De�er</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						&Uuml;sl&uuml; Say�lar</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						K&ouml;kl&uuml; Say�lar</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+				</tr>
+				<tr>
+					<td>
+						Fakt&ouml;riyel</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+				</tr>
+				<tr>
+					<td>
+						&Ccedil;arpanlara Ay�rma</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						-</td>
+					<td>
+						&ndash;</td>
+				</tr>
+				<tr>
+					<td>
+						Oran- Orant�</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						Denklem &Ccedil;&ouml;zme</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						Say� Problemleri</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						Kesir Problemleri</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						Ya� Problemleri</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						��&ccedil;i ve Havuz Problemleri</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						Hareket-H�z Problemleri</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+				</tr>
+				<tr>
+					<td>
+						Y&uuml;zde-Kar-Zarar Problemleri</td>
+					<td>
+						2</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+				</tr>
+				<tr>
+					<td>
+						Kar���m Problemleri</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+				</tr>
+				<tr>
+					<td>
+						Grafik Problemleri</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+				</tr>
+				<tr>
+					<td>
+						K&uuml;meler ve Problemleri</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+				</tr>
+				<tr>
+					<td>
+						Fonksiyonlar</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						��lem</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+				</tr>
+				<tr>
+					<td>
+						Mod&uuml;ler Aritmetik</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+				</tr>
+				<tr>
+					<td>
+						Perm&uuml;tasyon</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+				</tr>
+				<tr>
+					<td>
+						Konbinasyon</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+				</tr>
+				<tr>
+					<td>
+						Olas�l�k</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						Say�sal Mant�k</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						3</td>
+					<td>
+						2</td>
+					<td>
+						3</td>
+					<td>
+						3</td>
+				</tr>
+				<tr>
+					<td>
+						�ekil Yetenek</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						&nbsp;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+				</tr>
+			</tbody>
+		</table>
+
+<hr>
+
+<table align="center" border="1" cellpadding="1" cellspacing="1" id="KitapSecTable" width="99%">
+			<thead>
+				<tr>
+					<th>
+						KPSS &Ouml;nlisans Tarih Konu Da��l�m�</th>
+					<th>
+						2012</th>
+					<th>
+						2014</th>
+					<th>
+						2016</th>
+					<th>
+						2018</th>
+					<th>
+						2020</th>
+					<th>
+						2022</th>
+					<th>
+						2023</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<td>
+						<strong>TOPLAM SORU SAYISI</strong></td>
+					<td>
+						<strong>30</strong></td>
+					<td>
+						<strong>27</strong></td>
+					<td>
+						<strong>27</strong></td>
+					<td>
+						<strong>27</strong></td>
+					<td>
+						<strong>27</strong></td>
+					<td>
+						<strong>27</strong></td>
+					<td>
+						<strong>27</strong></td>
+				</tr>
+			</tfoot>
+			<tbody>
+				<tr>
+					<td>
+						�slamiyet &Ouml;ncesi T&uuml;rk Tarihi</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						-</td>
+					<td>
+						&ndash;</td>
+				</tr>
+				<tr>
+					<td>
+						�slamiyet &Ouml;ncesi T&uuml;rk Devletlerinde K&uuml;lt&uuml;r Medeniyet</td>
+					<td>
+						3</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						�lk T&uuml;rk �slam Devletleri</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						�lk T&uuml;rk �slam Devletlerinde K&uuml;lt&uuml;r ve Medeniyet</td>
+					<td>
+						3</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+				</tr>
+				<tr>
+					<td>
+						Osmanl� Devleti Kurulu� ve Y&uuml;kselme D&ouml;nemi</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						17. Y&uuml;zy�l Osmanl� Devleti Duraklama D&ouml;nemi</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						3</td>
+					<td>
+						1</td>
+					<td>
+						3</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						18. Y&uuml;zy�l Osmanl� Devleti Gerileme D&ouml;nemi</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						-</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						19. Y&uuml;zy�l Osmanl� Devleti Da��lma D&ouml;nemi</td>
+					<td>
+						&nbsp;1</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						-</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						20. Y&uuml;zy�l Osmanl� Devleti</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						Osmanl� Devleti K&uuml;lt&uuml;r ve Medeniyet</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						4</td>
+					<td>
+						1</td>
+					<td>
+						4</td>
+					<td>
+						4</td>
+				</tr>
+				<tr>
+					<td>
+						Milli M&uuml;cadele D&ouml;nemi</td>
+					<td>
+						4</td>
+					<td>
+						4</td>
+					<td>
+						3</td>
+					<td>
+						4</td>
+					<td>
+						3</td>
+					<td>
+						4</td>
+					<td>
+						4</td>
+				</tr>
+				<tr>
+					<td>
+						�nk�lap Tarihi</td>
+					<td>
+						5</td>
+					<td>
+						5</td>
+					<td>
+						3</td>
+					<td>
+						5</td>
+					<td>
+						3</td>
+					<td>
+						5</td>
+					<td>
+						5</td>
+				</tr>
+				<tr>
+					<td>
+						Atat&uuml;rk D&ouml;nemi �&ccedil; ve D�� Politikalar</td>
+					<td>
+						4</td>
+					<td>
+						3</td>
+					<td>
+						5</td>
+					<td>
+						1</td>
+					<td>
+						5</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						&Ccedil;a�da� T&uuml;rk ve D&uuml;nya Tarihi</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						4</td>
+					<td>
+						2</td>
+					<td>
+						4</td>
+					<td>
+						4</td>
+				</tr>
+			</tbody>
+		</table>
+
+<hr>
+
+<table align="center" border="1" cellpadding="1" cellspacing="1" id="KitapSecTable" width="99%">
+			<thead>
+				<tr>
+					<th>
+						KPSS &Ouml;nlisans Co�rafya Konu Da��l�m�</th>
+					<th>
+						2012</th>
+					<th>
+						2014</th>
+					<th>
+						2016</th>
+					<th>
+						2018</th>
+					<th>
+						2020</th>
+					<th>
+						2022</th>
+					<th>
+						2023</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<td>
+						<strong>TOPLAM SORU SAYISI</strong></td>
+					<td>
+						<strong>18</strong></td>
+					<td>
+						<strong>18</strong></td>
+					<td>
+						<strong>18</strong></td>
+					<td>
+						<strong>18</strong></td>
+					<td>
+						<strong>18</strong></td>
+					<td>
+						<strong>18</strong></td>
+					<td>
+						<strong>18</strong></td>
+				</tr>
+			</tfoot>
+			<tbody>
+				<tr>
+					<td>
+						T&uuml;rkiye&rsquo;nin Co�rafi Konumu</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+				</tr>
+				<tr>
+					<td>
+						T&uuml;rkiye&rsquo;nin �klimi ve Bikti &Ouml;rt&uuml;s&uuml;</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						3</td>
+					<td>
+						2</td>
+					<td>
+						3</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+				</tr>
+				<tr>
+					<td>
+						T&uuml;rkiye&rsquo;nin Fiziki &Ouml;zellikleri</td>
+					<td>
+						2</td>
+					<td>
+						4</td>
+					<td>
+						4</td>
+					<td>
+						4</td>
+					<td>
+						4</td>
+					<td>
+						4</td>
+					<td>
+						4</td>
+				</tr>
+				<tr>
+					<td>
+						T&uuml;rkiye&rsquo;de N&uuml;fus ve Yerle�me</td>
+					<td>
+						2</td>
+					<td>
+						3</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+				</tr>
+				<tr>
+					<td>
+						Tar�m</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						Hayvanc�l�k</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						Madenler ve Enerji Kaynaklar�</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+				</tr>
+				<tr>
+					<td>
+						Sanayi ve End&uuml;stri</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						Ula��m</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						Ticaret</td>
+					<td>
+						2</td>
+					<td>
+						2</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						Turizm</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+					<td>
+						1</td>
+				</tr>
+				<tr>
+					<td>
+						B&ouml;lgeler Co�rafyas�</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						1</td>
+					<td>
+						&ndash;</td>
+					<td>
+						&ndash;</td>
+				</tr>
+			</tbody>
+		</table>
+
+<hr>
+
+<table align="center" border="1" cellpadding="1" cellspacing="1" id="KitapSecTable" width="99%">
+		<thead>
+			<tr>
+				<th>
+					KPSS &Ouml;nlisans Vatanda�l�k Konu Da��l�m�</th>
+				<th>
+					2012</th>
+				<th>
+					2014</th>
+				<th>
+					2016</th>
+				<th>
+					2018</th>
+				<th>
+					2020</th>
+				<th>
+					2022</th>
+				<th>
+					2023</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<td>
+					<strong>TOPLAM SORU SAYISI</strong></td>
+				<td>
+					<strong>9</strong></td>
+				<td>
+					<strong>9</strong></td>
+				<td>
+					<strong>9</strong></td>
+				<td>
+					<strong>9</strong></td>
+				<td>
+					<strong>9</strong></td>
+				<td>
+					<strong>9</strong></td>
+				<td>
+					<strong>9</strong></td>
+			</tr>
+		</tfoot>
+		<tbody>
+			<tr>
+				<td>
+					Temel Hukuk Kavramlar�</td>
+				<td>
+					3</td>
+				<td>
+					3</td>
+				<td>
+					3</td>
+				<td>
+					3</td>
+				<td>
+					3</td>
+				<td>
+					3</td>
+				<td>
+					3</td>
+			</tr>
+			<tr>
+				<td>
+					Anayasal Kavramlar</td>
+				<td>
+					1</td>
+				<td>
+					&ndash;</td>
+				<td>
+					&ndash;</td>
+				<td>
+					&ndash;</td>
+				<td>
+					&ndash;</td>
+				<td>
+					&ndash;</td>
+				<td>
+					&ndash;</td>
+			</tr>
+			<tr>
+				<td>
+					T&uuml;rk Anayasa Tarihi</td>
+				<td>
+					&ndash;</td>
+				<td>
+					&ndash;</td>
+				<td>
+					&ndash;</td>
+				<td>
+					&ndash;</td>
+				<td>
+					&ndash;</td>
+				<td>
+					&ndash;</td>
+				<td>
+					&ndash;</td>
+			</tr>
+			<tr>
+				<td>
+					Temel Hak &Ouml;devler</td>
+				<td>
+					1</td>
+				<td>
+					&ndash;</td>
+				<td>
+					&ndash;</td>
+				<td>
+					&ndash;</td>
+				<td>
+					&ndash;</td>
+				<td>
+					&ndash;</td>
+				<td>
+					&ndash;</td>
+			</tr>
+			<tr>
+				<td>
+					Yasama</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+				<td>
+					&ndash;</td>
+				<td>
+					1</td>
+				<td>
+					&ndash;</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+			</tr>
+			<tr>
+				<td>
+					Y&uuml;r&uuml;tme</td>
+				<td>
+					1</td>
+				<td>
+					2</td>
+				<td>
+					3</td>
+				<td>
+					2</td>
+				<td>
+					3</td>
+				<td>
+					2</td>
+				<td>
+					2</td>
+			</tr>
+			<tr>
+				<td>
+					Yarg�</td>
+				<td>
+					&ndash;</td>
+				<td>
+					1</td>
+				<td>
+					&ndash;</td>
+				<td>
+					1</td>
+				<td>
+					&ndash;</td>
+				<td>
+					1</td>
+				<td>
+					1</td>
+			</tr>
+			<tr>
+				<td>
+					�dare Hukuku</td>
+				<td>
+					2</td>
+				<td>
+					2</td>
+				<td>
+					3</td>
+				<td>
+					2</td>
+				<td>
+					3</td>
+				<td>
+					2</td>
+				<td>
+					2</td>
+			</tr>
+		</tbody>
+	</table>
+
+<hr>
+
+<table  border="0" cellspacing="0" cellpadding="0">
+						<tr></tr>
+						</table>
+
+<hr>
+
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+	<tr>
+		<td valign="top"  width="500"><a href="https://www.kitapsec.com/blog/ags-konulari-ve-soru-dagilimlari-264.html" class="loadClick" title="AGS Konular� ve Soru Da��l�mlar�"><img alt="AGS Konular� ve Soru Da��l�mlar�" class="lazy" data-original="//cdn.kitapsec.com/image/blog/2024/12/03/meb-ags1733253283.jpg" src="//cdn.kitapsec.com/image/blog/default.png" style="width:500px; height:141px;" border="0"/></a></td>
+		<td valign="top" style="padding-left:20px;">
+			<a href="https://www.kitapsec.com/blog/ags-konulari-ve-soru-dagilimlari-264.html" class=" loadClick" title="AGS Konular� ve Soru Da��l�mlar�">
+			<h1>AGS Konular� ve Soru Da��l�mlar�</h2>
+			<h2>207 MEB AGS Konular� ve Soru Da��l�mlar� Nas�l Olacak?</h2>		
+			<div sttyle="font-size:11px; color:gray">685 Okuma</div>
+		</a>
+		
+		</td>
+	</tr>
+</table>
+
+<hr>
+
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+	<tr>
+		<td valign="top"  width="500"><a href="https://www.kitapsec.com/blog/meb-ags-kitaplari-262.html" class="loadClick" title="MEB AGS Kitaplar�"><img alt="MEB AGS Kitaplar�" class="lazy" data-original="//cdn.kitapsec.com/image/blog/2024/11/21/ags1732177899.jpg" src="//cdn.kitapsec.com/image/blog/default.png" style="width:500px; height:141px;" border="0"/></a></td>
+		<td valign="top" style="padding-left:20px;">
+			<a href="https://www.kitapsec.com/blog/meb-ags-kitaplari-262.html" class=" loadClick" title="MEB AGS Kitaplar�">
+			<h1>MEB AGS Kitaplar�</h2>
+			<h2>2027 MEB AGS Kitaplar� ve Kitap �nerileri
+MEB AGS kitaplar� nas�l se�ilir? 2027 AGS konu da��l�m�, soru bankas�, deneme, mevzuat ve �ABT kaynaklar� hakk�nda kapsaml� haz�rl�k rehberi.</h2>		
+			<div sttyle="font-size:11px; color:gray">35 Okuma</div>
+		</a>
+		
+		</td>
+	</tr>
+</table>
+
+<hr>
+
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+	<tr>
+		<td valign="top"  width="500"><a href="https://www.kitapsec.com/blog/kpss-genel-kultur-genel-yetenek-konulari-241.html" class="loadClick" title="KPSS Genel K�lt�r Genel Yetenek Konular�"><img alt="KPSS Genel K�lt�r Genel Yetenek Konular�" class="lazy" data-original="//cdn.kitapsec.com/image/blog/2023/09/19/kpss1695139816.jpg" src="//cdn.kitapsec.com/image/blog/default.png" style="width:500px; height:141px;" border="0"/></a></td>
+		<td valign="top" style="padding-left:20px;">
+			<a href="https://www.kitapsec.com/blog/kpss-genel-kultur-genel-yetenek-konulari-241.html" class=" loadClick" title="KPSS Genel K�lt�r Genel Yetenek Konular�">
+			<h1>KPSS Genel K�lt�r Genel Yetenek Konular�</h2>
+			<h2>KPSS Genel K�lt�r Genel Yetenek Konular� Nelerdir?</h2>		
+			<div sttyle="font-size:11px; color:gray">271 Okuma</div>
+		</a>
+		
+		</td>
+	</tr>
+</table>
+
+<hr>
+
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+	<tr>
+		<td valign="top"  width="500"><a href="https://www.kitapsec.com/blog/2026-kpss-ortaogretim-konulari-ve-soru-dagilimi-229.html" class="loadClick" title="2026 KPSS Orta��retim Konular� ve Soru Da��l�m�"><img alt="2026 KPSS Orta��retim Konular� ve Soru Da��l�m�" class="lazy" data-original="//cdn.kitapsec.com/image/blog/2023/09/14/kpss1694688118.jpg" src="//cdn.kitapsec.com/image/blog/default.png" style="width:500px; height:141px;" border="0"/></a></td>
+		<td valign="top" style="padding-left:20px;">
+			<a href="https://www.kitapsec.com/blog/2026-kpss-ortaogretim-konulari-ve-soru-dagilimi-229.html" class=" loadClick" title="2026 KPSS Orta��retim Konular� ve Soru Da��l�m�">
+			<h1>2026 KPSS Orta��retim Konular� ve Soru Da��l�m�</h2>
+			<h2>2026 KPSS Orta��retim Konular� ve Soru Da��l�m� Nelerdir?</h2>		
+			<div sttyle="font-size:11px; color:gray">8380 Okuma</div>
+		</a>
+		
+		</td>
+	</tr>
+</table>
+
+<hr>
+
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+	<tr>
+		<td valign="top"  width="500"><a href="https://www.kitapsec.com/blog/2026-kpss-deneme-kitaplari-227.html" class="loadClick" title="2026 KPSS Deneme Kitaplar�"><img alt="2026 KPSS Deneme Kitaplar�" class="lazy" data-original="//cdn.kitapsec.com/image/blog/2025/09/01/kpss-denemeler1756722315.jpeg" src="//cdn.kitapsec.com/image/blog/default.png" style="width:500px; height:141px;" border="0"/></a></td>
+		<td valign="top" style="padding-left:20px;">
+			<a href="https://www.kitapsec.com/blog/2026-kpss-deneme-kitaplari-227.html" class=" loadClick" title="2026 KPSS Deneme Kitaplar�">
+			<h1>2026 KPSS Deneme Kitaplar�</h2>
+			<h2>2026 KPSS Deneme Kitaplar�</h2>		
+			<div sttyle="font-size:11px; color:gray">59 Okuma</div>
+		</a>
+		
+		</td>
+	</tr>
+</table>
+
+<hr>
+
+<table border="0" width="100%">
+  <tr>
+    <td>
+<a href="https://www.kitapsec.com/Products/MEB-AGS-Kitaplari/" title="MEB AGS Kitaplar�">MEB AGS Kitaplar�</a> 
+<a href="https://www.kitapsec.com/Products/ALES-Kitaplari/" title="ALES Kitaplar�">ALES Kitaplar�</a> 
+<a href="https://www.kitapsec.com/Products/DGS-Kitaplari/" title="DGS Kitaplar�">DGS Kitaplar�</a> 
+<a href="https://www.kitapsec.com/Products/Edebiyat/" title="Edebiyat">Edebiyat</a> 
+<a href="https://www.kitapsec.com/Products/Elektronik/" title="Elektronik">Elektronik</a> 
+<a href="https://www.kitapsec.com/Products/GYS-Kitaplari/" title="GYS Kitaplar�">GYS Kitaplar�</a> 
+<a href="https://www.kitapsec.com/Products/Ilkokul-Yardimci-Kitaplar/" title="�lkokul Yard�mc� Kitaplar">�lkokul Yard�mc� Kitaplar</a> 
+<a href="https://www.kitapsec.com/Products/Kirtasiye/" title="K�rtasiye">K�rtasiye</a> 
+<a href="https://www.kitapsec.com/Products/Edebiyat/" title="Kitap">Kitap</a> 
+<a href="https://www.kitapsec.com/Products/KPSS-A-Grubu/" title="KPSS A Grubu Kitaplar�">KPSS A Grubu Kitaplar�</a> 
+<a href="https://www.kitapsec.com/Products/KPSS-Lise-Onlisans/" title="KPSS Lise �nlisans">KPSS Lise �nlisans Kitaplar�</a> 
+<a href="https://www.kitapsec.com/Products/KPSS-Egitim-Bilimleri/" title="KPSS E�itim Bilimleri">KPSS E�itim Bilimleri</a>  
+</td>
+<td>
+<a href="https://www.kitapsec.com/Products/KPSS-Kitaplari/" title="KPSS Kitaplar�">KPSS Kitaplar�</a>  
+<a href="https://www.kitapsec.com/Products/KPSS-Kitaplari/Kpss-Hazirlik-Kitaplari/" title="Kpss Haz�rl�k Kitaplar�">Kpss Haz�rl�k Kitaplar�</a>  
+<a href="https://www.kitapsec.com/Products/LYS-Kitaplari/" title="Lise Yard�mc� Kitaplar">LYS Kitaplar�</a>  
+<a href="https://www.kitapsec.com/Products/LGS-Kitaplari/" title="Liselere Giri� S�nav� Kitaplar�">LGS Kitaplar�</a>  
+<a href="https://www.kitapsec.com/Products/Okul-Oncesi-Egitim/" title="Okul �ncesi E�itim Kitaplar�">Okul �ncesi E�itim</a>  
+<a href="https://www.kitapsec.com/Products/Edebiyat/Cok-Satan-Kitaplar/" title="�ok Satan Kitaplar">�ok Satan Kitaplar</a> 
+<a href="https://www.kitapsec.com/Products/Oyuncak/" title="Oyuncak">Oyuncak</a>  
+<a href="https://www.kitapsec.com/Products/KPSS-Ogretmen-Alan-Sinavi/" title="�ABT Kitaplar�">�ABT Kitaplar�</a>  
+<a href="https://www.kitapsec.com/Products/SMMM-Kitaplari/" title="SMMM Kitaplar�">SMMM Kitaplar�</a>  
+<a href="https://www.kitapsec.com/Konu/2019-YKS-Kitaplari.html" title="�niversiteye Haz�rl�k">�niversiteye Haz�rl�k</a>  
+<a href="https://www.kitapsec.com/Products/YDS-Kitaplari/" title="YDS Kitaplar�">YDS Kitaplar�</a>  
+<a href="https://www.kitapsec.com/Products/YKS-Kitaplari/" title="YKS Kitaplar�">YKS Kitaplar�</a>  
+
+</td>
+  </tr>
+  
+</table>
+
+<hr>
+
+<table border="0" width="100%">
+  <tr>
+    <td>
+	<a href="https://www.kitapsec.com/Yayinevleri/Indeks-Akademi-Yayincilik/" title="�ndeks Akademi Yay�nc�l�k">�ndeks Akademi Yay�nc�l�k</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Is-Bankasi-Kultur-Yayinlari/" title="�� Bankas� K�lt�r Yay�nlar�">�� Bankas� K�lt�r Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Acil-Yayinlari/" title="Acil Yay�nlar�">Acil Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Benim-Hocam-Yayinlari/1-1-0a0-40-0-1-0-0.xhtml" title="Benim Hocam Yay�nlar�">Benim Hocam Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Informal-Yayinlari/" title="�nformal Yay�nlar�">�nformal Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Orijinal-Yayinlari/" title="Orijinal Yay�nlar�">Orijinal Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Birey-Yayinlari/" title="Birey Yay�nlar�">Birey Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Can-Yayinlari/" title="Can Yay�nlar�">Can Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Delta-Kultur-Yayinlari/" title="Delta K�lt�r Yay�nlar�">Delta K�lt�r Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Destek-Yayinlari/" title="Destek Yay�nlar�">Destek Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Dogan-Kitap/" title="Do�an Kitap">Do�an Kitap</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Editor-Yayinevi/" title="Edit�r Yay�nevi">Edit�r Yay�nevi</a> 
+</td>
+    <td>
+	<a href="https://www.kitapsec.com/Yayinevleri/Endemik-Yayinlari/" title="Endemik Yay�nlar�">Endemik Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Retro-Yayincilik/" title="Retro Yay�nc�l�k">Retro Yay�nc�l�k</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Everest-Yayinlari/" title="Everest Yay�nlar�">Everest Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Dizgi-Kitap/" title="Dizgi Kitap">Dizgi Kitap</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Bilgi-Sarmal-Yayinlari/" title="Bilgi Sarmal Yay�nlar�">Bilgi Sarmal Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Hiz-ve-Renk-Yayinlari/" title="H�z ve�Renk Yay�nlar�">H�z ve�Renk Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Iletisim-Yayinlari/" title="�leti�im Yay�nlar�">�leti�im Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Inkilap-Kitabevi/" title="�nk�lap Kitabevi">�nk�lap Kitabevi</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Ithaki-Yayinlari/" title="�thaki Yay�nlar�">�thaki Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Karekok-Yayinlari/" title="Karek�k Yay�nlar�">Karek�k Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Kirmizi-Kedi-Yayinlari/" title="K�rm�z� Kedi Yay�nlar�">K�rm�z� Kedi Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Kultur-Yayincilik/" title="K�lt�r Yay�nc�l�k">K�lt�r Yay�nc�l�k</a> 
+</td>
+    <td>
+	<a href="https://www.kitapsec.com/Yayinevleri/Limit-Yayinlari/" title="Limit Yay�nlar�">Limit Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Okyanus-Yayincilik/" title="Okyanus Yay�nc�l�k">Okyanus Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Palme-Yayinevi/1-1-0a0-40-0-1-0-0.xhtml" title="Palme Yay�nlar�">Palme Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Pegem-Yayinlari/1-1-0a0-40-0-1-0-0.xhtml" title="Pegem Yay�nlar�">Pegem Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Sonuc-Yayinlari/" title="Sonu� Yay�nlar�">Sonu� Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Timas-Yayinlari/" title="Tima� Yay�nlar�">Tima� Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Tonguc-Akademi/" title="Tongu� Akademi">Tongu� Akademi</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Uc-Dort-Bes-Yayinlari/" title="�� D�rt Be� Yay�nlar�">�� D�rt Be� Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Yapi-Kredi-Yayinlari/" title="Yap� Kredi Yay�nlar�">Yap� Kredi Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Yargi-Yayinlari/" title="Yarg� Yay�nlar�">Yarg� Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Yayin-Denizi-Yayinlari/" title="Yay�n Denizi Yay�nlar�">Yay�n Denizi Yay�nlar�</a> 
+	<a href="https://www.kitapsec.com/Yayinevleri/Yediiklim-Yayinlari/1-1-0a0-40-0-1-0-0.xhtml" title="Yediiklim Yay�nlar�">Yediiklim Yay�nlar�</a> 
+</td>
+  </tr>
+  
+</table>
