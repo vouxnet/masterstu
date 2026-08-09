@@ -33,6 +33,7 @@ export default function FriendsPage() {
     acceptFriendRequest,
     rejectFriendRequest,
     cancelSentRequest,
+    simulatePartnerAccept,
     removeFriend,
     sendPoke,
     sendCheer,
@@ -253,12 +254,21 @@ export default function FriendsPage() {
                       <span className="text-[10px] text-gray-400">⏳ Yanıt bekleniyor</span>
                     </div>
 
-                    <button
-                      onClick={() => cancelSentRequest(req.id)}
-                      className="text-[10px] text-rose-400 hover:text-rose-300 bg-rose-500/10 px-2.5 py-1 rounded-lg border border-rose-500/20"
-                    >
-                      İptal Et
-                    </button>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => simulatePartnerAccept(req.id)}
+                        className="text-[10px] font-bold text-emerald-300 bg-emerald-500/20 hover:bg-emerald-500/30 px-2.5 py-1 rounded-lg border border-emerald-500/30 transition-transform active:scale-95"
+                        title="Simülasyon: Karşı taraf kabul ettiğinde arkadaş listesine geçmesini test edin"
+                      >
+                        ✓ Onaylandı (Test Et)
+                      </button>
+                      <button
+                        onClick={() => cancelSentRequest(req.id)}
+                        className="text-[10px] font-bold text-rose-400 hover:text-rose-300 bg-rose-500/10 px-2.5 py-1 rounded-lg border border-rose-500/20"
+                      >
+                        İptal Et
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
