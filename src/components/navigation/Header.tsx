@@ -17,8 +17,8 @@ export const Header: React.FC = () => {
   const selectedExams: ExamType[] = currentUser.selectedExams || ["kpss_lisans"];
   const activeExam: ExamType = currentUser.activeExam || "kpss_lisans";
 
-  const handleLogout = () => {
-    document.cookie = "kpss_session=; path=/; max-age=0";
+  const handleLogout = async () => {
+    await useAuthStore.getState().signOut();
     router.push("/login");
   };
 
