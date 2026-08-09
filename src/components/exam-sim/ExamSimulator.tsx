@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import ReactDOM from "react-dom";
 import { DuelQuestion } from "@/src/lib/data/duelQuestions";
 import { Clock, ChevronLeft, ChevronRight, AlertTriangle, Flag } from "lucide-react";
 
@@ -172,8 +173,8 @@ export default function ExamSimulator({ questions, durationMinutes, onComplete, 
 
   const currentQ = questions[currentQuestionIndex];
 
-  return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-[#0a0a0a] text-white" ref={containerRef}>
+  return ReactDOM.createPortal(
+    <div className="fixed inset-0 z-[9999] flex flex-col bg-[#0a0a0a] text-white" ref={containerRef}>
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-white/10">
         <div className="flex items-center space-x-2">
@@ -328,6 +329,7 @@ export default function ExamSimulator({ questions, durationMinutes, onComplete, 
           </div>
         </div>
       )}
-    </div>
+    </div>,
+    document.body
   );
 }
