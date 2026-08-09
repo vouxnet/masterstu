@@ -64,17 +64,78 @@ export const initialCurriculumData: CurriculumTopic[] = [
   { id: "onl-vat-3", userRole: "onlisans", course: "Vatandaşlık", unit: "Anayasa Hukuku", topic: "1982 Anayasası Yürütme Organı ve Cumhurbaşkanlığı", questionWeight: 2, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl Kesin 2 Soru" },
   { id: "onl-vat-4", userRole: "onlisans", course: "Vatandaşlık", unit: "İdare Hukuku", topic: "İdare Hukuku ve İdari Teşkilat Yapısı", questionWeight: 2, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl Kesin 2-3 Soru" },
 
-  // ==================== KPSS LİSANS + ALAN ====================
-  { id: "h-1", userRole: "lisans_alan", course: "Hukuk", unit: "Anayasa Hukuku", topic: "Anayasa Hukukunun Temel Kavramları ve Devlet Biçimleri", questionWeight: 2, status: "not_started" },
-  { id: "h-2", userRole: "lisans_alan", course: "Hukuk", unit: "Anayasa Hukuku", topic: "1982 Anayasası Temel Haklar ve Ödevler Tablosu", questionWeight: 2, status: "not_started" },
-  { id: "h-3", userRole: "lisans_alan", course: "Hukuk", unit: "İdare Hukuku", topic: "İdari Teşkilat: Merkezden Yönetim ve Yerinden Yönetim", questionWeight: 3, status: "not_started" },
-  { id: "h-4", userRole: "lisans_alan", course: "Hukuk", unit: "Borçlar Hukuku", topic: "Borç İlişkisinin Doğumu ve Haksız Fiil Sorumluluğu", questionWeight: 3, status: "not_started" },
-  { id: "i-1", userRole: "lisans_alan", course: "İktisat", unit: "Mikro İktisat", topic: "Tüketici Teorisi ve Fayda Maksimizasyonu", questionWeight: 4, status: "not_started" },
-  { id: "i-2", userRole: "lisans_alan", course: "İktisat", unit: "Makro İktisat", topic: "IS-LM Modeli: Mal ve Para Piyasası Dengesi", questionWeight: 4, status: "not_started" },
-  { id: "m-1", userRole: "lisans_alan", course: "Maliye", unit: "Maliye Teorisi", topic: "Kamusal Mallar ve Dışsallıklar", questionWeight: 3, status: "not_started" },
-  { id: "m-2", userRole: "lisans_alan", course: "Maliye", unit: "Kamu Gelirleri", topic: "Verginin Yansıması ve Laffer Eğrisi", questionWeight: 4, status: "not_started" },
-  { id: "ui-1", userRole: "lisans_alan", course: "Uluslararası İlişkiler", unit: "Siyasi Tarih", topic: "1648 Vestfalya Barışı ve Modern Devletler Sistemi", questionWeight: 3, status: "not_started" },
-  { id: "ui-2", userRole: "lisans_alan", course: "Uluslararası İlişkiler", unit: "Teoriler", topic: "Realizm, Neorealizm (Waltz) ve Güç Dengesi Kuramı", questionWeight: 4, status: "not_started" },
+  // ==================== RESMİ ÖSYM KPSS LİSANS GY-GK VE ALAN BİLGİSİ (A GRUBU) ====================
+  // LİSANS TÜRKÇE (30 SORU)
+  { id: "lis-tr-1", userRole: "lisans_alan", course: "Türkçe", unit: "Anlam Bilgisi", topic: "Sözcükte Anlam, Deyim ve Atasözleri", questionWeight: 2, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl 1-2 Soru" },
+  { id: "lis-tr-2", userRole: "lisans_alan", course: "Türkçe", unit: "Anlam Bilgisi", topic: "Cümlede Anlam ve Cümle Yorumlama", questionWeight: 2, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl 2 Soru" },
+  { id: "lis-tr-3", userRole: "lisans_alan", course: "Türkçe", unit: "Dil Bilgisi", topic: "Sözcük Türleri ve Yapısı", questionWeight: 2, status: "not_started", osymFrequencyPercent: 85, osymAnalysisNote: "⚡ Düzenli Sorulur" },
+  { id: "lis-tr-4", userRole: "lisans_alan", course: "Türkçe", unit: "Dil Bilgisi", topic: "Cümlenin Ögeleri ve Cümle Türleri", questionWeight: 1, status: "not_started", osymFrequencyPercent: 85, osymAnalysisNote: "⚡ Sık Çıkar" },
+  { id: "lis-tr-5", userRole: "lisans_alan", course: "Türkçe", unit: "Yazım ve Noktalama", topic: "Yazım Kuralları ve Noktalama İşaretleri", questionWeight: 2, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl Kesin 2 Soru" },
+  { id: "lis-tr-6", userRole: "lisans_alan", course: "Türkçe", unit: "Paragraf", topic: "Paragrafta Anlam, Ana Fikir ve Yardımcı Düşünce", questionWeight: 15, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Sınavın %50'si (15 Soru)" },
+  { id: "lis-tr-7", userRole: "lisans_alan", course: "Türkçe", unit: "Sözel Mantık", topic: "Sözel Mantık ve Akıl Yürütme Soruları", questionWeight: 4, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl Kesin 4 Soru" },
+
+  // LİSANS MATEMATİK & GEOMETRİ (30 SORU)
+  { id: "lis-mat-1", userRole: "lisans_alan", course: "Matematik", unit: "Temel Matematik", topic: "Temel Kavramlar, Bölünebilme ve EBOB-EKOK", questionWeight: 3, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl 3 Soru" },
+  { id: "lis-mat-2", userRole: "lisans_alan", course: "Matematik", unit: "Rasyonel & Cebir", topic: "Rasyonel Sayılar, Üslü ve Köklü Sayılar", questionWeight: 4, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl 4 Soru" },
+  { id: "lis-mat-3", userRole: "lisans_alan", course: "Matematik", unit: "Denklem & Çarpanlar", topic: "Çarpanlara Ayırma ve Denklem Çözme", questionWeight: 2, status: "not_started", osymFrequencyPercent: 85, osymAnalysisNote: "⚡ Yüksek İhtimal" },
+  { id: "lis-mat-4", userRole: "lisans_alan", course: "Matematik", unit: "Problemler", topic: "Sayı, Kesir, Yaş, Yüzde-Kâr-Zarar Problemleri", questionWeight: 5, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl 5 Soru" },
+  { id: "lis-mat-5", userRole: "lisans_alan", course: "Matematik", unit: "Problemler", topic: "Hareket-Hız, Karışım ve Grafik Problemleri", questionWeight: 3, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl 3 Soru" },
+  { id: "lis-mat-6", userRole: "lisans_alan", course: "Matematik", unit: "Kümeler & Olasılık", topic: "Kümeler, Fonksiyonlar ve Olasılık Mantığı", questionWeight: 3, status: "not_started", osymFrequencyPercent: 85, osymAnalysisNote: "⚡ Her Yıl 3 Soru" },
+  { id: "lis-mat-7", userRole: "lisans_alan", course: "Matematik", unit: "Sayısal Mantık", topic: "Sayısal Mantık ve Analitik Akıl Yürütme", questionWeight: 4, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl 4 Soru" },
+  { id: "lis-mat-8", userRole: "lisans_alan", course: "Matematik", unit: "Geometri", topic: "Geometri (Açılar, Üçgenler, Analitik Geometri)", questionWeight: 3, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl Kesin 3 Soru" },
+
+  // LİSANS TARİH (27 SORU)
+  { id: "lis-tar-1", userRole: "lisans_alan", course: "Tarih", unit: "İslamiyet Öncesi Türk Tarihi", topic: "İslamiyet Öncesi Türk Tarihi ve Teşkilatı", questionWeight: 1, status: "not_started", osymFrequencyPercent: 75, osymAnalysisNote: "📌 Her Yıl 1 Soru" },
+  { id: "lis-tar-2", userRole: "lisans_alan", course: "Tarih", unit: "Türk-İslam Tarihi", topic: "İlk Türk-İslam Devletleri ve Medeniyeti", questionWeight: 2, status: "not_started", osymFrequencyPercent: 85, osymAnalysisNote: "⚡ Her Yıl 2 Soru" },
+  { id: "lis-tar-3", userRole: "lisans_alan", course: "Tarih", unit: "Osmanlı Siyasi Tarihi", topic: "Osmanlı Devleti Kuruluş, Yükselme ve Islahatlar", questionWeight: 3, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl 3 Soru" },
+  { id: "lis-tar-4", userRole: "lisans_alan", course: "Tarih", unit: "Osmanlı Medeniyeti", topic: "Osmanlı Kültür ve Medeniyeti (İdare, Ordu, Toprak)", questionWeight: 4, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl Kesin 4 Soru" },
+  { id: "lis-tar-5", userRole: "lisans_alan", course: "Tarih", unit: "Milli Mücadele", topic: "Trablusgarp, Balkan Savaşları ve 1. Dünya Savaşı", questionWeight: 2, status: "not_started", osymFrequencyPercent: 85, osymAnalysisNote: "⚡ Düzenli Sorulur" },
+  { id: "lis-tar-6", userRole: "lisans_alan", course: "Tarih", unit: "Milli Mücadele", topic: "Milli Mücadele Hazırlık ve Muharebeler Dönemi", questionWeight: 4, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl Kesin 4 Soru" },
+  { id: "lis-tar-7", userRole: "lisans_alan", course: "Tarih", unit: "İnkılap Tarihi", topic: "Atatürk İnkılapları, İlkeleri ve İç/Dış Politika", questionWeight: 5, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl Kesin 5 Soru" },
+  { id: "lis-tar-8", userRole: "lisans_alan", course: "Tarih", unit: "Çağdaş Tarih", topic: "Çağdaş Türk ve Dünya Tarihi", questionWeight: 3, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl Kesin 3 Soru" },
+
+  // LİSANS COĞRAFYA (18 SORU)
+  { id: "lis-cog-1", userRole: "lisans_alan", course: "Coğrafya", unit: "Coğrafi Konum", topic: "Türkiye'nin Coğrafi Konumu ve Etkileri", questionWeight: 2, status: "not_started", osymFrequencyPercent: 85, osymAnalysisNote: "⚡ Her Yıl 1-2 Soru" },
+  { id: "lis-cog-2", userRole: "lisans_alan", course: "Coğrafya", unit: "Fiziki Coğrafya", topic: "Türkiye'nin Yeryüzü Şekilleri, İklimi ve Su Varlığı", questionWeight: 5, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Sınavın %30'u (5 Soru)" },
+  { id: "lis-cog-3", userRole: "lisans_alan", course: "Coğrafya", unit: "Beşeri Coğrafya", topic: "Türkiye'de Nüfus, Yerleşme ve Göç Hareketleri", questionWeight: 3, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl Kesin 3 Soru" },
+  { id: "lis-cog-4", userRole: "lisans_alan", course: "Coğrafya", unit: "Ekonomik Coğrafya", topic: "Tarım, Hayvancılık, Madenler ve Enerji Kaynakları", questionWeight: 4, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl Kesin 4 Soru" },
+  { id: "lis-cog-5", userRole: "lisans_alan", course: "Coğrafya", unit: "Ekonomik Coğrafya", topic: "Sanayi, Ulaşım, Ticaret ve Turizm", questionWeight: 4, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl Kesin 4 Soru" },
+
+  // LİSANS VATANDAŞLIK & GÜNCEL (15 SORU)
+  { id: "lis-vat-1", userRole: "lisans_alan", course: "Vatandaşlık", unit: "Hukuka Giriş", topic: "Temel Hukuk Kavramları ve Hukuk İlkeleri", questionWeight: 3, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl Kesin 3 Soru" },
+  { id: "lis-vat-2", userRole: "lisans_alan", course: "Vatandaşlık", unit: "Anayasa Hukuku", topic: "1982 Anayasası Esasları, Yasama ve Yargı Organları", questionWeight: 3, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl Kesin 3 Soru" },
+  { id: "lis-vat-3", userRole: "lisans_alan", course: "Vatandaşlık", unit: "Anayasa Hukuku", topic: "1982 Anayasası Yürütme ve Cumhurbaşkanlığı Kararnameleri", questionWeight: 3, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl Kesin 3 Soru" },
+  { id: "lis-vat-4", userRole: "lisans_alan", course: "Vatandaşlık", unit: "İdare Hukuku", topic: "İdare Hukuku ve İdari Teşkilat Yapısı", questionWeight: 3, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl Kesin 3 Soru" },
+  { id: "lis-vat-5", userRole: "lisans_alan", course: "Vatandaşlık", unit: "Güncel Bilgiler", topic: "Güncel Sosyo-Politik Bilgiler ve Uluslararası Kuruluşlar", questionWeight: 6, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Her Yıl Kesin 6 Soru" },
+
+  // LİSANS ALAN BİLGİSİ - HUKUK (40 SORU)
+  { id: "h-1", userRole: "lisans_alan", course: "Hukuk", unit: "Anayasa Hukuku", topic: "Anayasa Hukukunun Temel Kavramları ve 1982 Anayasası", questionWeight: 6, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Kesin 6 Soru" },
+  { id: "h-2", userRole: "lisans_alan", course: "Hukuk", unit: "İdare Hukuku", topic: "İdari Teşkilat, İdari İşlemler ve İdari Yargılama (Danıştay)", questionWeight: 7, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Kesin 7 Soru" },
+  { id: "h-3", userRole: "lisans_alan", course: "Hukuk", unit: "Ceza Hukuku", topic: "Ceza Hukuku Genel Hükümler ve Suç Teorisi", questionWeight: 5, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Kesin 5 Soru" },
+  { id: "h-4", userRole: "lisans_alan", course: "Hukuk", unit: "Medeni Hukuk", topic: "Medeni Hukuk (Başlangıç, Kişiler, Eşya Hukuku)", questionWeight: 6, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Kesin 6 Soru" },
+  { id: "h-5", userRole: "lisans_alan", course: "Hukuk", unit: "Borçlar Hukuku", topic: "Borçlar Hukuku Genel Hükümler ve Sözleşmeler", questionWeight: 6, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Kesin 6 Soru" },
+  { id: "h-6", userRole: "lisans_alan", course: "Hukuk", unit: "Ticaret Hukuku", topic: "Ticari İşletme, Şirketler Hukuku ve Kıymetli Evrak", questionWeight: 6, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Kesin 6 Soru" },
+  { id: "h-7", userRole: "lisans_alan", course: "Hukuk", unit: "İcra İflas", topic: "İcra ve İflas Hukuku Esasları", questionWeight: 4, status: "not_started", osymFrequencyPercent: 85, osymAnalysisNote: "⚡ Kesin 4 Soru" },
+
+  // LİSANS ALAN BİLGİSİ - İKTİSAT (40 SORU)
+  { id: "i-1", userRole: "lisans_alan", course: "İktisat", unit: "Mikro İktisat", topic: "Tüketici ve Üretici Teorisi, Piyasa Türleri", questionWeight: 12, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Sınavın %30'u (12 Soru)" },
+  { id: "i-2", userRole: "lisans_alan", course: "İktisat", unit: "Makro İktisat", topic: "IS-LM Modeli, Enflasyon, İşsizlik ve Toplam Talep", questionWeight: 10, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Kesin 10 Soru" },
+  { id: "i-3", userRole: "lisans_alan", course: "İktisat", unit: "Para & Banka", topic: "Para Teorisi, Bankacılık ve Merkez Bankası Politikaları", questionWeight: 6, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Kesin 6 Soru" },
+  { id: "i-4", userRole: "lisans_alan", course: "İktisat", unit: "Uluslararası İktisat", topic: "Uluslararası Ticaret Teorileri ve Döviz Kuru Sistemleri", questionWeight: 5, status: "not_started", osymFrequencyPercent: 85, osymAnalysisNote: "⚡ Kesin 5 Soru" },
+  { id: "i-5", userRole: "lisans_alan", course: "İktisat", unit: "Büyüme & Türkiye", topic: "İktisadi Büyüme Modelleri ve Türkiye Ekonomisi", questionWeight: 7, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Kesin 7 Soru" },
+
+  // LİSANS ALAN BİLGİSİ - MALİYE (40 SORU)
+  { id: "m-1", userRole: "lisans_alan", course: "Maliye", unit: "Maliye Teorisi", topic: "Kamusal Mallar, Dışsallıklar ve Kamu Tercihi", questionWeight: 6, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Kesin 6 Soru" },
+  { id: "m-2", userRole: "lisans_alan", course: "Maliye", unit: "Kamu Giderleri", topic: "Kamu Harcamalarının Sınıflandırılması ve Artış Teorileri", questionWeight: 6, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Kesin 6 Soru" },
+  { id: "m-3", userRole: "lisans_alan", course: "Maliye", unit: "Kamu Gelirleri", topic: "Vergi Teorisi, Verginin Yansıması ve Laffer Eğrisi", questionWeight: 8, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Kesin 8 Soru" },
+  { id: "m-4", userRole: "lisans_alan", course: "Maliye", unit: "Devlet Bütçesi", topic: "Bütçe İlkeleri, Bütçe Kanunu ve Borçlanma", questionWeight: 8, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Kesin 8 Soru" },
+  { id: "m-5", userRole: "lisans_alan", course: "Maliye", unit: "Maliye Politikası", topic: "Maliye Politikası ve Türk Vergi Sistemi (Gelir, Kurumlar, KDV)", questionWeight: 12, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Sınavın %30'u (12 Soru)" },
+
+  // LİSANS ALAN BİLGİSİ - ULUSLARARASI İLİŞKİLER (40 SORU)
+  { id: "ui-1", userRole: "lisans_alan", course: "Uluslararası İlişkiler", unit: "Teoriler", topic: "Uluslararası İlişkiler Teorileri (Realizm, Liberalizm, İnşacılık)", questionWeight: 10, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Kesin 10 Soru" },
+  { id: "ui-2", userRole: "lisans_alan", course: "Uluslararası İlişkiler", unit: "Siyasi Tarih", topic: "1648 Vestfalya'dan Günümüze Siyasi Tarih", questionWeight: 10, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Kesin 10 Soru" },
+  { id: "ui-3", userRole: "lisans_alan", course: "Uluslararası İlişkiler", unit: "Uluslararası Hukuk", topic: "Uluslararası Hukuk ve Uluslararası Örgütler (BM, NATO, AB)", questionWeight: 10, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Kesin 10 Soru" },
+  { id: "ui-4", userRole: "lisans_alan", course: "Uluslararası İlişkiler", unit: "Türk Dış Politikası", topic: "Türk Dış Politikası Dönemleri ve Kriz Yönetimi", questionWeight: 10, status: "not_started", osymFrequencyPercent: 100, osymAnalysisNote: "🔥 Kesin 10 Soru" },
 
   // ==================== ORTAÖĞRETİM (LİSE) ====================
   { id: "ort-tr-1", userRole: "ortaogretim", course: "Türkçe", unit: "Sözcükte Anlam", topic: "Sözcükte Anlam", questionWeight: 1, status: "not_started" },

@@ -79,8 +79,8 @@ export default function FriendsPage() {
     }
   };
 
-  const triggerCheerWithConfetti = (friendName: string) => {
-    sendCheer(friendName);
+  const triggerCheerWithConfetti = (friend: FriendUser) => {
+    sendCheer(friend, currentUser.name, currentUser.friendCode);
     confetti({
       particleCount: 60,
       spread: 70,
@@ -353,7 +353,7 @@ export default function FriendsPage() {
                 {/* Duo Co-Op Action Buttons */}
                 <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/5">
                   <button
-                    onClick={() => sendPoke(friend.name)}
+                    onClick={() => sendPoke(friend, currentUser.name, currentUser.friendCode)}
                     className="rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 px-3 py-2 text-xs font-bold border border-indigo-500/40 transition-transform active:scale-95 flex items-center justify-center space-x-1"
                   >
                     <Zap className="h-4 w-4 text-amber-300" />
@@ -361,7 +361,15 @@ export default function FriendsPage() {
                   </button>
 
                   <button
-                    onClick={() => triggerCheerWithConfetti(friend.name)}
+                    onClick={() => {
+                      sendCheer(friend, currentUser.name, currentUser.friendCode);
+                      confetti({
+                        particleCount: 60,
+                        spread: 70,
+                        origin: { y: 0.7 },
+                        colors: ["#F59E0B", "#10B981", "#6366F1"],
+                      });
+                    }}
                     className="rounded-xl bg-emerald-600/30 hover:bg-emerald-600/50 text-emerald-300 px-3 py-2 text-xs font-bold border border-emerald-500/40 transition-transform active:scale-95 flex items-center justify-center space-x-1"
                   >
                     <Sparkles className="h-4 w-4 text-emerald-400" />

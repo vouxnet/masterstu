@@ -26,6 +26,8 @@ export interface AppNotification {
   id: string;
   type: "friend_add" | "poke" | "cheer" | "question";
   senderName: string;
+  senderCode?: string;
+  targetCode?: string;
   message: string;
   createdAt: string;
   read: boolean;
@@ -45,16 +47,17 @@ interface FriendState {
   rejectFriendRequest: (requestId: string) => void;
   cancelSentRequest: (requestId: string) => void;
   removeFriend: (id: string) => void;
-  sendPoke: (friendName: string) => void;
-  sendCheer: (friendName: string) => void;
-  sendQuestionToFriend: (friendName: string, text: string) => void;
+  sendPoke: (friend: FriendUser, senderName: string, senderCode: string) => void;
+  sendCheer: (friend: FriendUser, senderName: string, senderCode: string) => void;
+  sendQuestionToFriend: (friend: FriendUser, text: string, senderName: string, senderCode: string) => void;
   markNotificationsRead: () => void;
   clearNotifications: () => void;
   clearToast: () => void;
   resetFriends: () => void;
 }
 
-const GLOBAL_NETWORK_KEY = "kpss_global_friend_network_v2";
+const GLOBAL_NETWORK_KEY = "kpss_global_friend_network_v3";
+const GLOBAL_NOTIFS_KEY = "kpss_global_notifications_v3";
 
 const getGlobalNetwork = (): FriendRequest[] => {
   if (typeof window === "undefined") return [];
@@ -70,7 +73,24 @@ const saveGlobalNetwork = (network: FriendRequest[]) => {
   if (typeof window === "undefined") return;
   try {
     localStorage.setItem(GLOBAL_NETWORK_KEY, JSON.stringify(network));
-    // Broadcast cross-tab event
+    window.dispatchEvent(new Event("storage"));
+  } catch (e) {}
+};
+
+const getGlobalNotifications = (): AppNotification[] => {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(GLOBAL_NOTIFS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+};
+
+const saveGlobalNotifications = (notifs: AppNotification[]) => {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(GLOBAL_NOTIFS_KEY, JSON.stringify(notifs));
     window.dispatchEvent(new Event("storage"));
   } catch (e) {}
 };
@@ -98,6 +118,7 @@ export const useFriendStore = create<FriendState>()(
         const myCode = userCode.trim().toUpperCase();
 
         const network = getGlobalNetwork();
+        const globalNotifs = getGlobalNotifications();
 
         // 1. Incoming requests targeting myCode
         const incoming = network.filter(
@@ -116,28 +137,29 @@ export const useFriendStore = create<FriendState>()(
             (r.senderCode.toUpperCase() === myCode || r.targetCode.toUpperCase() === myCode)
         );
 
-        let currentFriends = [...get().friends];
+        // Deduplicate friends by friendCode & id
+        const friendMap = new Map<string, FriendUser>();
+        get().friends.forEach((f) => {
+          friendMap.set(f.friendCode.toUpperCase(), f);
+        });
+
         let hasNewFriend = false;
 
         newlyAccepted.forEach((req) => {
           const isSender = req.senderCode.toUpperCase() === myCode;
-          const friendCode = isSender ? req.targetCode : req.senderCode;
+          const friendCode = (isSender ? req.targetCode : req.senderCode).toUpperCase();
           const friendName = isSender ? req.targetCode.replace("#", "") : req.senderName;
           const friendAvatar = isSender
             ? `https://api.dicebear.com/7.x/avataaars/svg?seed=${friendName}`
             : req.senderAvatar;
 
-          const exists = currentFriends.some(
-            (f) => f.friendCode.toUpperCase() === friendCode.toUpperCase()
-          );
-
-          if (!exists) {
+          if (!friendMap.has(friendCode)) {
             hasNewFriend = true;
-            currentFriends.push({
-              id: `friend-${Date.now()}-${Math.random()}`,
+            friendMap.set(friendCode, {
+              id: `friend-${friendCode}`,
               name: friendName,
               friendCode: friendCode,
-              roleLabel: "ÖSYM Önlisans Adayı",
+              roleLabel: "ÖSYM Önlisans / Lisans Adayı",
               avatarUrl: friendAvatar,
               statusText: "Canlı Ders Çalışıyor ⏳",
               isOnline: true,
@@ -146,10 +168,24 @@ export const useFriendStore = create<FriendState>()(
           }
         });
 
+        // 4. Fetch incoming notifications targeting myCode
+        const myIncomingNotifs = globalNotifs.filter(
+          (n) => n.targetCode && n.targetCode.toUpperCase() === myCode
+        );
+
+        const notifMap = new Map<string, AppNotification>();
+        get().notifications.forEach((n) => notifMap.set(n.id, n));
+        myIncomingNotifs.forEach((n) => notifMap.set(n.id, n));
+
+        const mergedNotifications = Array.from(notifMap.values()).sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+
         set({
           pendingRequests: incoming,
           sentRequests: outgoing,
-          friends: currentFriends,
+          friends: Array.from(friendMap.values()),
+          notifications: mergedNotifications,
         });
 
         if (hasNewFriend) {
@@ -194,7 +230,7 @@ export const useFriendStore = create<FriendState>()(
         }
 
         const newRequest: FriendRequest = {
-          id: `g-req-${Date.now()}`,
+          id: `g-req-${Date.now()}-${Math.random()}`,
           senderCode: myCode,
           senderName: currentUserName || "Aday Kullanıcı",
           senderAvatar: currentUserAvatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${currentUserName}`,
@@ -236,11 +272,22 @@ export const useFriendStore = create<FriendState>()(
         );
         saveGlobalNetwork(updatedNetwork);
 
+        const friendCode = req.senderCode.toUpperCase();
+        const existingFriends = get().friends;
+
+        if (existingFriends.some((f) => f.friendCode.toUpperCase() === friendCode)) {
+          set((state) => ({
+            pendingRequests: state.pendingRequests.filter((r) => r.id !== requestId),
+            toastMessage: `⚠️ ${req.senderName} zaten arkadaş listenizde ekli!`,
+          }));
+          return;
+        }
+
         const newFriend: FriendUser = {
-          id: `friend-${Date.now()}`,
+          id: `friend-${friendCode}`,
           name: req.senderName,
           friendCode: req.senderCode,
-          roleLabel: "ÖSYM Önlisans Adayı",
+          roleLabel: "ÖSYM Önlisans / Lisans Adayı",
           avatarUrl: req.senderAvatar,
           statusText: "Canlı Ders Çalışıyor ⏳",
           isOnline: true,
@@ -295,51 +342,100 @@ export const useFriendStore = create<FriendState>()(
         }));
       },
 
-      sendPoke: (friendName: string) => {
-        const newNotif: AppNotification = {
-          id: `notif-poke-${Date.now()}`,
+      sendPoke: (friend: FriendUser, senderName: string, senderCode: string) => {
+        const targetCode = friend.friendCode.toUpperCase();
+        const globalNotifs = getGlobalNotifications();
+
+        const newOutboundNotif: AppNotification = {
+          id: `notif-poke-${Date.now()}-${Math.random()}`,
           type: "poke",
-          senderName: friendName,
-          message: `👉 ${friendName} kullanıcısına ders hatırlatması (Dürt) gönderdiniz.`,
+          senderName: senderName || "Çalışma Arkadaşın",
+          senderCode: senderCode,
+          targetCode: targetCode,
+          message: `👉 ${senderName} size ders çalışma hatırlatması (Dürt!) gönderdi.`,
+          createdAt: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+          read: false,
+        };
+
+        saveGlobalNotifications([newOutboundNotif, ...globalNotifs]);
+
+        // Local confirmation notification for sender
+        const localSenderNotif: AppNotification = {
+          id: `notif-poke-local-${Date.now()}`,
+          type: "poke",
+          senderName: friend.name,
+          message: `👉 ${friend.name} (${friend.friendCode}) kullanıcısına ders hatırlatması gönderdiniz.`,
           createdAt: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
           read: false,
         };
 
         set((state) => ({
-          notifications: [newNotif, ...state.notifications],
-          toastMessage: `👉 ${friendName} kişisine "Dürt" bildirimi başarıyla gönderildi!`,
+          notifications: [localSenderNotif, ...state.notifications],
+          toastMessage: `👉 ${friend.name} kişisine dürtme bildirimi gönderildi!`,
         }));
       },
 
-      sendCheer: (friendName: string) => {
-        const newNotif: AppNotification = {
-          id: `notif-cheer-${Date.now()}`,
+      sendCheer: (friend: FriendUser, senderName: string, senderCode: string) => {
+        const targetCode = friend.friendCode.toUpperCase();
+        const globalNotifs = getGlobalNotifications();
+
+        const newOutboundNotif: AppNotification = {
+          id: `notif-cheer-${Date.now()}-${Math.random()}`,
           type: "cheer",
-          senderName: friendName,
-          message: `🎉 ${friendName} kullanıcısına tebrik ve motivasyon mesajı ilettiniz! (+10 XP)`,
+          senderName: senderName || "Çalışma Arkadaşın",
+          senderCode: senderCode,
+          targetCode: targetCode,
+          message: `🎉 ${senderName} sizi tebrik etti ve motivasyon gönderdi! (+10 XP)`,
+          createdAt: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+          read: false,
+        };
+
+        saveGlobalNotifications([newOutboundNotif, ...globalNotifs]);
+
+        const localSenderNotif: AppNotification = {
+          id: `notif-cheer-local-${Date.now()}`,
+          type: "cheer",
+          senderName: friend.name,
+          message: `🎉 ${friend.name} kullanıcısına tebrik ve motivasyon mesajı ilettiniz! (+10 XP)`,
           createdAt: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
           read: false,
         };
 
         set((state) => ({
-          notifications: [newNotif, ...state.notifications],
-          toastMessage: `🎉 ${friendName} kişisine tebrik bildirimi iletildi!`,
+          notifications: [localSenderNotif, ...state.notifications],
+          toastMessage: `🎉 ${friend.name} kişisine tebrik bildirimi iletildi!`,
         }));
       },
 
-      sendQuestionToFriend: (friendName: string, text: string) => {
-        const newNotif: AppNotification = {
-          id: `notif-q-${Date.now()}`,
+      sendQuestionToFriend: (friend: FriendUser, text: string, senderName: string, senderCode: string) => {
+        const targetCode = friend.friendCode.toUpperCase();
+        const globalNotifs = getGlobalNotifications();
+
+        const newOutboundNotif: AppNotification = {
+          id: `notif-q-${Date.now()}-${Math.random()}`,
           type: "question",
-          senderName: friendName,
-          message: `📩 ${friendName} kullanıcısına sorunuz iletildi: "${text}"`,
+          senderName: senderName || "Çalışma Arkadaşın",
+          senderCode: senderCode,
+          targetCode: targetCode,
+          message: `📩 ${senderName} size bir soru gönderdi: "${text}"`,
+          createdAt: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+          read: false,
+        };
+
+        saveGlobalNotifications([newOutboundNotif, ...globalNotifs]);
+
+        const localSenderNotif: AppNotification = {
+          id: `notif-q-local-${Date.now()}`,
+          type: "question",
+          senderName: friend.name,
+          message: `📩 ${friend.name} kullanıcısına sorunuz iletildi: "${text}"`,
           createdAt: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
           read: false,
         };
 
         set((state) => ({
-          notifications: [newNotif, ...state.notifications],
-          toastMessage: `📩 ${friendName} kullanıcısına sorunuz iletildi!`,
+          notifications: [localSenderNotif, ...state.notifications],
+          toastMessage: `📩 ${friend.name} kullanıcısına sorunuz iletildi!`,
         }));
       },
 
@@ -354,7 +450,7 @@ export const useFriendStore = create<FriendState>()(
       resetFriends: () => set({ friends: [], pendingRequests: [], sentRequests: [], notifications: [], toastMessage: null }),
     }),
     {
-      name: "asimptot_friends_real_v7",
+      name: "asimptot_friends_real_v8",
     }
   )
 );

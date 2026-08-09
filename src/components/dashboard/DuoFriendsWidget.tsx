@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useAuthStore } from "@/src/lib/store/useAuthStore";
-import { useFriendStore } from "@/src/lib/store/useFriendStore";
+import { useFriendStore, FriendUser } from "@/src/lib/store/useFriendStore";
 import { Users, Flame, UserPlus, Copy, Check, MessageSquare, BookOpen, Send, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
@@ -14,6 +14,7 @@ export function DuoFriendsWidget() {
 
   const [questionModalFriend, setQuestionModalFriend] = useState<string | null>(null);
   const [questionInput, setQuestionInput] = useState("");
+  const [copied, setCopied] = useState(false);
 
   const displayFriends = partnerUser 
     ? [
@@ -31,17 +32,16 @@ export function DuoFriendsWidget() {
       ]
     : friends;
 
-  const handleCheer = (name: string) => {
-    sendCheer(name);
+  const handleCheer = (friend: FriendUser) => {
+    sendCheer(friend, currentUser.name, currentUser.friendCode);
     confetti({
-      particleCount: 50,
-      spread: 60,
+      particleCount: 60,
+      spread: 70,
       origin: { y: 0.7 },
       colors: ["#F59E0B", "#10B981", "#6366F1"],
     });
   };
 
-  const [copied, setCopied] = useState(false);
   const handleCopy = () => {
     navigator.clipboard.writeText(currentUser.friendCode || "");
     setCopied(true);
@@ -52,7 +52,10 @@ export function DuoFriendsWidget() {
     e.preventDefault();
     if (!questionModalFriend || !questionInput.trim()) return;
 
-    sendQuestionToFriend(questionModalFriend, questionInput);
+    const targetFriend = displayFriends.find(f => f.name === questionModalFriend || f.friendCode === questionModalFriend);
+    if (targetFriend) {
+      sendQuestionToFriend(targetFriend, questionInput, currentUser.name, currentUser.friendCode);
+    }
     setQuestionModalFriend(null);
     setQuestionInput("");
   };
@@ -137,7 +140,7 @@ export function DuoFriendsWidget() {
               {/* Quick Interactive Actions */}
               <div className="grid grid-cols-4 gap-1.5 pt-1">
                 <button
-                  onClick={() => sendPoke(friend.name)}
+                  onClick={() => sendPoke(friend, currentUser.name, currentUser.friendCode)}
                   className="rounded-xl bg-amber-500/15 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 py-1.5 text-[10px] font-bold transition-all active:scale-95 flex items-center justify-center space-x-1"
                   title="Ders Çalış Hatırlatması Gönder"
                 >
@@ -145,7 +148,7 @@ export function DuoFriendsWidget() {
                 </button>
 
                 <button
-                  onClick={() => handleCheer(friend.name)}
+                  onClick={() => handleCheer(friend)}
                   className="rounded-xl bg-emerald-500/15 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 py-1.5 text-[10px] font-bold transition-all active:scale-95 flex items-center justify-center space-x-1"
                   title="Tebrik Et ve Konfeti Patlat"
                 >
