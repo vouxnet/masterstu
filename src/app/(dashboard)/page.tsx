@@ -153,9 +153,9 @@ export default function DashboardPage() {
 
         {/* Right Column (lg:col-span-1) */}
         <div className="space-y-6">
+          <DailyFactWidget />
           <PomodoroWidget />
           <TodoSummary />
-          <DailyFactWidget />
         </div>
       </div>
 
