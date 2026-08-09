@@ -197,21 +197,49 @@ export default function CurriculumPage() {
           </div>
         </div>
 
-        {/* Course Filter Pills */}
-        <div className="flex items-center space-x-2 overflow-x-auto pb-1">
-          {courses.map((course) => (
+        {/* Course Filter Pills & Expand/Collapse All Buttons */}
+        <div className="flex items-center justify-between gap-3 overflow-x-auto pb-1">
+          <div className="flex items-center space-x-2">
+            {courses.map((course) => (
+              <button
+                key={course}
+                onClick={() => setSelectedCourse(course)}
+                className={`rounded-xl px-4 py-2 text-xs font-semibold whitespace-nowrap transition-all border ${
+                  selectedCourse === course
+                    ? "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/30"
+                    : "glass-card text-gray-400 border-white/5 hover:text-white"
+                }`}
+              >
+                {course}
+              </button>
+            ))}
+          </div>
+
+          {/* Expand / Collapse All Controls */}
+          <div className="flex items-center space-x-2 shrink-0">
             <button
-              key={course}
-              onClick={() => setSelectedCourse(course)}
-              className={`rounded-xl px-4 py-2 text-xs font-semibold whitespace-nowrap transition-all border ${
-                selectedCourse === course
-                  ? "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/30"
-                  : "glass-card text-gray-400 border-white/5 hover:text-white"
-              }`}
+              onClick={() => {
+                const nextState: Record<string, boolean> = {};
+                Object.keys(groupedByUnit).forEach((k) => (nextState[k] = true));
+                setOpenUnits(nextState);
+              }}
+              className="rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-3 py-1.5 text-xs font-bold transition-all flex items-center space-x-1.5 whitespace-nowrap"
+              title="Tüm Üniteleri Aç"
             >
-              {course}
+              <span>📂 Tümünü Aç</span>
             </button>
-          ))}
+            <button
+              onClick={() => {
+                const nextState: Record<string, boolean> = {};
+                Object.keys(groupedByUnit).forEach((k) => (nextState[k] = false));
+                setOpenUnits(nextState);
+              }}
+              className="rounded-xl bg-gray-500/10 hover:bg-gray-500/20 text-gray-300 border border-gray-500/30 px-3 py-1.5 text-xs font-bold transition-all flex items-center space-x-1.5 whitespace-nowrap"
+              title="Tüm Üniteleri Kapat"
+            >
+              <span>📁 Tümünü Kapat</span>
+            </button>
+          </div>
         </div>
       </div>
 

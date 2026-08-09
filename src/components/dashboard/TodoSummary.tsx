@@ -53,7 +53,7 @@ export const TodoSummary: React.FC = () => {
   const completedCount = todos.filter((t) => t.completed).length;
 
   return (
-    <div className="rounded-3xl glass-panel p-6 border border-white/10 shadow-xl flex flex-col h-full max-h-[400px]">
+    <div className="rounded-3xl glass-panel p-6 border border-white/10 shadow-xl flex flex-col h-full min-h-[320px]">
       <div className="flex items-center justify-between mb-4 shrink-0">
         <div className="flex items-center space-x-2.5">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600/30 text-indigo-400 border border-indigo-500/30">
@@ -113,7 +113,7 @@ export const TodoSummary: React.FC = () => {
                   className="flex-1 bg-black/40 border border-indigo-500/50 rounded-lg px-2 py-1 text-white focus:outline-none"
                 />
               ) : (
-                <span className={`truncate ${todo.completed ? 'line-through text-gray-500' : ''}`}>
+                <span className={`break-words leading-relaxed ${todo.completed ? 'line-through text-gray-500' : ''}`}>
                   {todo.title}
                 </span>
               )}

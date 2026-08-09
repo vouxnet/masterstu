@@ -13,6 +13,7 @@ import { DailyQuestWidget } from "@/src/components/dashboard/DailyQuestWidget";
 import { DuoFriendsWidget } from "@/src/components/dashboard/DuoFriendsWidget";
 import { Brain, Clock, Flame, BookOpen, TrendingUp, Sparkles, Camera, Calendar } from "lucide-react";
 import { formatTimeRemaining } from "@/src/lib/utils";
+import { LiveCurrentNewsWidget } from "@/src/components/dashboard/LiveCurrentNewsWidget";
 
 export default function DashboardPage() {
   const { currentUser, partnerUser } = useAuthStore();
@@ -154,6 +155,7 @@ export default function DashboardPage() {
         {/* Right Column (lg:col-span-1) */}
         <div className="space-y-6">
           <DailyFactWidget />
+          <LiveCurrentNewsWidget />
           <PomodoroWidget />
           <TodoSummary />
         </div>

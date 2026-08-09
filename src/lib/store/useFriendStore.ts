@@ -450,7 +450,7 @@ export const useFriendStore = create<FriendState>()(
       resetFriends: () => set({ friends: [], pendingRequests: [], sentRequests: [], notifications: [], toastMessage: null }),
     }),
     {
-      name: "asimptot_friends_real_v8",
+      name: "asimptot_friends_persist_v10",
     }
   )
 );

@@ -90,7 +90,7 @@ export default function AIHubPage() {
   const netTrend = lastExam && prevExam ? lastExam.totalNet - prevExam.totalNet : null;
 
   // Active AI Tab
-  const [activeTab, setActiveTab] = useState<"coach" | "pvp" | "topics" | "podcast" | "triage" | "simulation">("coach");
+  const [activeTab, setActiveTab] = useState<"coach" | "topics" | "podcast" | "triage" | "simulation">("coach");
 
   // Simulation State
   const [simStatus, setSimStatus] = useState<"idle" | "running" | "finished">("idle");
@@ -109,9 +109,8 @@ export default function AIHubPage() {
   }, []);
 
   const handleStartSimulation = () => {
-    let qCount = 15;
-    if (simDuration === 60) qCount = 30;
-    if (simDuration === 120) qCount = 60;
+    let qCount = 30;
+    if (simDuration === 130 || simDuration === 120) qCount = 60;
     setSimQuestions(getRandomQuestions(qCount, activeExam));
     setSimStatus("running");
   };
@@ -122,66 +121,6 @@ export default function AIHubPage() {
     const newHistory = [result, ...simHistory];
     setSimHistory(newHistory);
     localStorage.setItem('asimptot_simulations_v1', JSON.stringify(newHistory));
-  };
-
-  // Friend PvP State
-  const [pvpScore, setPvpScore] = useState<{ user: number; friend: number }>({ user: 0, friend: 0 });
-  const [pvpCurrentQuestion, setPvpCurrentQuestion] = useState(1);
-  const [pvpFinished, setPvpFinished] = useState(false);
-  const [questions, setQuestions] = useState<DuelQuestion[]>(() => getRandomQuestions(5, activeExam));
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
-  const [showAnswer, setShowAnswer] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(30);
-
-  useEffect(() => {
-    if (activeTab === "pvp" && !pvpFinished && !showAnswer && timeLeft > 0) {
-      const timer = setTimeout(() => setTimeLeft(prev => prev - 1), 1000);
-      return () => clearTimeout(timer);
-    } else if (timeLeft === 0 && !showAnswer && !pvpFinished) {
-      handlePvpAnswer(-1); // Timeout
-    }
-  }, [timeLeft, activeTab, pvpFinished, showAnswer]);
-
-  const handlePvpAnswer = (index: number) => {
-    if (showAnswer) return;
-    setSelectedAnswer(index);
-    setShowAnswer(true);
-
-    const currentQ = questions[pvpCurrentQuestion - 1];
-    const isCorrect = index === currentQ?.correctIndex;
-
-    if (isCorrect) {
-      setPvpScore((prev) => ({ ...prev, user: prev.user + 20 }));
-      confetti({ particleCount: 30, spread: 50, origin: { y: 0.7 } });
-    }
-    
-    // Friend randomly gets +15 or +0
-    const friendCorrect = Math.random() > 0.4;
-    if (friendCorrect) {
-      setPvpScore((prev) => ({ ...prev, friend: prev.friend + 15 }));
-    }
-
-    setTimeout(() => {
-      if (pvpCurrentQuestion < 5) {
-        setPvpCurrentQuestion((prev) => prev + 1);
-        setSelectedAnswer(null);
-        setShowAnswer(false);
-        setTimeLeft(30);
-      } else {
-        setPvpFinished(true);
-        confetti({ particleCount: 80, spread: 80, origin: { y: 0.6 } });
-      }
-    }, 1500);
-  };
-
-  const resetPvp = () => {
-    setQuestions(getRandomQuestions(5, activeExam));
-    setPvpScore({ user: 0, friend: 0 });
-    setPvpCurrentQuestion(1);
-    setPvpFinished(false);
-    setSelectedAnswer(null);
-    setShowAnswer(false);
-    setTimeLeft(30);
   };
 
   // Compute Konu Tahmini
@@ -199,21 +138,7 @@ export default function AIHubPage() {
   
   const topTopics = allTopics.sort((a, b) => b.avg - a.avg).slice(0, 15);
 
-  const getOptionColor = (index: number) => {
-    switch (index) {
-      case 0: return "hover:bg-indigo-600/30 border-white/10 hover:border-indigo-500/50";
-      case 1: return "hover:bg-emerald-600/30 border-white/10 hover:border-emerald-500/50";
-      case 2: return "hover:bg-amber-600/30 border-white/10 hover:border-amber-500/50";
-      case 3: return "hover:bg-rose-600/30 border-white/10 hover:border-rose-500/50";
-      default: return "";
-    }
-  };
 
-  const getAnswerColor = (index: number, correctIndex: number) => {
-    if (index === correctIndex) return "bg-emerald-600/50 border-emerald-500/50";
-    if (index === selectedAnswer && index !== correctIndex) return "bg-rose-600/50 border-rose-500/50";
-    return "opacity-50";
-  };
 
   const podcastEpisodes = [
     { id: "p1", title: "Anayasa Hukuku Özet", subject: "Hukuk", duration: "24:30", plays: 142, isOfficial: true },
@@ -247,7 +172,7 @@ export default function AIHubPage() {
 
         <div className="inline-flex items-center space-x-2 rounded-2xl glass-card px-4 py-2 text-xs font-bold text-amber-300 border border-amber-500/30">
           <Sparkles className="h-4 w-4 text-amber-400 animate-spin" />
-          <span>6 Yapay Zeka Modülü Aktif</span>
+          <span>5 Yapay Zeka Modülü Aktif</span>
         </div>
       </div>
 
@@ -263,18 +188,6 @@ export default function AIHubPage() {
         >
           <Bot className="h-4 w-4 text-indigo-300" />
           <span>🤖 AI Koç & Analiz</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab("pvp")}
-          className={`rounded-xl px-4 py-2.5 text-xs font-bold whitespace-nowrap transition-all border flex items-center space-x-1.5 ${
-            activeTab === "pvp"
-              ? "bg-rose-600 border-rose-500 text-white shadow-lg shadow-rose-600/30"
-              : "glass-card text-gray-400 border-white/5 hover:text-white"
-          }`}
-        >
-          <Swords className="h-4 w-4 text-rose-300" />
-          <span>⚔️ Canlı Düello (1v1)</span>
         </button>
         
         <button
@@ -416,100 +329,7 @@ export default function AIHubPage() {
       )}
 
 
-      {/* 2. FRIEND PVP CHALLENGE */}
-      {activeTab === "pvp" && (
-        <div className="rounded-3xl glass-panel p-6 border border-white/10 shadow-2xl space-y-5">
-          <div className="flex items-center justify-between border-b border-white/10 pb-4">
-            <div className="flex items-center space-x-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-600/30 text-rose-300 border border-rose-500/40">
-                <Swords className="h-7 w-7" />
-              </div>
-              <div>
-                <h3 className="font-display text-lg font-bold text-white">
-                  Canlı Düello & Soru Yarışı (1v1 Challenge)
-                </h3>
-                <p className="text-xs text-gray-400">
-                  5 Soru - 30 Soru Başı Süre - Zamana Karşı Yarış!
-                </p>
-              </div>
-            </div>
 
-            <div className="flex items-center space-x-3 bg-black/40 px-4 py-2 rounded-2xl border border-white/10">
-              <span className="text-xs font-bold text-indigo-300">{currentUser.name}: {pvpScore.user}</span>
-              <span className="text-xs text-gray-500">VS</span>
-              <span className="text-xs font-bold text-rose-300">Arkadaş: {pvpScore.friend}</span>
-            </div>
-          </div>
-
-          {!pvpFinished && questions.length > 0 ? (
-            <div className="space-y-4 text-center py-4">
-              <div className="flex items-center justify-center space-x-4">
-                <span className="rounded-full bg-rose-500/20 px-3 py-1 text-xs font-bold text-rose-300 border border-rose-500/30">
-                  Soru {pvpCurrentQuestion} / 5
-                </span>
-                <span className={`rounded-full px-3 py-1 text-xs font-bold border flex items-center space-x-1 ${timeLeft <= 5 ? "bg-rose-500/20 text-rose-300 border-rose-500/30 animate-pulse" : "bg-white/10 text-gray-300 border-white/20"}`}>
-                  <Timer className="w-3 h-3" />
-                  <span>{timeLeft}s</span>
-                </span>
-              </div>
-
-              <div className="inline-block mt-2 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-white/10 text-gray-400">
-                {questions[pvpCurrentQuestion - 1]?.subject}
-              </div>
-
-              <h4 className="font-display text-lg font-bold text-white max-w-xl mx-auto min-h-[60px] flex items-center justify-center">
-                {questions[pvpCurrentQuestion - 1]?.question}
-              </h4>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto pt-2">
-                {questions[pvpCurrentQuestion - 1]?.options.map((opt, i) => (
-                  <button
-                    key={i}
-                    onClick={() => handlePvpAnswer(i)}
-                    disabled={showAnswer}
-                    className={`rounded-2xl glass-card p-4 text-sm font-bold text-left transition-all ${
-                      showAnswer 
-                        ? getAnswerColor(i, questions[pvpCurrentQuestion - 1].correctIndex) 
-                        : getOptionColor(i)
-                    } ${showAnswer ? "text-white" : "text-gray-200"}`}
-                  >
-                    <span className="mr-2 opacity-50">{String.fromCharCode(65 + i)})</span>
-                    {opt}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : pvpFinished ? (
-            <div className="text-center py-6 space-y-3">
-              <Award className="mx-auto h-12 w-12 text-amber-400 animate-bounce" />
-              <h3 className="font-display text-2xl font-extrabold text-white">
-                Düello Tamamlandı! 🏆
-              </h3>
-              <p className="text-sm text-emerald-300 font-bold mb-4">
-                Sen: {pvpScore.user} | Arkadaş: {pvpScore.friend}
-              </p>
-              <h4 className="text-xl font-bold text-white mb-6">
-                {pvpScore.user > pvpScore.friend ? "🎉 KAZANDIN!" : pvpScore.user < pvpScore.friend ? "😔 KAYBETTİN" : "🤝 BERABERE!"}
-              </h4>
-              <button
-                onClick={resetPvp}
-                className="rounded-xl glass-button px-5 py-2.5 text-xs font-bold text-white shadow-lg inline-flex items-center space-x-2 mb-4"
-              >
-                <RefreshCw className="h-4 w-4" />
-                <span>Yeniden Oyna</span>
-              </button>
-
-              {/* PvP Results Review */}
-              <div className="mt-8 text-left space-y-4 max-w-2xl mx-auto border-t border-white/10 pt-6">
-                <h4 className="text-lg font-bold text-white mb-2">Soru Özeti ve Açıklamalar</h4>
-                {questions.map((q, idx) => (
-                  <QuestionReviewCard key={idx} q={q} index={idx} />
-                ))}
-              </div>
-            </div>
-          ) : null}
-        </div>
-      )}
 
       {/* 3. KONU TAHMİNİ */}
       {activeTab === "topics" && (
@@ -683,24 +503,49 @@ export default function AIHubPage() {
               <h3 className="font-display text-3xl font-bold text-white">Acımasız ÖSYM Simülasyonu</h3>
               <p className="text-gray-400">Gerçek sınav stresini yaşa. Timer durdurulamaz. Çıkarsan PES ETTİ damgası yersin.</p>
               
-              <div className="flex justify-center space-x-4">
-                {[30, 60, 120].map(dur => (
-                  <button
-                    key={dur}
-                    onClick={() => setSimDuration(dur)}
-                    className={`px-6 py-3 rounded-xl font-bold transition-all border ${simDuration === dur ? 'bg-rose-600/20 border-rose-500 text-rose-300' : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'}`}
-                  >
-                    {dur} dk
-                    <span className="block text-xs font-normal opacity-70">{dur === 30 ? '15 Soru' : dur === 60 ? '30 Soru' : '60 Soru'}</span>
-                  </button>
-                ))}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-xl mx-auto">
+                <button
+                  onClick={() => setSimDuration(40)}
+                  className={`p-5 rounded-2xl font-bold transition-all border text-left flex flex-col justify-between ${
+                    simDuration === 40 || simDuration === 30
+                      ? 'bg-rose-600/20 border-rose-500 text-rose-300 shadow-xl shadow-rose-600/10'
+                      : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10'
+                  }`}
+                >
+                  <div>
+                    <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block mb-1">⚡ Tür 1 (Nokta Atışı)</span>
+                    <span className="text-base font-black block text-white">30 Soruluk Özel Simülasyon</span>
+                    <span className="text-xs text-gray-400 block mt-1">%80+ çıkma ihtimalli tüm derslerden sıcak sorular</span>
+                  </div>
+                  <span className="mt-4 text-xs font-bold text-rose-400 bg-rose-500/10 px-3 py-1.5 rounded-xl border border-rose-500/20 w-fit">
+                    ⏱️ 40 Dakika Süre
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => setSimDuration(130)}
+                  className={`p-5 rounded-2xl font-bold transition-all border text-left flex flex-col justify-between ${
+                    simDuration === 130 || simDuration === 120
+                      ? 'bg-indigo-600/20 border-indigo-500 text-indigo-300 shadow-xl shadow-indigo-600/10'
+                      : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10'
+                  }`}
+                >
+                  <div>
+                    <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider block mb-1">🏆 Tür 2 (Tam Prova)</span>
+                    <span className="text-base font-black block text-white">120 Soruluk Önlisans Sınavı</span>
+                    <span className="text-xs text-gray-400 block mt-1">Birebir ÖSYM Önlisans soru ve konu dağılımı</span>
+                  </div>
+                  <span className="mt-4 text-xs font-bold text-indigo-400 bg-indigo-500/10 px-3 py-1.5 rounded-xl border border-indigo-500/20 w-fit">
+                    ⏱️ 130 Dakika Süre
+                  </span>
+                </button>
               </div>
 
               <button
                 onClick={handleStartSimulation}
-                className="w-full sm:w-auto px-8 py-4 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-lg transition-colors shadow-lg shadow-rose-600/30"
+                className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-rose-600 to-indigo-600 hover:from-rose-500 hover:to-indigo-500 text-white font-black rounded-2xl text-lg transition-all shadow-xl shadow-rose-600/20 hover:scale-105 active:scale-95"
               >
-                🔥 Simülasyonu Başlat
+                🔥 Gerçek ÖSYM Simülasyonunu Başlat
               </button>
 
               {simHistory.length > 0 && (

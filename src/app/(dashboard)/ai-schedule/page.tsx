@@ -21,71 +21,110 @@ export interface DaySchedule {
 }
 
 const PRESET_PROGRAMS: Record<string, { title: string; desc: string; days: DaySchedule[] }> = {
-  onlisans_derece: {
-    title: "🎯 Önlisans Derece Programı (Önerilen)",
-    desc: "ÖSYM Önlisans müfredatındaki 5 temel ders ve haftalık deneme sınavı ile derece odaklı çalışma.",
+  derece_kapsam: {
+    title: "🎯 Derece Odaklı Tam Kapsam Programı",
+    desc: "ÖSYM müfredatındaki 5 temel dersi eşit ağırlıklandırıp haftalık genel deneme ile pekiştiren derece programı.",
     days: [
       {
         dayName: "Pazartesi",
         blocks: [
-          { id: "b1", course: "Türkçe", topicNote: "Paragraf Hız ve Anlam Çalışması", targetQuestions: 40, completed: false },
+          { id: "b1", course: "Türkçe", topicNote: "Paragrafta Anlam & Hız Tüyoları", targetQuestions: 40, completed: false },
           { id: "b2", course: "Matematik", topicNote: "Temel Kavramlar & Sayılar", targetQuestions: 30, completed: false },
         ]
       },
       {
         dayName: "Salı",
         blocks: [
-          { id: "b3", course: "Tarih", topicNote: "İslamiyet Öncesi Türk Tarihi & İlk Devletler", targetQuestions: 35, completed: false },
-          { id: "b4", course: "Coğrafya", topicNote: "Türkiye'nin Coğrafi Konumu ve Yer Şekilleri", targetQuestions: 30, completed: false },
+          { id: "b3", course: "Tarih", topicNote: "İslamiyet Öncesi & İlk Türk Devletleri", targetQuestions: 35, completed: false },
+          { id: "b4", course: "Coğrafya", topicNote: "Türkiye'nin Fiziki Özellikleri", targetQuestions: 30, completed: false },
         ]
       },
       {
         dayName: "Çarşamba",
         blocks: [
           { id: "b5", course: "Matematik", topicNote: "Rasyonel Sayılar & Basit Eşitsizlikler", targetQuestions: 40, completed: false },
-          { id: "b6", course: "Vatandaşlık", topicNote: "Anayasa Hukuku Temel Esaslar", targetQuestions: 30, completed: false },
+          { id: "b6", course: "Vatandaşlık", topicNote: "Temel Hukuk Kavramları & Haklar", targetQuestions: 30, completed: false },
         ]
       },
       {
         dayName: "Perşembe",
         blocks: [
-          { id: "b7", course: "Türkçe", topicNote: "Dil Bilgisi (Sözcük Türleri & Yazım)", targetQuestions: 35, completed: false },
-          { id: "b8", course: "Tarih", topicNote: "Osmanlı Devleti Kuruluş ve Yükselme", targetQuestions: 40, completed: false },
+          { id: "b7", course: "Türkçe", topicNote: "Yazım Kuralları & Noktalama İşaretleri", targetQuestions: 35, completed: false },
+          { id: "b8", course: "Tarih", topicNote: "Osmanlı Kültür ve Medeniyeti", targetQuestions: 40, completed: false },
         ]
       },
       {
         dayName: "Cuma",
         blocks: [
-          { id: "b9", course: "Coğrafya", topicNote: "İklim ve Bitki Örtüsü", targetQuestions: 30, completed: false },
-          { id: "b10", course: "Vatandaşlık", topicNote: "Temel Hak ve Hürriyetler (1982 Anayasası)", targetQuestions: 30, completed: false },
+          { id: "b9", course: "Coğrafya", topicNote: "Madenler, Sanayi & Ulaşım", targetQuestions: 30, completed: false },
+          { id: "b10", course: "Vatandaşlık", topicNote: "1982 Anayasası & Yürütme Organı", targetQuestions: 30, completed: false },
         ]
       },
       {
         dayName: "Cumartesi",
         blocks: [
-          { id: "b11", course: "Genel Deneme", topicNote: "120 Soruluk ÖSYM Önlisans Deneme Sınavı", targetQuestions: 120, completed: false },
+          { id: "b11", course: "Genel Deneme", topicNote: "120 Soruluk ÖSYM Önlisans Tam Prova", targetQuestions: 120, completed: false },
           { id: "b12", course: "Yanlış Kutusunu İncele", topicNote: "Deneme Yanlışlarını Fotoğraflayıp Kaydet", targetQuestions: 0, completed: false },
         ]
       },
       {
         dayName: "Pazar",
         blocks: [
-          { id: "b13", course: "Haftalık Tekrar & Mola", topicNote: "Zayıf Konulardan Flashcard Kartları Tekrar Et", targetQuestions: 25, completed: false },
+          { id: "b13", course: "Haftalık Tekrar", topicNote: "Zayıf Konulardan Flashcard Kartları Tekrar Et", targetQuestions: 25, completed: false },
         ]
       }
     ]
   },
+  soru_temposu: {
+    title: "⚡ Soru Tempolu Hızlı Net Artırma Programı",
+    desc: "Günde 150+ soru, paragraf-problem rutinleri ve soru odaklı seri net artırma kampı.",
+    days: [
+      { dayName: "Pazartesi", blocks: [{ id: "st1", course: "Türkçe", topicNote: "40 Paragraf + 20 Sözel Mantık Sorusu", targetQuestions: 60, completed: false }, { id: "st2", course: "Matematik", topicNote: "30 Problem Sorusu", targetQuestions: 30, completed: false }] },
+      { dayName: "Salı", blocks: [{ id: "st3", course: "Tarih", topicNote: "Osmanlı Medeniyeti & İnkılaplar Testi", targetQuestions: 50, completed: false }, { id: "st4", course: "Coğrafya", topicNote: "Türkiye Fiziki & Ekonomik Harita Testi", targetQuestions: 40, completed: false }] },
+      { dayName: "Çarşamba", blocks: [{ id: "st5", course: "Matematik", topicNote: "40 Sayısal Mantık & Grafik Sorusu", targetQuestions: 40, completed: false }, { id: "st6", course: "Vatandaşlık", topicNote: "Anayasa & İdare Hukuku Testi", targetQuestions: 40, completed: false }] },
+      { dayName: "Perşembe", blocks: [{ id: "st7", course: "Türkçe", topicNote: "Yazım-Noktalama & Dil Bilgisi Testi", targetQuestions: 50, completed: false }, { id: "st8", course: "Tarih", topicNote: "Milli Mücadele & Atatürk İnkılapları", targetQuestions: 50, completed: false }] },
+      { dayName: "Cuma", blocks: [{ id: "st9", course: "Branş Denemesi", topicNote: "Türkçe + Matematik Branş Denemeleri", targetQuestions: 60, completed: false }] },
+      { dayName: "Cumartesi", blocks: [{ id: "st10", course: "Genel Deneme", topicNote: "120 Soruluk Önlisans Deneme Sınavı", targetQuestions: 120, completed: false }] },
+      { dayName: "Pazar", blocks: [{ id: "st11", course: "Haftalık Seri Soru", topicNote: "Hafta Boyunca Yapılamayan 50 Yanlış Soru", targetQuestions: 50, completed: false }] }
+    ]
+  },
   calisanlar_aksam: {
-    title: "🌙 Çalışanlar İçin Yoğunlaştırılmış Akşam Programı",
-    desc: "İş veya okul sonrası günde 2-3 saatlik maksimum verim odaklı hızlı tekrar ve soru temposu.",
+    title: "🌙 Çalışanlar & Öğrenciler İçin Akşam Programı",
+    desc: "İş veya okul sonrası günde 2.5 saatlik maksimum verim odaklı hızlı tekrar ve soru temposu.",
     days: [
       { dayName: "Pazartesi", blocks: [{ id: "c1", course: "Türkçe", topicNote: "30 Paragraf Sorusu + 20 Dil Bilgisi", targetQuestions: 50, completed: false }] },
       { dayName: "Salı", blocks: [{ id: "c2", course: "Matematik", topicNote: "Problemler & Sayısal Mantık", targetQuestions: 40, completed: false }] },
       { dayName: "Çarşamba", blocks: [{ id: "c3", course: "Tarih", topicNote: "İnkılap Tarihi ve Atatürk İlkeleri", targetQuestions: 45, completed: false }] },
       { dayName: "Perşembe", blocks: [{ id: "c4", course: "Coğrafya", topicNote: "Türkiye Madenler ve Enerji Kaynakları", targetQuestions: 35, completed: false }] },
       { dayName: "Cuma", blocks: [{ id: "c5", course: "Vatandaşlık", topicNote: "İdare Hukuku & Anayasa Değişiklikleri", targetQuestions: 35, completed: false }] },
-      { dayName: "Cumartesi", blocks: [{ id: "c6", course: "Genel Deneme", topicNote: "Önlisans Branş Veya Genel Deneme", targetQuestions: 120, completed: false }] },
+      { dayName: "Cumartesi", blocks: [{ id: "c6", course: "Genel Deneme", topicNote: "Önlisans Branş veya Genel Deneme", targetQuestions: 120, completed: false }] },
       { dayName: "Pazar", blocks: [{ id: "c7", course: "Haftalık Tekrar", topicNote: "Hafta Boyunca Yapılamayan Sorulara Bak", targetQuestions: 30, completed: false }] }
+    ]
+  },
+  zayif_konu_kamp: {
+    title: "🧠 Zayıf Konuları Kapatma & Ebbinghaus Kampı",
+    desc: "Unutulan kırmızı konuları kurtarma, flashcard tekrarları ve yanlış kutusu temizleme kampı.",
+    days: [
+      { dayName: "Pazartesi", blocks: [{ id: "z1", course: "Tarih", topicNote: "Tarih Unutulan Konulardan 50 Flashcard", targetQuestions: 50, completed: false }] },
+      { dayName: "Salı", blocks: [{ id: "z2", course: "Coğrafya", topicNote: "Coğrafya Harita & Maden Flashcard Tekrarı", targetQuestions: 40, completed: false }] },
+      { dayName: "Çarşamba", blocks: [{ id: "z3", course: "Vatandaşlık", topicNote: "Anayasa Maddeleri & HSK/AYM Flashcard", targetQuestions: 40, completed: false }] },
+      { dayName: "Perşembe", blocks: [{ id: "z4", course: "Matematik", topicNote: "Yapılamayan Problem Türleri Çalışması", targetQuestions: 35, completed: false }] },
+      { dayName: "Cuma", blocks: [{ id: "z5", course: "Yanlış Kutusu", topicNote: "Biriken Tüm Yanlış Soruları Çöz ve Not Al", targetQuestions: 30, completed: false }] },
+      { dayName: "Cumartesi", blocks: [{ id: "z6", course: "Genel Deneme", topicNote: "Önlisans Denemesi Çöz ve Yanlış Analizi Yap", targetQuestions: 120, completed: false }] },
+      { dayName: "Pazar", blocks: [{ id: "z7", course: "Zayıf Konu Tekrarı", topicNote: "Hafıza Barlarında Kırmızı Olan 3 Konu", targetQuestions: 35, completed: false }] }
+    ]
+  },
+  deneme_provası: {
+    title: "🏆 Sınav Provası & Seri Deneme Kampı",
+    desc: "Gün aşırı deneme sınavı çözerek sınav süresi yönetimi ve yüksek kondisyon kazanma programı.",
+    days: [
+      { dayName: "Pazartesi", blocks: [{ id: "d1", course: "Genel Deneme", topicNote: "120 Soruluk Önlisans Denemesi (130 Dk)", targetQuestions: 120, completed: false }] },
+      { dayName: "Salı", blocks: [{ id: "d2", course: "Deneme Analizi", topicNote: "Pazartesi Denemesinin Detaylı Çözümü", targetQuestions: 40, completed: false }] },
+      { dayName: "Çarşamba", blocks: [{ id: "d3", course: "Genel Deneme", topicNote: "120 Soruluk Önlisans Denemesi (130 Dk)", targetQuestions: 120, completed: false }] },
+      { dayName: "Perşembe", blocks: [{ id: "d4", course: "Deneme Analizi", topicNote: "Çarşamba Denemesinin Detaylı Çözümü", targetQuestions: 40, completed: false }] },
+      { dayName: "Cuma", blocks: [{ id: "d5", course: "Branş Denemesi", topicNote: "Tarih + Coğrafya + Vatandaşlık Branş Denemeleri", targetQuestions: 54, completed: false }] },
+      { dayName: "Cumartesi", blocks: [{ id: "d6", course: "Genel Deneme", topicNote: "Haftanın 3. Genel Önlisans Denemesi", targetQuestions: 120, completed: false }] },
+      { dayName: "Pazar", blocks: [{ id: "d7", course: "Dinlenme & Flashcard", topicNote: "Hafif Tekrar ve Zihin Dinlendirme", targetQuestions: 20, completed: false }] }
     ]
   }
 };
@@ -114,7 +153,7 @@ export default function AiSchedulePage() {
 
   const availableCourses = getCoursesForExam(activeExam);
 
-  const [schedule, setSchedule] = useState<DaySchedule[]>(PRESET_PROGRAMS.onlisans_derece.days);
+  const [schedule, setSchedule] = useState<DaySchedule[]>(PRESET_PROGRAMS.derece_kapsam.days);
   const [editingBlock, setEditingBlock] = useState<{ dayIndex: number; blockIndex: number; block: StudyBlock } | null>(null);
   const [isClient, setIsClient] = useState(false);
 
@@ -125,10 +164,10 @@ export default function AiSchedulePage() {
       try {
         setSchedule(JSON.parse(saved));
       } catch (e) {
-        setSchedule(PRESET_PROGRAMS.onlisans_derece.days);
+        setSchedule(PRESET_PROGRAMS.derece_kapsam.days);
       }
     } else {
-      setSchedule(PRESET_PROGRAMS.onlisans_derece.days);
+      setSchedule(PRESET_PROGRAMS.derece_kapsam.days);
     }
   }, [activeExam]);
 

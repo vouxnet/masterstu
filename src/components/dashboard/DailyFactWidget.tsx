@@ -5,16 +5,34 @@ import { Lightbulb, ChevronRight, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getTodaysFact, dailyFacts, DailyFact } from "@/src/lib/data/dailyFacts";
 
+import { useAuthStore } from "@/src/lib/store/useAuthStore";
+
 export function DailyFactWidget() {
+  const { currentUser } = useAuthStore();
+  const activeExam = currentUser.activeExam || "kpss_lisans";
   const [currentFact, setCurrentFact] = useState<DailyFact | null>(null);
 
+  const getFilteredFacts = () => {
+    if (activeExam === "kpss_onlisans") {
+      return dailyFacts.filter(f => f.category !== "hukuk" && f.category !== "iktisat" && f.category !== "maliye");
+    }
+    return dailyFacts;
+  };
+
   useEffect(() => {
-    setCurrentFact(getTodaysFact());
-  }, []);
+    const facts = getFilteredFacts();
+    const todaysFact = getTodaysFact();
+    if (activeExam === "kpss_onlisans" && (todaysFact.category === "hukuk" || todaysFact.category === "iktisat" || todaysFact.category === "maliye")) {
+      setCurrentFact(facts[0] || todaysFact);
+    } else {
+      setCurrentFact(todaysFact);
+    }
+  }, [activeExam]);
 
   const handleNextFact = () => {
-    const randomIndex = Math.floor(Math.random() * dailyFacts.length);
-    setCurrentFact(dailyFacts[randomIndex]);
+    const facts = getFilteredFacts();
+    const randomIndex = Math.floor(Math.random() * facts.length);
+    setCurrentFact(facts[randomIndex]);
   };
 
   if (!currentFact) return null;

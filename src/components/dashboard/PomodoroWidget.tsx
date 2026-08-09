@@ -28,12 +28,29 @@ export const PomodoroWidget: React.FC = () => {
 
   const courses = getExamCourses(activeExam);
 
+  const TECHNIQUES = {
+    pomodoro: { name: "⏱️ Pomodoro (25/5 Dk)", work: 25, break: 5 },
+    rule50: { name: "🌊 50/10 Kuralı (Deep Work)", work: 50, break: 10 },
+    peak90: { name: "🚀 90 Dk Zirve Odak", work: 90, break: 20 },
+    method52: { name: "📊 52/17 Üretkenlik", work: 52, break: 17 },
+  };
+
+  const [activeTechnique, setActiveTechnique] = useState<keyof typeof TECHNIQUES>("pomodoro");
   const [secondsLeft, setSecondsLeft] = useState(25 * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [mode, setMode] = useState<"work" | "break">("work");
   const [selectedSubject, setSelectedSubject] = useState(courses[0] || "Türkçe");
   const [sessionCompleted, setSessionCompleted] = useState(false);
   const [completedToday, setCompletedToday] = useState(0);
+
+  const activeTechConfig = TECHNIQUES[activeTechnique];
+
+  const handleTechniqueChange = (techKey: keyof typeof TECHNIQUES) => {
+    setActiveTechnique(techKey);
+    setIsRunning(false);
+    setMode("work");
+    setSecondsLeft(TECHNIQUES[techKey].work * 60);
+  };
 
   // Refs to avoid stale closures inside the timer useEffect
   const selectedSubjectRef = useRef(selectedSubject);
@@ -59,7 +76,7 @@ export const PomodoroWidget: React.FC = () => {
         addLog({
           activityType: 'pomodoro',
           subject: selectedSubjectRef.current,
-          durationMinutes: 25,
+          durationMinutes: activeTechConfig.work,
           questionsCount: 0,
           examType: currentUserRef.current.activeExam,
           date: new Date().toISOString().split('T')[0],
@@ -68,22 +85,22 @@ export const PomodoroWidget: React.FC = () => {
         setSessionCompleted(true);
         setTimeout(() => setSessionCompleted(false), 3000);
         setMode("break");
-        setSecondsLeft(5 * 60);
+        setSecondsLeft(activeTechConfig.break * 60);
       } else {
         setMode("work");
-        setSecondsLeft(25 * 60);
+        setSecondsLeft(activeTechConfig.work * 60);
       }
       setIsRunning(false);
     }
     return () => clearInterval(timer);
-  }, [isRunning, secondsLeft, mode]);
+  }, [isRunning, secondsLeft, mode, activeTechConfig]);
 
   const toggleTimer = () => setIsRunning(!isRunning);
 
   const resetTimer = (newMode: "work" | "break") => {
     setIsRunning(false);
     setMode(newMode);
-    setSecondsLeft(newMode === "work" ? 25 * 60 : 5 * 60);
+    setSecondsLeft(newMode === "work" ? activeTechConfig.work * 60 : activeTechConfig.break * 60);
   };
 
   const minutes = Math.floor(secondsLeft / 60);
@@ -129,6 +146,23 @@ export const PomodoroWidget: React.FC = () => {
             <span>{partnerUser.name}: Pomodoro ⏳</span>
           </div>
         )}
+      </div>
+
+      {/* Technique Selector Pills */}
+      <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 scrollbar-none">
+        {Object.entries(TECHNIQUES).map(([key, tech]) => (
+          <button
+            key={key}
+            onClick={() => handleTechniqueChange(key as keyof typeof TECHNIQUES)}
+            className={`rounded-xl px-3 py-1.5 text-[11px] font-bold whitespace-nowrap transition-all border ${
+              activeTechnique === key
+                ? "bg-amber-500/20 border-amber-500/50 text-amber-300 shadow-md"
+                : "bg-white/5 border-white/10 text-gray-400 hover:text-white"
+            }`}
+          >
+            {tech.name}
+          </button>
+        ))}
       </div>
 
       {/* Subject Selector & Timer Display */}
