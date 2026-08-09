@@ -99,17 +99,24 @@ export default function DashboardPage() {
         {/* Left Column (lg:col-span-2) */}
         <div className="lg:col-span-2 space-y-6">
           <DailyQuestWidget />
+
+          {/* Micro-Learning Dual Subgrid: Günün Bilgisi & Güncel Olaylar */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <DailyFactWidget />
+            <LiveCurrentNewsWidget />
+          </div>
+
           <DuoFriendsWidget />
           
           {/* Haftalık İstatistik Bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="rounded-2xl glass-card p-4 border border-white/10 flex items-center space-x-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 shrink-0">
                 <Flame className="h-5 w-5" />
               </div>
               <div>
                 <p className="text-[10px] text-gray-400 font-semibold">Günlük Seri</p>
-                <p className="font-display font-bold text-white text-lg flex items-center">
+                <p className="font-display font-bold text-white text-base flex items-center flex-wrap">
                   {streak > 0 ? `${streak} Gün 🔥` : 'Başla!'}
                   {streakFreezeInfo.freezes > 0 && (
                     <span className="text-[9px] text-cyan-400 ml-1 bg-cyan-900/40 px-1.5 py-0.5 rounded border border-cyan-500/30">🧊×{streakFreezeInfo.freezes}</span>
@@ -119,32 +126,32 @@ export default function DashboardPage() {
             </div>
 
             <div className="rounded-2xl glass-card p-4 border border-white/10 flex items-center space-x-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 shrink-0">
                 <Clock className="h-5 w-5" />
               </div>
               <div>
                 <p className="text-[10px] text-gray-400 font-semibold">Bu Hafta</p>
-                <p className="font-display font-bold text-white text-lg">{weeklyStats.totalMinutes > 0 ? `${weeklyStats.totalMinutes} Dk` : '0 Dk'}</p>
+                <p className="font-display font-bold text-white text-base">{weeklyStats.totalMinutes > 0 ? `${weeklyStats.totalMinutes} Dk` : '0 Dk'}</p>
               </div>
             </div>
 
             <div className="rounded-2xl glass-card p-4 border border-white/10 flex items-center space-x-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">
                 <BookOpen className="h-5 w-5" />
               </div>
               <div>
                 <p className="text-[10px] text-gray-400 font-semibold">Aktif Gün</p>
-                <p className="font-display font-bold text-white text-lg">{weeklyStats.activeDays}/7</p>
+                <p className="font-display font-bold text-white text-base">{weeklyStats.activeDays}/7</p>
               </div>
             </div>
 
             <div className="rounded-2xl glass-card p-4 border border-white/10 flex items-center space-x-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30 shrink-0">
                 <TrendingUp className="h-5 w-5" />
               </div>
               <div>
                 <p className="text-[10px] text-gray-400 font-semibold">Son Net</p>
-                <p className="font-display font-bold text-white text-lg">{lastExams[0] ? `${lastExams[0].totalNet}` : '—'}</p>
+                <p className="font-display font-bold text-white text-base">{lastExams[0] ? `${lastExams[0].totalNet}` : '—'}</p>
               </div>
             </div>
           </div>
@@ -154,8 +161,6 @@ export default function DashboardPage() {
 
         {/* Right Column (lg:col-span-1) */}
         <div className="space-y-6">
-          <DailyFactWidget />
-          <LiveCurrentNewsWidget />
           <PomodoroWidget />
           <TodoSummary />
         </div>

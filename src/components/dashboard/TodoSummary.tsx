@@ -53,8 +53,8 @@ export const TodoSummary: React.FC = () => {
   const completedCount = todos.filter((t) => t.completed).length;
 
   return (
-    <div className="rounded-3xl glass-panel p-6 border border-white/10 shadow-xl flex flex-col h-full min-h-[320px]">
-      <div className="flex items-center justify-between mb-4 shrink-0">
+    <div className="rounded-3xl glass-panel p-5 border border-white/10 shadow-xl flex flex-col max-h-[360px] overflow-hidden">
+      <div className="flex items-center justify-between mb-3 shrink-0">
         <div className="flex items-center space-x-2.5">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600/30 text-indigo-400 border border-indigo-500/30">
             <ListTodo className="h-5 w-5" />
@@ -69,7 +69,7 @@ export const TodoSummary: React.FC = () => {
       </div>
 
       {/* Todo List */}
-      <div className="space-y-2 overflow-y-auto pr-1 flex-1 mb-4">
+      <div className="space-y-2 overflow-y-auto pr-1 flex-1 max-h-[220px] scrollbar-thin mb-3">
         {todos.map((todo) => (
           <div
             key={todo.id}

@@ -99,24 +99,24 @@ export function LiveCurrentNewsWidget() {
       </div>
 
       {/* Main Content Card */}
-      <div className="rounded-2xl bg-black/40 p-4 border border-white/5 space-y-2">
+      <div className="rounded-2xl bg-black/40 p-3.5 border border-white/5 space-y-1.5">
         <div className="flex items-center justify-between text-xs">
-          <span className="rounded-md bg-cyan-950/60 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 text-[10px] font-bold">
+          <span className="rounded-md bg-cyan-950/60 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 text-[9.5px] font-bold">
             {currentItem.category}
           </span>
-          <span className="text-[10px] text-gray-400 font-semibold">{currentItem.date}</span>
+          <span className="text-[9.5px] text-gray-400 font-semibold">{currentItem.date}</span>
         </div>
 
-        <h4 className="font-display font-bold text-white text-sm leading-snug">
+        <h4 className="font-display font-bold text-white text-xs sm:text-sm leading-snug line-clamp-2">
           {currentItem.title}
         </h4>
 
-        <p className="text-xs text-gray-300 leading-relaxed font-medium">
+        <p className="text-[11px] text-gray-300 leading-relaxed font-medium line-clamp-2">
           {currentItem.detail}
         </p>
 
-        <div className="pt-1.5 border-t border-white/5">
-          <span className="text-[10.5px] font-bold text-amber-300 bg-amber-500/10 px-2.5 py-1 rounded-lg border border-amber-500/20 inline-block">
+        <div className="pt-1 border-t border-white/5">
+          <span className="text-[9.5px] font-bold text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20 inline-block truncate max-w-full">
             {currentItem.osymNote}
           </span>
         </div>
