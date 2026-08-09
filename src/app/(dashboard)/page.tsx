@@ -94,18 +94,11 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Layer 2: Main Area (2 Column Grid) */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column (lg:col-span-2) */}
-        <div className="lg:col-span-2 space-y-6">
+      {/* Layer 2: Main Area (Spacious 2-Column Responsive Layout) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Left Core Area (lg:col-span-7) */}
+        <div className="lg:col-span-7 space-y-6">
           <DailyQuestWidget />
-
-          {/* Micro-Learning Dual Subgrid: Günün Bilgisi & Güncel Olaylar */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <DailyFactWidget />
-            <LiveCurrentNewsWidget />
-          </div>
-
           <DuoFriendsWidget />
           
           {/* Haftalık İstatistik Bar */}
@@ -159,14 +152,20 @@ export default function DashboardPage() {
           <MemoryDecayWidget />
         </div>
 
-        {/* Right Column (lg:col-span-1) */}
-        <div className="space-y-6">
+        {/* Right Core Area (lg:col-span-5) */}
+        <div className="lg:col-span-5 space-y-6">
           <PomodoroWidget />
           <TodoSummary />
         </div>
       </div>
 
-      {/* Layer 3: Bottom */}
+      {/* Layer 3: Micro-Learning & Current Affairs Hub (Full Width 2-Column Cards) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <DailyFactWidget />
+        <LiveCurrentNewsWidget />
+      </div>
+
+      {/* Layer 4: Bottom Quick Access */}
       <div>
         <h3 className="font-display font-bold text-white text-lg mb-3 flex items-center space-x-2">
           <Sparkles className="h-5 w-5 text-indigo-400" />

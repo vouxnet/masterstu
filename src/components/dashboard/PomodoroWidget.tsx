@@ -148,16 +148,16 @@ export const PomodoroWidget: React.FC = () => {
         )}
       </div>
 
-      {/* Technique Selector Pills */}
-      <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 scrollbar-none">
+      {/* Technique Selector Grid (Zero Horizontal Scroll!) */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {Object.entries(TECHNIQUES).map(([key, tech]) => (
           <button
             key={key}
             onClick={() => handleTechniqueChange(key as keyof typeof TECHNIQUES)}
-            className={`rounded-xl px-3 py-1.5 text-[11px] font-bold whitespace-nowrap transition-all border ${
+            className={`rounded-xl px-2.5 py-2 text-[11px] font-bold transition-all border text-center leading-snug ${
               activeTechnique === key
-                ? "bg-amber-500/20 border-amber-500/50 text-amber-300 shadow-md"
-                : "bg-white/5 border-white/10 text-gray-400 hover:text-white"
+                ? "bg-amber-500/20 border-amber-500/50 text-amber-300 shadow-md shadow-amber-500/10 scale-[1.02]"
+                : "bg-white/5 border-white/10 text-gray-400 hover:text-white hover:bg-white/10"
             }`}
           >
             {tech.name}
