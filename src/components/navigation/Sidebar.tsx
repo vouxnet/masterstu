@@ -20,20 +20,24 @@ import {
   Target,
   GitBranch,
 } from "lucide-react";
-import { useAuthStore } from "@/src/lib/store/useAuthStore";
+import { useAuthStore, EXAM_METADATA } from "@/src/lib/store/useAuthStore";
 
 export const Sidebar: React.FC = () => {
   const pathname = usePathname();
   const { setQuickActionOpen, currentUser } = useAuthStore();
 
+  let curriculumLabel = "📚 Müfredat";
+  if (currentUser.activeExam === "kpss_lisans") curriculumLabel = "📚 Lisans Müfredatı";
+  else if (currentUser.activeExam === "kpss_onlisans") curriculumLabel = "📚 Önlisans Müfredatı";
+
   const coreLinks = [
     { href: "/", label: "Gösterge Paneli", icon: Home },
     { href: "/ai-hub", label: "🤖 Asimptot AI Hub", icon: Bot },
-    { href: "/curriculum", label: "KPSS Müfredatı", icon: BookOpen },
+    { href: "/curriculum", label: curriculumLabel, icon: BookOpen },
     { href: "/ai-schedule", label: "🗓️ AI Haftalık Takvim", icon: CalendarDays },
   ];
 
-  const practiceLinks = [
+  const practiceLinksRaw = [
     { href: "/placement", label: "🎯 Atama Hedefi", icon: Target },
     { href: "/league", label: "🏆 Haftalık Lig", icon: ShieldCheck },
     { href: "/friends", label: "👥 Duo Pano", icon: Users },
@@ -44,6 +48,13 @@ export const Sidebar: React.FC = () => {
     { href: "/question-distribution", label: "📊 Soru Dağılımları", icon: BarChart3 },
     { href: "/skill-tree", label: "🌳 Yetenek Ağacı", icon: GitBranch },
   ];
+
+  const practiceLinks = practiceLinksRaw.filter((link) => {
+    if (link.href === "/placement" || link.href === "/question-distribution") {
+      return currentUser.activeExam === "kpss_lisans" || currentUser.activeExam === "kpss_onlisans";
+    }
+    return true;
+  });
 
   return (
     <aside className="hidden md:flex w-64 flex-col glass-panel border-r border-white/10 min-h-screen p-4 sticky top-16 overflow-y-auto custom-scrollbar">

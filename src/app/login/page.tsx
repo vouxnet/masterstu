@@ -33,7 +33,7 @@ export default function LoginPage() {
       if (error) {
         setErrorMessage(error);
       } else {
-        router.push("/");
+        router.push("/onboarding");
       }
     } else {
       const { error } = await signInWithEmail(realEmail, realPassword);

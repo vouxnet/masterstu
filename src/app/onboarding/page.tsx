@@ -31,7 +31,7 @@ export default function OnboardingPage() {
       : ["kpss_lisans"]
   );
 
-  const lockedExams: ExamType[] = ["yks_tyt", "yks_ayt"];
+  const lockedExams: ExamType[] = ["yks_tyt", "yks_ayt", "kpss_ortaogretim", "yds", "ales"];
 
   const examOptions: { id: ExamType; icon: React.FC<{ className?: string }> }[] = [
     { id: "kpss_lisans", icon: GraduationCap },
@@ -69,6 +69,8 @@ export default function OnboardingPage() {
     };
     const role = examToRole[selectedExams[0]] || "lisans_alan";
     await resetAllTopics(role);
+
+    localStorage.setItem('asimptot_onboarded', 'true');
 
     router.push("/");
   };

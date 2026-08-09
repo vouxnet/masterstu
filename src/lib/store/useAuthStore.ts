@@ -135,6 +135,8 @@ interface AuthState {
   setActiveExam: (exam: ExamType) => void;
   toggleTodo: (id: string) => void;
   addTodo: (title: string, subject: string) => void;
+  removeTodo: (id: string) => void;
+  updateTodo: (id: string, title: string) => void;
   addSharedQuestion: (subject: string, text: string, imageUrl?: string) => void;
   answerSharedQuestion: (id: string, text: string, imageUrl?: string) => void;
   setQuickActionOpen: (open: boolean) => void;
@@ -207,6 +209,20 @@ export const useAuthStore = create<AuthState>()(
           completed: false,
         };
         set((state) => ({ todos: [newTodo, ...state.todos] }));
+      },
+
+      removeTodo: (id) => {
+        set((state) => ({
+          todos: state.todos.filter((todo) => todo.id !== id),
+        }));
+      },
+
+      updateTodo: (id, title) => {
+        set((state) => ({
+          todos: state.todos.map((todo) =>
+            todo.id === id ? { ...todo, title } : todo
+          ),
+        }));
       },
 
       addSharedQuestion: (subject, text, imageUrl) => {
