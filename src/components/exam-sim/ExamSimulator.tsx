@@ -188,8 +188,8 @@ export default function ExamSimulator({ questions, durationMinutes, onComplete, 
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto p-6 md:p-12 flex flex-col">
-        <div className="max-w-3xl w-full mx-auto flex-1 flex flex-col">
+      <div className="flex-1 overflow-y-auto p-6 md:p-12">
+        <div className="max-w-3xl w-full mx-auto">
           <div className="mb-8">
             <span className="inline-block px-3 py-1 bg-white/10 text-gray-400 rounded-md text-xs font-bold uppercase tracking-wider mb-4">
               {currentQ.subject} - Soru {currentQuestionIndex + 1}
@@ -199,7 +199,7 @@ export default function ExamSimulator({ questions, durationMinutes, onComplete, 
             </h2>
           </div>
 
-          <div className="space-y-3 mt-auto mb-12">
+          <div className="space-y-3 mb-12">
             {currentQ.options.map((opt, idx) => {
               const isSelected = answers[currentQuestionIndex] === idx;
               return (
