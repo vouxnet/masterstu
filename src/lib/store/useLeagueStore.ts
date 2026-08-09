@@ -37,6 +37,7 @@ interface LeagueState {
   checkWeekEnd: () => void;
   getLeagueInfo: () => { tier: LeagueTier; config: typeof LEAGUE_CONFIG[LeagueTier]; rank: number; totalMembers: number };
   resetWeek: () => void;
+  resetLeague: () => void;
 }
 
 const generateLeaderboard = (tier: LeagueTier, currentUserXP: number): LeagueMember[] => {
@@ -140,6 +141,14 @@ export const useLeagueStore = create<LeagueState>()(
           weekStartDate: new Date().toISOString(),
           leaderboard: generateLeaderboard(newTier, 0)
         };
+      }),
+
+      resetLeague: () => set({
+        currentTier: 'bronze',
+        weeklyXP: 0,
+        totalXP: 0,
+        weekStartDate: new Date().toISOString(),
+        leaderboard: generateLeaderboard('bronze', 0)
       })
     }),
     {

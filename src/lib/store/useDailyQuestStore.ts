@@ -21,6 +21,7 @@ interface DailyQuestState {
   updateQuestProgress: (questType: string, amount: number) => void;
   getTodayQuests: () => DailyQuest[];
   getCompletionRate: () => number;
+  resetQuests: () => void;
 }
 
 export const useDailyQuestStore = create<DailyQuestState>()(
@@ -134,7 +135,9 @@ export const useDailyQuestStore = create<DailyQuestState>()(
         if (quests.length === 0) return 0;
         const completed = quests.filter(q => q.completed).length;
         return (completed / quests.length) * 100;
-      }
+      },
+
+      resetQuests: () => set({ quests: [], lastGeneratedDate: '', totalXP: 0 })
     }),
     { name: 'asimptot_daily_quests_v1' }
   )

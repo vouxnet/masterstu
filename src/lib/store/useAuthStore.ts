@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { createClient } from "@/src/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
+import { clearAllUserStats } from "@/src/lib/utils/resetStats";
 
 export type ExamType = "kpss_lisans" | "kpss_onlisans" | "kpss_ortaogretim" | "yds" | "ales" | "yks_tyt" | "yks_ayt";
 
@@ -168,6 +169,30 @@ const guestUser: UserProfile = {
   streakCount: 0,
 };
 
+function buildProfileFromUser(user: User, existing: UserProfile, fallbackName?: string): UserProfile {
+  const meta = user.user_metadata || {};
+  const name = meta.name || fallbackName || existing.name || user.email?.split('@')[0] || "Aday";
+  const selectedExams: ExamType[] = meta.selectedExams || (existing.selectedExams && existing.selectedExams.length > 0 ? existing.selectedExams : ['kpss_lisans']);
+  const activeExam: ExamType = meta.activeExam || existing.activeExam || selectedExams[0] || 'kpss_lisans';
+  const role = activeExam === 'kpss_onlisans' ? 'onlisans' : (meta.role || existing.role || 'lisans_alan');
+  const label = EXAM_METADATA[activeExam]?.shortLabel || 'KPSS';
+  const roleLabel = `${name} (${label})`;
+  const friendCode = meta.friendCode || existing.friendCode || `#${name.toUpperCase().replace(/[^A-Z0-9]/g, '') || 'ADAY'}2026`;
+
+  return {
+    ...guestUser,
+    ...existing,
+    id: user.id,
+    name,
+    email: user.email || existing.email || "",
+    friendCode,
+    role: role as any,
+    roleLabel,
+    selectedExams,
+    activeExam,
+  };
+}
+
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
@@ -183,15 +208,44 @@ export const useAuthStore = create<AuthState>()(
       todos: [],
 
       setSelectedExams: (exams) => {
+        const currentActive = get().currentUser.activeExam;
+        const newActive = exams.includes(currentActive) ? currentActive : (exams[0] || 'kpss_lisans');
+        const role = newActive === 'kpss_onlisans' ? 'onlisans' : 'lisans_alan';
+        const label = EXAM_METADATA[newActive]?.shortLabel || 'KPSS';
+        
         set((state) => ({
-          currentUser: { ...state.currentUser, selectedExams: exams },
+          currentUser: {
+            ...state.currentUser,
+            selectedExams: exams,
+            activeExam: newActive,
+            role: role as any,
+            roleLabel: `${state.currentUser.name} (${label})`,
+          },
         }));
+
+        try {
+          const supabase = createClient();
+          supabase.auth.updateUser({ data: { selectedExams: exams, activeExam: newActive, role } }).catch(() => {});
+        } catch (e) {}
       },
 
       setActiveExam: (exam) => {
+        const role = exam === 'kpss_onlisans' ? 'onlisans' : 'lisans_alan';
+        const label = EXAM_METADATA[exam]?.shortLabel || 'KPSS';
+
         set((state) => ({
-          currentUser: { ...state.currentUser, activeExam: exam },
+          currentUser: {
+            ...state.currentUser,
+            activeExam: exam,
+            role: role as any,
+            roleLabel: `${state.currentUser.name} (${label})`,
+          },
         }));
+
+        try {
+          const supabase = createClient();
+          supabase.auth.updateUser({ data: { activeExam: exam, role } }).catch(() => {});
+        } catch (e) {}
       },
 
       toggleTodo: (id) => {
@@ -292,28 +346,29 @@ export const useAuthStore = create<AuthState>()(
 
       signUpWithEmail: async (email, password, name) => {
         const supabase = createClient();
+        const initialCode = `#${name.toUpperCase().replace(/[^A-Z0-9]/g, '') || 'ADAY'}2026`;
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
             data: {
               name,
+              friendCode: initialCode,
+              selectedExams: ['kpss_lisans'],
+              activeExam: 'kpss_lisans',
+              role: 'lisans_alan'
             },
           },
         });
         if (error) return { error: error.message };
         
         if (data.user) {
+          clearAllUserStats('kpss_lisans');
+          const profile = buildProfileFromUser(data.user, guestUser, name);
           set({ 
             authMode: 'supabase',
             supabaseUser: data.user,
-            currentUser: {
-              ...guestUser,
-              id: data.user.id,
-              name: data.user.user_metadata?.name || name,
-              email: data.user.email || email,
-              roleLabel: `${data.user.user_metadata?.name || name} (Lisans + Alan)`,
-            }
+            currentUser: profile
           });
         }
         return { error: null };
@@ -328,16 +383,11 @@ export const useAuthStore = create<AuthState>()(
         if (error) return { error: error.message };
         
         if (data.user) {
+          const profile = buildProfileFromUser(data.user, get().currentUser, email.split('@')[0]);
           set({ 
             authMode: 'supabase',
             supabaseUser: data.user,
-            currentUser: {
-              ...guestUser,
-              id: data.user.id,
-              name: data.user.user_metadata?.name || email.split('@')[0],
-              email: data.user.email || email,
-              roleLabel: `${data.user.user_metadata?.name || email.split('@')[0]} (Lisans + Alan)`,
-            }
+            currentUser: profile
           });
         }
         return { error: null };
@@ -346,6 +396,7 @@ export const useAuthStore = create<AuthState>()(
       signOut: async () => {
         const supabase = createClient();
         await supabase.auth.signOut();
+        clearAllUserStats('kpss_lisans');
         set({ 
           authMode: 'supabase',
           supabaseUser: null,
@@ -359,16 +410,11 @@ export const useAuthStore = create<AuthState>()(
         const { data: { session } } = await supabase.auth.getSession();
         
         if (session?.user) {
+          const profile = buildProfileFromUser(session.user, get().currentUser);
           set({
             authMode: 'supabase',
             supabaseUser: session.user,
-            currentUser: {
-              ...guestUser,
-              id: session.user.id,
-              name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || "User",
-              email: session.user.email || "",
-              roleLabel: `${session.user.user_metadata?.name || session.user.email?.split('@')[0] || "User"} (Lisans + Alan)`,
-            }
+            currentUser: profile
           });
         } else {
           set({ authMode: 'supabase', supabaseUser: null });
@@ -377,15 +423,11 @@ export const useAuthStore = create<AuthState>()(
         // Subscribe to auth changes
         supabase.auth.onAuthStateChange((_event, session) => {
           if (session?.user) {
+            const profile = buildProfileFromUser(session.user, get().currentUser);
             set({
               authMode: 'supabase',
               supabaseUser: session.user,
-              currentUser: {
-                ...get().currentUser,
-                id: session.user.id,
-                email: session.user.email || "",
-                name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || "User",
-              }
+              currentUser: profile
             });
           } else {
             set({ authMode: 'supabase', supabaseUser: null });

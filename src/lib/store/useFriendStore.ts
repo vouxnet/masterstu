@@ -32,6 +32,7 @@ interface FriendState {
   sendPoke: (friendName: string) => void;
   sendCheer: (friendName: string) => void;
   clearNotification: () => void;
+  resetFriends: () => void;
 }
 
 // No hardcoded realFriendsOnly
@@ -118,6 +119,7 @@ export const useFriendStore = create<FriendState>()(
       },
 
       clearNotification: () => set({ notification: null }),
+      resetFriends: () => set({ friends: [], pendingRequests: [], notification: null }),
     }),
     {
       name: "kpss_friends_v2", // Updated storage key for clean real users

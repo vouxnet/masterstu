@@ -31,6 +31,7 @@ interface ExamHistoryState {
   getBestScore: (examType?: string) => ExamResult | null;
   getTrend: (examType?: string) => number[];
   getResultsForExam: (examType: string) => ExamResult[];
+  clearHistory: () => void;
 }
 
 export const useExamHistoryStore = create<ExamHistoryState>()(
@@ -72,6 +73,8 @@ export const useExamHistoryStore = create<ExamHistoryState>()(
         const baseResults = examType ? get().getResultsForExam(examType) : get().results;
         return baseResults.slice(0, 5).map((r) => r.totalNet).reverse();
       },
+
+      clearHistory: () => set({ results: [] }),
     }),
     { name: "asimptot_exam_history_v1" }
   )

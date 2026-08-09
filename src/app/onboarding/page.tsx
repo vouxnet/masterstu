@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore, EXAM_METADATA, ExamType } from "@/src/lib/store/useAuthStore";
+import { clearAllUserStats } from "@/src/lib/utils/resetStats";
 import { useCurriculumStore } from "@/src/lib/store/useCurriculumStore";
 import {
   GraduationCap,
@@ -73,7 +74,8 @@ export default function OnboardingPage() {
       yks_ayt: "yks_ayt",
     };
     const role = examToRole[selectedExams[0]] || "lisans_alan";
-    await resetAllTopics(role);
+    // Sınav seçimi yapılınca tüm istatistik ve verileri 0'dan sıfırla
+    clearAllUserStats(selectedExams[0]);
 
     localStorage.setItem('asimptot_onboarded', 'true');
 
