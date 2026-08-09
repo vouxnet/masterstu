@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/src/lib/store/useAuthStore";
-import { User, Bell, Lock, Save } from "lucide-react";
+import { User, Bell, Lock, Save, LogOut } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function SettingsPage() {
-  const { currentUser, updateUserProfile } = useAuthStore();
+  const router = useRouter();
+  const { currentUser, updateUserProfile, signOut } = useAuthStore();
   
   const [name, setName] = useState(currentUser.name);
   const [email, setEmail] = useState(currentUser.email);
@@ -43,6 +45,16 @@ export default function SettingsPage() {
               <span>Güvenlik</span>
             </div>
             <span className="text-[10px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">Yakında</span>
+          </button>
+          <button
+            onClick={async () => {
+              await signOut();
+              router.push('/login');
+            }}
+            className="w-full flex items-center space-x-3 p-3 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20 font-medium hover:bg-rose-500/20 transition-colors mt-4"
+          >
+            <LogOut className="w-5 h-5" />
+            <span>Çıkış Yap</span>
           </button>
         </div>
 
