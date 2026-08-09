@@ -68,7 +68,7 @@ export default function DashboardPage() {
            <div className="flex items-baseline space-x-2">
              <span className="font-display text-3xl font-extrabold text-white">{String(time.days).padStart(2, "0")}</span>
              <span className="text-xs text-gray-400 font-medium">Gün</span>
-             <span className="font-display text-xl font-bold text-gray-300 w-20 text-center">
+             <span className="font-display text-xl font-bold text-gray-300 min-w-[90px] text-center whitespace-nowrap">
                {String(time.hours).padStart(2, "0")}:{String(time.minutes).padStart(2, "0")}:{String(time.seconds).padStart(2, "0")}
              </span>
            </div>

@@ -172,8 +172,14 @@ const guestUser: UserProfile = {
 function buildProfileFromUser(user: User, existing: UserProfile, fallbackName?: string): UserProfile {
   const meta = user.user_metadata || {};
   const name = meta.name || fallbackName || existing.name || user.email?.split('@')[0] || "Aday";
-  const selectedExams: ExamType[] = meta.selectedExams || (existing.selectedExams && existing.selectedExams.length > 0 ? existing.selectedExams : ['kpss_lisans']);
-  const activeExam: ExamType = meta.activeExam || existing.activeExam || selectedExams[0] || 'kpss_lisans';
+
+  let savedActive: ExamType | null = null;
+  if (typeof window !== 'undefined') {
+    savedActive = (localStorage.getItem('asimptot_active_exam') as ExamType) || null;
+  }
+
+  const selectedExams: ExamType[] = meta.selectedExams || (existing.selectedExams && existing.selectedExams.length > 0 ? existing.selectedExams : (savedActive ? [savedActive] : ['kpss_lisans']));
+  const activeExam: ExamType = savedActive || meta.activeExam || existing.activeExam || selectedExams[0] || 'kpss_lisans';
   const role = activeExam === 'kpss_onlisans' ? 'onlisans' : (meta.role || existing.role || 'lisans_alan');
   const label = EXAM_METADATA[activeExam]?.shortLabel || 'KPSS';
   const roleLabel = `${name} (${label})`;
@@ -212,6 +218,11 @@ export const useAuthStore = create<AuthState>()(
         const newActive = exams.includes(currentActive) ? currentActive : (exams[0] || 'kpss_lisans');
         const role = newActive === 'kpss_onlisans' ? 'onlisans' : 'lisans_alan';
         const label = EXAM_METADATA[newActive]?.shortLabel || 'KPSS';
+
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('asimptot_active_exam', newActive);
+          document.cookie = `asimptot_active_exam=${newActive}; path=/; max-age=31536000`;
+        }
         
         set((state) => ({
           currentUser: {
@@ -232,6 +243,11 @@ export const useAuthStore = create<AuthState>()(
       setActiveExam: (exam) => {
         const role = exam === 'kpss_onlisans' ? 'onlisans' : 'lisans_alan';
         const label = EXAM_METADATA[exam]?.shortLabel || 'KPSS';
+
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('asimptot_active_exam', exam);
+          document.cookie = `asimptot_active_exam=${exam}; path=/; max-age=31536000`;
+        }
 
         set((state) => ({
           currentUser: {

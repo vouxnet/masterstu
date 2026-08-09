@@ -22,12 +22,15 @@ export interface FriendRequest {
 
 interface FriendState {
   friends: FriendUser[];
-  pendingRequests: FriendRequest[];
+  pendingRequests: FriendRequest[]; // Incoming requests
+  sentRequests: FriendRequest[];    // Outgoing requests
   notification: string | null;
 
   // Actions
   sendFriendRequest: (code: string) => boolean;
+  cancelSentRequest: (id: string) => void;
   acceptFriendRequest: (id: string) => void;
+  rejectFriendRequest: (id: string) => void;
   removeFriend: (id: string) => void;
   sendPoke: (friendName: string) => void;
   sendCheer: (friendName: string) => void;
@@ -35,13 +38,12 @@ interface FriendState {
   resetFriends: () => void;
 }
 
-// No hardcoded realFriendsOnly
-
 export const useFriendStore = create<FriendState>()(
   persist(
     (set, get) => ({
       friends: [],
       pendingRequests: [],
+      sentRequests: [],
       notification: null,
 
       sendFriendRequest: (code: string) => {
@@ -55,26 +57,34 @@ export const useFriendStore = create<FriendState>()(
           return false;
         }
 
-        // Check if already pending
-        const alreadyPending = get().pendingRequests.some((r) => r.senderCode.toUpperCase() === cleanCode);
-        if (alreadyPending) {
-          set({ notification: "⏳ Bu kullanıcıya zaten istek gönderildi." });
+        // Check if already sent
+        const alreadySent = get().sentRequests.some((r) => r.senderCode.toUpperCase() === cleanCode);
+        if (alreadySent) {
+          set({ notification: "⏳ Bu kullanıcıya zaten istek gönderdiniz. Yanıt bekleniyor." });
           return false;
         }
 
-        // Add to pending sent requests
+        // Add to sentRequests (Outgoing)
         const newRequest: FriendRequest = {
-          id: `req-${Date.now()}`,
+          id: `sent-${Date.now()}`,
           senderName: cleanCode.replace('#', ''),
           senderCode: cleanCode,
           senderAvatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
-          createdAt: new Date().toISOString(),
+          createdAt: new Date().toLocaleDateString("tr-TR"),
         };
+
         set((state) => ({
-          pendingRequests: [...state.pendingRequests, newRequest],
-          notification: `✅ ${cleanCode} kodlu kullanıcıya arkadaşlık daveti gönderildi! Kabul etmesini bekleyin.`,
+          sentRequests: [...state.sentRequests, newRequest],
+          notification: `✅ ${cleanCode} kodlu kullanıcıya arkadaşlık daveti gönderildi! Kabul etmesi bekleniyor.`,
         }));
         return true;
+      },
+
+      cancelSentRequest: (id: string) => {
+        set((state) => ({
+          sentRequests: state.sentRequests.filter((r) => r.id !== id),
+          notification: "İstek iptal edildi.",
+        }));
       },
 
       acceptFriendRequest: (id: string) => {
@@ -99,6 +109,13 @@ export const useFriendStore = create<FriendState>()(
         }));
       },
 
+      rejectFriendRequest: (id: string) => {
+        set((state) => ({
+          pendingRequests: state.pendingRequests.filter((r) => r.id !== id),
+          notification: "Gelen istek reddedildi.",
+        }));
+      },
+
       removeFriend: (id: string) => {
         set((state) => ({
           friends: state.friends.filter((f) => f.id !== id),
@@ -119,10 +136,10 @@ export const useFriendStore = create<FriendState>()(
       },
 
       clearNotification: () => set({ notification: null }),
-      resetFriends: () => set({ friends: [], pendingRequests: [], notification: null }),
+      resetFriends: () => set({ friends: [], pendingRequests: [], sentRequests: [], notification: null }),
     }),
     {
-      name: "kpss_friends_v2", // Updated storage key for clean real users
+      name: "asimptot_friends_v3",
     }
   )
 );

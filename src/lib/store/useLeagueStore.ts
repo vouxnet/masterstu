@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { useAuthStore } from './useAuthStore';
+import { useFriendStore } from './useFriendStore';
 
 export type LeagueTier = 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond' | 'obsidian';
 
@@ -22,48 +23,18 @@ export const LEAGUE_CONFIG: Record<LeagueTier, { name: string; emoji: string; co
   obsidian: { name: 'Obsidyen', emoji: '🖤', color: '#3D0C4F', minXP: 5000, promotionSlots: 0, relegationSlots: 3 },
 };
 
-const LEAGUE_ORDER: LeagueTier[] = ['bronze', 'silver', 'gold', 'platinum', 'diamond', 'obsidian'];
-
-const BOT_NAMES = ['Elif Yıldız', 'Mehmet Kaya', 'Zeynep Demir', 'Ahmet Çelik', 'Ayşe Şahin', 'Burak Öztürk', 'Fatma Aydın', 'Emre Koç', 'Seda Arslan', 'Can Yılmaz', 'Merve Polat', 'Barış Eren', 'Deniz Güneş', 'Gizem Ak'];
-
 interface LeagueState {
   currentTier: LeagueTier;
   weeklyXP: number;
   totalXP: number;
   weekStartDate: string;
-  leaderboard: LeagueMember[];
   addXP: (amount: number) => void;
   getCurrentRank: () => number;
-  checkWeekEnd: () => void;
   getLeagueInfo: () => { tier: LeagueTier; config: typeof LEAGUE_CONFIG[LeagueTier]; rank: number; totalMembers: number };
+  getLeaderboard: () => LeagueMember[];
   resetWeek: () => void;
   resetLeague: () => void;
 }
-
-const generateLeaderboard = (tier: LeagueTier, currentUserXP: number): LeagueMember[] => {
-  const minBaseXP = LEAGUE_CONFIG[tier].minXP;
-  
-  const bots: LeagueMember[] = BOT_NAMES.map((name, idx) => ({
-    id: `bot-${idx}`,
-    name,
-    avatarUrl: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`,
-    weeklyXP: Math.floor(Math.random() * 500) + minBaseXP,
-    rank: 0,
-    isCurrentUser: false,
-  }));
-
-  const user: LeagueMember = {
-    id: 'current-user',
-    name: useAuthStore.getState().currentUser.name,
-    avatarUrl: useAuthStore.getState().currentUser.avatarUrl,
-    weeklyXP: currentUserXP,
-    rank: 0,
-    isCurrentUser: true,
-  };
-
-  const allMembers = [...bots, user].sort((a, b) => b.weeklyXP - a.weeklyXP);
-  return allMembers.map((m, idx) => ({ ...m, rank: idx + 1 }));
-};
 
 export const useLeagueStore = create<LeagueState>()(
   persist(
@@ -72,87 +43,75 @@ export const useLeagueStore = create<LeagueState>()(
       weeklyXP: 0,
       totalXP: 0,
       weekStartDate: new Date().toISOString(),
-      leaderboard: generateLeaderboard('bronze', 0),
-      
-      addXP: (amount) => set((state) => {
-        const newWeeklyXP = state.weeklyXP + amount;
-        
-        // Update user in leaderboard
-        let members = state.leaderboard.map(m => 
-          m.isCurrentUser ? { ...m, weeklyXP: newWeeklyXP } : m
-        );
-        
-        // Re-sort and update ranks
-        members = members.sort((a, b) => b.weeklyXP - a.weeklyXP);
-        members = members.map((m, idx) => ({ ...m, rank: idx + 1 }));
-        
-        return {
-          weeklyXP: newWeeklyXP,
+
+      addXP: (amount: number) => {
+        set((state) => ({
+          weeklyXP: state.weeklyXP + amount,
           totalXP: state.totalXP + amount,
-          leaderboard: members
-        };
-      }),
-
-      getCurrentRank: () => {
-        const user = get().leaderboard.find(m => m.isCurrentUser);
-        return user?.rank || 0;
+        }));
       },
 
-      checkWeekEnd: () => {
-        const state = get();
-        const start = new Date(state.weekStartDate);
-        const now = new Date();
-        const diff = now.getTime() - start.getTime();
-        const days = diff / (1000 * 3600 * 24);
-
-        if (days >= 7) {
-          get().resetWeek();
-        }
-      },
+      getCurrentRank: () => 1,
 
       getLeagueInfo: () => {
-        const state = get();
+        const tier = get().currentTier;
         return {
-          tier: state.currentTier,
-          config: LEAGUE_CONFIG[state.currentTier],
-          rank: state.getCurrentRank(),
-          totalMembers: state.leaderboard.length
+          tier,
+          config: LEAGUE_CONFIG[tier],
+          rank: get().getCurrentRank(),
+          totalMembers: get().getLeaderboard().length,
         };
       },
 
-      resetWeek: () => set((state) => {
-        const rank = state.getCurrentRank();
-        const config = LEAGUE_CONFIG[state.currentTier];
-        const tierIdx = LEAGUE_ORDER.indexOf(state.currentTier);
-        let newTier = state.currentTier;
+      getLeaderboard: () => {
+        const currentUser = useAuthStore.getState().currentUser;
+        const friends = useFriendStore.getState().friends || [];
 
-        // Promote
-        if (rank <= config.promotionSlots && tierIdx < LEAGUE_ORDER.length - 1) {
-          newTier = LEAGUE_ORDER[tierIdx + 1];
-        } 
-        // Relegate
-        else if (rank > state.leaderboard.length - config.relegationSlots && tierIdx > 0) {
-          newTier = LEAGUE_ORDER[tierIdx - 1];
-        }
+        const members: LeagueMember[] = [
+          {
+            id: currentUser.id || 'me',
+            name: currentUser.name || 'Sen',
+            avatarUrl: currentUser.avatarUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
+            weeklyXP: get().weeklyXP,
+            rank: 1,
+            isCurrentUser: true,
+          },
+          ...friends.map((f, idx) => ({
+            id: f.id,
+            name: f.name,
+            avatarUrl: f.avatarUrl,
+            weeklyXP: 0,
+            rank: idx + 2,
+            isCurrentUser: false,
+          })),
+        ];
 
-        return {
-          currentTier: newTier,
+        members.sort((a, b) => b.weeklyXP - a.weeklyXP);
+        members.forEach((m, idx) => {
+          m.rank = idx + 1;
+        });
+
+        return members;
+      },
+
+      resetWeek: () => {
+        set({
           weeklyXP: 0,
           weekStartDate: new Date().toISOString(),
-          leaderboard: generateLeaderboard(newTier, 0)
-        };
-      }),
+        });
+      },
 
-      resetLeague: () => set({
-        currentTier: 'bronze',
-        weeklyXP: 0,
-        totalXP: 0,
-        weekStartDate: new Date().toISOString(),
-        leaderboard: generateLeaderboard('bronze', 0)
-      })
+      resetLeague: () => {
+        set({
+          currentTier: 'bronze',
+          weeklyXP: 0,
+          totalXP: 0,
+          weekStartDate: new Date().toISOString(),
+        });
+      },
     }),
     {
-      name: 'asimptot-league-storage'
+      name: 'asimptot_league_clean_v1',
     }
   )
 );

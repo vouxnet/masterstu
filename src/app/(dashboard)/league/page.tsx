@@ -5,14 +5,13 @@ import { Trophy, Skull, ShieldCheck, Zap } from "lucide-react";
 import { useLeagueStore } from "@/src/lib/store/useLeagueStore";
 
 export default function LeaguePage() {
-  const { leaderboard, getLeagueInfo, checkWeekEnd, weeklyXP } = useLeagueStore();
+  const { getLeaderboard, getLeagueInfo, weeklyXP } = useLeagueStore();
+  const leaderboard = getLeaderboard();
   const info = getLeagueInfo();
   
   const [timeLeft, setTimeLeft] = useState("");
 
   useEffect(() => {
-    checkWeekEnd();
-    
     // Simple countdown logic for visual purposes
     const timer = setInterval(() => {
       const now = new Date();
@@ -21,7 +20,7 @@ export default function LeaguePage() {
       const diff = target.getTime() - now.getTime();
       
       if (diff <= 0) {
-        checkWeekEnd();
+        useLeagueStore.getState().resetWeek();
       } else {
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);

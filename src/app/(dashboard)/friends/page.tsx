@@ -28,8 +28,11 @@ export default function FriendsPage() {
   const {
     friends,
     pendingRequests,
+    sentRequests,
     sendFriendRequest,
     acceptFriendRequest,
+    rejectFriendRequest,
+    cancelSentRequest,
     removeFriend,
     sendPoke,
     sendCheer,
@@ -79,74 +82,68 @@ export default function FriendsPage() {
     streakCount: partnerUser.streakCount || 14
   } : null;
 
-  const displayFriends = [
-    ...(partnerAsFriend ? [partnerAsFriend] : []),
-    ...friends.filter(f => f.name !== currentUser.name && f.name !== partnerUser?.name)
-  ];
+  const displayFriends = partnerAsFriend 
+    ? [partnerAsFriend, ...friends.filter(f => f.id !== partnerUser?.id)]
+    : friends;
 
-  if (!isClient) {
-    return <div className="p-8 text-center text-gray-400">Yükleniyor...</div>;
-  }
+  if (!isClient) return null;
 
   return (
     <div className="space-y-6">
-      {/* Toast Notification Banner */}
+      {/* Toast Notification */}
       <AnimatePresence>
         {notification && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="flex items-center justify-between rounded-2xl bg-indigo-950/90 p-4 border border-indigo-500/40 text-xs text-indigo-200 shadow-xl backdrop-blur-md"
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-6 right-6 z-50 rounded-2xl bg-indigo-950/90 text-white border border-indigo-500/40 p-4 shadow-2xl flex items-center space-x-3 text-xs font-semibold backdrop-blur-xl"
           >
-            <div className="flex items-center space-x-2">
-              <Sparkles className="h-4 w-4 text-indigo-400 animate-spin" />
-              <span>{notification}</span>
-            </div>
+            <span>{notification}</span>
             <button
               onClick={clearNotification}
-              className="text-gray-400 hover:text-white"
+              className="rounded-lg bg-white/10 p-1 hover:bg-white/20 text-gray-300"
             >
-              <X className="h-4 w-4" />
+              <X className="h-3.5 w-3.5" />
             </button>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-3xl glass-panel p-6 border border-white/10 shadow-xl relative overflow-hidden">
-        <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl" />
-        <div className="z-10">
-          <div className="flex items-center space-x-3">
-            <div className="rounded-2xl bg-indigo-500/20 p-3 text-indigo-300">
-              <Users className="h-6 w-6" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-display font-bold text-white tracking-tight">
-                Arkadaşlık ve Duo Pano
-              </h1>
-              <p className="text-sm text-gray-400 mt-1">
-                Arkadaşlarınla eşleş, ortak seriler yakala ve birbirinize sorular gönderin.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="z-10 flex flex-col items-start sm:items-end bg-black/40 p-4 rounded-2xl border border-white/5">
-          <span className="text-[10px] text-gray-400 font-bold uppercase mb-1">
-            Senin Arkadaş Kodun
-          </span>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-3xl glass-panel p-6 border border-white/10 shadow-2xl">
+        <div>
           <div className="flex items-center space-x-2">
-            <span className="font-display text-lg font-bold text-white bg-white/5 px-3 py-1 rounded-xl">
-              {currentUser.friendCode || ""}
+            <span className="rounded-full bg-indigo-500/20 px-3 py-1 text-xs font-bold text-indigo-300 border border-indigo-500/30">
+              Co-Op Duo Sistemi
             </span>
-            <button
-              onClick={handleCopyCode}
-              className="p-2 rounded-xl glass-button text-gray-300 hover:text-white"
-              title="Kodu Kopyala"
-            >
-              {copied ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4" />}
-            </button>
+            <span className="rounded-full bg-amber-500/20 px-3 py-1 text-xs font-bold text-amber-300 border border-amber-500/30">
+              Birlikte Kazanın 🤝
+            </span>
           </div>
+          <h1 className="mt-2 font-display text-2xl font-extrabold text-white sm:text-3xl">
+            Arkadaş Yönetimi & Duo Pano
+          </h1>
+          <p className="text-xs text-gray-300 mt-1">
+            Arkadaş kodunu paylaş, çalışma arkadaşlarını ekle ve birlikte seri yakala!
+          </p>
+        </div>
+
+        {/* User's Own Friend Code Card */}
+        <div className="rounded-2xl glass-card p-3.5 border border-indigo-500/30 bg-indigo-950/40 flex items-center space-x-3 shadow-lg">
+          <div>
+            <p className="text-[10px] uppercase font-bold text-indigo-300">Senin Arkadaş Kodun</p>
+            <p className="font-display font-black text-amber-400 text-sm tracking-wider">
+              {currentUser.friendCode || "#ADAY2026"}
+            </p>
+          </div>
+          <button
+            onClick={handleCopyCode}
+            className="rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white p-2 text-xs font-bold shadow-md flex items-center space-x-1 transition-transform active:scale-95"
+            title="Kodu Kopyala"
+          >
+            {copied ? <Check className="h-4 w-4 text-emerald-300" /> : <Copy className="h-4 w-4" />}
+          </button>
         </div>
       </div>
 
@@ -163,7 +160,7 @@ export default function FriendsPage() {
               <input
                 type="text"
                 required
-                placeholder="Örn: #ABC1234"
+                placeholder="Örn: #AHMET2026"
                 value={inputCode}
                 onChange={(e) => setInputCode(e.target.value)}
                 className="w-full rounded-2xl bg-gray-900/90 pl-9 pr-4 py-2.5 text-xs text-white placeholder-gray-500 border border-white/10 focus:border-indigo-500 focus:outline-none"
@@ -179,52 +176,93 @@ export default function FriendsPage() {
           </form>
         </div>
 
-        {/* Pending Requests (2 Cols) */}
-        <div className="md:col-span-2 rounded-3xl glass-panel p-5 border border-white/10 shadow-xl space-y-3">
-          <div className="flex items-center justify-between border-b border-white/10 pb-3">
-            <div className="flex items-center space-x-2">
+        {/* Pending & Sent Requests (2 Cols) */}
+        <div className="md:col-span-2 rounded-3xl glass-panel p-5 border border-white/10 shadow-xl space-y-4">
+          {/* Gelen İstekler */}
+          <div>
+            <div className="flex items-center space-x-2 border-b border-white/10 pb-2 mb-3">
               <UserCheck className="h-5 w-5 text-amber-400" />
               <h3 className="font-display font-bold text-white text-sm">
-                Bekleyen İSTEKLER ({pendingRequests.length})
+                Gelen İstekler ({pendingRequests.length})
               </h3>
             </div>
-          </div>
 
-          {pendingRequests.length > 0 ? (
-            <div className="space-y-2">
-              {pendingRequests.map((req) => (
-                <div
-                  key={req.id}
-                  className="flex items-center justify-between rounded-2xl bg-black/40 p-3 border border-white/5"
-                >
-                  <div className="flex items-center space-x-3">
-                    <img
-                      src={req.senderAvatar}
-                      alt={req.senderName}
-                      className="h-10 w-10 rounded-xl object-cover border border-white/10"
-                    />
-                    <div>
-                      <h4 className="font-display font-bold text-white text-xs">
-                        {req.senderName} ({req.senderCode})
-                      </h4>
-                      <p className="text-[10px] text-gray-400">{req.createdAt}</p>
+            {pendingRequests.length > 0 ? (
+              <div className="space-y-2">
+                {pendingRequests.map((req) => (
+                  <div
+                    key={req.id}
+                    className="flex items-center justify-between rounded-2xl bg-black/40 p-3 border border-white/5"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <img
+                        src={req.senderAvatar}
+                        alt={req.senderName}
+                        className="h-10 w-10 rounded-xl object-cover border border-white/10"
+                      />
+                      <div>
+                        <h4 className="font-display font-bold text-white text-xs">
+                          {req.senderName} ({req.senderCode})
+                        </h4>
+                        <p className="text-[10px] text-gray-400">{req.createdAt}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => acceptFriendRequest(req.id)}
+                        className="rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 text-xs font-bold shadow-md flex items-center space-x-1 transition-transform active:scale-95"
+                      >
+                        <CheckCircle2 className="h-4 w-4" />
+                        <span>Kabul Et</span>
+                      </button>
+                      <button
+                        onClick={() => rejectFriendRequest(req.id)}
+                        className="rounded-xl bg-rose-950/60 hover:bg-rose-900 text-rose-300 border border-rose-500/30 px-2.5 py-1.5 text-xs font-bold transition-transform active:scale-95"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
                     </div>
                   </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-gray-400 py-2">
+                Sana gönderilmiş bekleyen bir arkadaşlık isteği yok.
+              </p>
+            )}
+          </div>
 
-                  <button
-                    onClick={() => acceptFriendRequest(req.id)}
-                    className="rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 text-xs font-bold shadow-md flex items-center space-x-1 transition-transform active:scale-95"
+          {/* Gönderilen İstekler */}
+          {sentRequests.length > 0 && (
+            <div className="pt-2 border-t border-white/10">
+              <div className="flex items-center space-x-2 pb-2 mb-2">
+                <Clock className="h-4 w-4 text-indigo-400" />
+                <h4 className="font-display font-bold text-gray-300 text-xs">
+                  Gönderdiğin İstekler (Yanıt Bekleniyor) ({sentRequests.length})
+                </h4>
+              </div>
+              <div className="space-y-2">
+                {sentRequests.map((req) => (
+                  <div
+                    key={req.id}
+                    className="flex items-center justify-between rounded-2xl bg-indigo-950/30 p-2.5 border border-indigo-500/20"
                   >
-                    <CheckCircle2 className="h-4 w-4" />
-                    <span>Kabul Et</span>
-                  </button>
-                </div>
-              ))}
+                    <div className="flex items-center space-x-3">
+                      <span className="text-xs text-indigo-300 font-mono font-bold">{req.senderCode}</span>
+                      <span className="text-[10px] text-gray-400">⏳ Yanıt bekleniyor</span>
+                    </div>
+
+                    <button
+                      onClick={() => cancelSentRequest(req.id)}
+                      className="text-[10px] text-rose-400 hover:text-rose-300 bg-rose-500/10 px-2.5 py-1 rounded-lg border border-rose-500/20"
+                    >
+                      İptal Et
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
-          ) : (
-            <p className="text-xs text-gray-400 py-4 text-center">
-              Bekleyen yeni arkadaşlık isteği yok.
-            </p>
           )}
         </div>
       </div>
