@@ -17,6 +17,8 @@ export interface FriendRequest {
   senderName: string;
   senderCode: string;
   senderAvatar: string;
+  targetCode: string;
+  status: "pending" | "accepted" | "rejected";
   createdAt: string;
 }
 
@@ -35,24 +37,43 @@ interface FriendState {
   sentRequests: FriendRequest[];
   notifications: AppNotification[];
   toastMessage: string | null;
-  notification: string | null;
 
   // Actions
-  sendFriendRequest: (code: string) => boolean;
-  acceptFriendRequest: (id: string) => void;
-  rejectFriendRequest: (id: string) => void;
-  cancelSentRequest: (id: string) => void;
-  simulatePartnerAccept: (requestId: string) => void;
+  syncNetworkRequests: (currentUserCode: string, currentUserName: string) => void;
+  sendFriendRequest: (targetCode: string, currentUserCode: string, currentUserName: string, currentUserAvatar?: string) => boolean;
+  acceptFriendRequest: (requestId: string, currentUserCode: string) => void;
+  rejectFriendRequest: (requestId: string) => void;
+  cancelSentRequest: (requestId: string) => void;
   removeFriend: (id: string) => void;
   sendPoke: (friendName: string) => void;
   sendCheer: (friendName: string) => void;
   sendQuestionToFriend: (friendName: string, text: string) => void;
   markNotificationsRead: () => void;
   clearNotifications: () => void;
-  clearNotification: () => void;
   clearToast: () => void;
   resetFriends: () => void;
 }
+
+const GLOBAL_NETWORK_KEY = "kpss_global_friend_network_v2";
+
+const getGlobalNetwork = (): FriendRequest[] => {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(GLOBAL_NETWORK_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+};
+
+const saveGlobalNetwork = (network: FriendRequest[]) => {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(GLOBAL_NETWORK_KEY, JSON.stringify(network));
+    // Broadcast cross-tab event
+    window.dispatchEvent(new Event("storage"));
+  } catch (e) {}
+};
 
 export const useFriendStore = create<FriendState>()(
   persist(
@@ -65,65 +86,155 @@ export const useFriendStore = create<FriendState>()(
           id: "notif-init-1",
           type: "friend_add",
           senderName: "Sistem",
-          message: "👋 Asimptot Duo sistemine hoş geldin! Arkadaş kopyalayıp istek gönderebilirsin.",
+          message: "👋 Asimptot Duo sistemine hoş geldin! Arkadaş kodunu paylaş veya bir kod girerek gerçek istek gönder.",
           createdAt: "Şimdi",
           read: false,
         }
       ],
       toastMessage: null,
-      notification: null,
 
-      sendFriendRequest: (code: string) => {
-        const cleanCode = code.trim().toUpperCase();
-        if (!cleanCode) return false;
+      syncNetworkRequests: (userCode: string, userName: string) => {
+        if (!userCode) return;
+        const myCode = userCode.trim().toUpperCase();
 
-        const formattedCode = cleanCode.startsWith("#") ? cleanCode : `#${cleanCode}`;
+        const network = getGlobalNetwork();
 
-        // Check if already a friend
-        const isFriend = get().friends.some((f) => f.friendCode.toUpperCase() === formattedCode);
+        // 1. Incoming requests targeting myCode
+        const incoming = network.filter(
+          (r) => r.targetCode.toUpperCase() === myCode && r.status === "pending"
+        );
+
+        // 2. Sent requests originating from myCode
+        const outgoing = network.filter(
+          (r) => r.senderCode.toUpperCase() === myCode && r.status === "pending"
+        );
+
+        // 3. Accepted requests targeting myCode or sent by myCode
+        const newlyAccepted = network.filter(
+          (r) =>
+            r.status === "accepted" &&
+            (r.senderCode.toUpperCase() === myCode || r.targetCode.toUpperCase() === myCode)
+        );
+
+        let currentFriends = [...get().friends];
+        let hasNewFriend = false;
+
+        newlyAccepted.forEach((req) => {
+          const isSender = req.senderCode.toUpperCase() === myCode;
+          const friendCode = isSender ? req.targetCode : req.senderCode;
+          const friendName = isSender ? req.targetCode.replace("#", "") : req.senderName;
+          const friendAvatar = isSender
+            ? `https://api.dicebear.com/7.x/avataaars/svg?seed=${friendName}`
+            : req.senderAvatar;
+
+          const exists = currentFriends.some(
+            (f) => f.friendCode.toUpperCase() === friendCode.toUpperCase()
+          );
+
+          if (!exists) {
+            hasNewFriend = true;
+            currentFriends.push({
+              id: `friend-${Date.now()}-${Math.random()}`,
+              name: friendName,
+              friendCode: friendCode,
+              roleLabel: "ÖSYM Önlisans Adayı",
+              avatarUrl: friendAvatar,
+              statusText: "Canlı Ders Çalışıyor ⏳",
+              isOnline: true,
+              streakCount: Math.floor(Math.random() * 8) + 1,
+            });
+          }
+        });
+
+        set({
+          pendingRequests: incoming,
+          sentRequests: outgoing,
+          friends: currentFriends,
+        });
+
+        if (hasNewFriend) {
+          set({
+            toastMessage: "🎉 İstek onaylandı! Yeni çalışma arkadaşınız listenize eklendi.",
+          });
+        }
+      },
+
+      sendFriendRequest: (targetCodeStr: string, currentUserCode: string, currentUserName: string, currentUserAvatar?: string) => {
+        const cleanTarget = targetCodeStr.trim().toUpperCase();
+        if (!cleanTarget) return false;
+
+        const formattedTarget = cleanTarget.startsWith("#") ? cleanTarget : `#${cleanTarget}`;
+        const myCode = (currentUserCode || "#ADAY2026").trim().toUpperCase();
+
+        if (formattedTarget === myCode) {
+          set({ toastMessage: "⚠️ Kendi arkadaşlık kodunuza istek gönderemezsiniz!" });
+          return false;
+        }
+
+        // Check if already friends
+        const isFriend = get().friends.some((f) => f.friendCode.toUpperCase() === formattedTarget);
         if (isFriend) {
-          set({ toastMessage: "⚠️ Bu kullanıcı zaten arkadaş listenizde ekli!", notification: "⚠️ Bu kullanıcı zaten arkadaş listenizde ekli!" });
+          set({ toastMessage: "⚠️ Bu kullanıcı zaten arkadaş listenizde ekli!" });
           return false;
         }
 
-        // Check if request already sent
-        const alreadySent = get().sentRequests.some((r) => r.senderCode.toUpperCase() === formattedCode);
-        if (alreadySent) {
-          set({ toastMessage: "⏳ Bu kullanıcıya zaten arkadaşlık isteği gönderdiniz. Yanıt bekleniyor!", notification: "⏳ Bu kullanıcıya zaten arkadaşlık isteği gönderdiniz." });
+        const network = getGlobalNetwork();
+
+        // Check if already sent in global network
+        const existing = network.find(
+          (r) =>
+            r.senderCode.toUpperCase() === myCode &&
+            r.targetCode.toUpperCase() === formattedTarget &&
+            r.status === "pending"
+        );
+
+        if (existing) {
+          set({ toastMessage: "⏳ Bu kullanıcıya zaten istek gönderdiniz. Yanıt bekleniyor!" });
           return false;
         }
 
-        const friendName = formattedCode.replace('#', '') || "Aday Kullanıcı";
-
-        const newSentRequest: FriendRequest = {
-          id: `sent-${Date.now()}`,
-          senderName: friendName,
-          senderCode: formattedCode,
-          senderAvatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${friendName}`,
+        const newRequest: FriendRequest = {
+          id: `g-req-${Date.now()}`,
+          senderCode: myCode,
+          senderName: currentUserName || "Aday Kullanıcı",
+          senderAvatar: currentUserAvatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${currentUserName}`,
+          targetCode: formattedTarget,
+          status: "pending",
           createdAt: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
         };
+
+        const updatedNetwork = [newRequest, ...network];
+        saveGlobalNetwork(updatedNetwork);
 
         const newNotif: AppNotification = {
           id: `notif-sent-${Date.now()}`,
           type: "friend_add",
-          senderName: friendName,
-          message: `✉️ ${formattedCode} kodlu kullanıcıya arkadaşlık isteği gönderildi. Karşı tarafın onayı bekleniyor.`,
+          senderName: formattedTarget,
+          message: `✉️ ${formattedTarget} kodlu kullanıcıya arkadaşlık isteği gönderildi. Karşı tarafın onayı bekleniyor.`,
           createdAt: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
           read: false,
         };
 
         set((state) => ({
-          sentRequests: [newSentRequest, ...state.sentRequests],
+          sentRequests: [newRequest, ...state.sentRequests],
           notifications: [newNotif, ...state.notifications],
-          toastMessage: `✉️ ${formattedCode} kodlu kullanıcıya arkadaşlık isteği gönderildi!`,
-          notification: `✉️ ${formattedCode} kodlu kullanıcıya arkadaşlık isteği gönderildi!`,
+          toastMessage: `✉️ ${formattedTarget} kullanıcısına arkadaşlık isteği gönderildi! Karşı tarafın onayı bekleniyor.`,
         }));
+
         return true;
       },
 
-      acceptFriendRequest: (id: string) => {
-        const req = get().pendingRequests.find((r) => r.id === id);
+      acceptFriendRequest: (requestId: string, currentUserCode: string) => {
+        const network = getGlobalNetwork();
+        const req = network.find((r) => r.id === requestId);
+
         if (!req) return;
+
+        // Mark as accepted in global network
+        const updatedNetwork = network.map((r) =>
+          r.id === requestId ? { ...r, status: "accepted" as const } : r
+        );
+        saveGlobalNetwork(updatedNetwork);
 
         const newFriend: FriendUser = {
           id: `friend-${Date.now()}`,
@@ -146,56 +257,34 @@ export const useFriendStore = create<FriendState>()(
         };
 
         set((state) => ({
-          pendingRequests: state.pendingRequests.filter((r) => r.id !== id),
+          pendingRequests: state.pendingRequests.filter((r) => r.id !== requestId),
           friends: [newFriend, ...state.friends],
           notifications: [newNotif, ...state.notifications],
           toastMessage: `🎉 ${req.senderName} ile artık arkadaşsınız!`,
         }));
       },
 
-      rejectFriendRequest: (id: string) => {
+      rejectFriendRequest: (requestId: string) => {
+        const network = getGlobalNetwork();
+        const updatedNetwork = network.map((r) =>
+          r.id === requestId ? { ...r, status: "rejected" as const } : r
+        );
+        saveGlobalNetwork(updatedNetwork);
+
         set((state) => ({
-          pendingRequests: state.pendingRequests.filter((r) => r.id !== id),
+          pendingRequests: state.pendingRequests.filter((r) => r.id !== requestId),
           toastMessage: "Arkadaşlık isteği reddedildi.",
         }));
       },
 
-      cancelSentRequest: (id: string) => {
-        set((state) => ({
-          sentRequests: state.sentRequests.filter((r) => r.id !== id),
-          toastMessage: "Gönderilen arkadaşlık isteği iptal edildi.",
-        }));
-      },
-
-      simulatePartnerAccept: (requestId: string) => {
-        const req = get().sentRequests.find((r) => r.id === requestId);
-        if (!req) return;
-
-        const newFriend: FriendUser = {
-          id: `friend-${Date.now()}`,
-          name: req.senderName,
-          friendCode: req.senderCode,
-          roleLabel: "ÖSYM Önlisans Adayı",
-          avatarUrl: req.senderAvatar,
-          statusText: "Canlı Ders Çalışıyor ⏳",
-          isOnline: true,
-          streakCount: Math.floor(Math.random() * 8) + 1,
-        };
-
-        const newNotif: AppNotification = {
-          id: `notif-approved-${Date.now()}`,
-          type: "friend_add",
-          senderName: req.senderName,
-          message: `🎉 ${req.senderName} (${req.senderCode}) gönderdiğiniz arkadaşlık isteğini kabul etti!`,
-          createdAt: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
-          read: false,
-        };
+      cancelSentRequest: (requestId: string) => {
+        const network = getGlobalNetwork();
+        const updatedNetwork = network.filter((r) => r.id !== requestId);
+        saveGlobalNetwork(updatedNetwork);
 
         set((state) => ({
           sentRequests: state.sentRequests.filter((r) => r.id !== requestId),
-          friends: [newFriend, ...state.friends],
-          notifications: [newNotif, ...state.notifications],
-          toastMessage: `🎉 ${req.senderName} isteğinizi kabul etti! Arkadaş listenize eklendi.`,
+          toastMessage: "Gönderilen arkadaşlık isteği iptal edildi.",
         }));
       },
 
@@ -261,12 +350,11 @@ export const useFriendStore = create<FriendState>()(
       },
 
       clearNotifications: () => set({ notifications: [] }),
-      clearNotification: () => set({ notification: null }),
       clearToast: () => set({ toastMessage: null }),
-      resetFriends: () => set({ friends: [], pendingRequests: [], sentRequests: [], notifications: [], toastMessage: null, notification: null }),
+      resetFriends: () => set({ friends: [], pendingRequests: [], sentRequests: [], notifications: [], toastMessage: null }),
     }),
     {
-      name: "asimptot_friends_real_v6",
+      name: "asimptot_friends_real_v7",
     }
   )
 );

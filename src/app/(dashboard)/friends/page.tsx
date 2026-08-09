@@ -33,12 +33,12 @@ export default function FriendsPage() {
     acceptFriendRequest,
     rejectFriendRequest,
     cancelSentRequest,
-    simulatePartnerAccept,
     removeFriend,
     sendPoke,
     sendCheer,
-    notification,
-    clearNotification,
+    syncNetworkRequests,
+    toastMessage,
+    clearToast,
   } = useFriendStore();
 
   const [inputCode, setInputCode] = useState("");
@@ -47,7 +47,24 @@ export default function FriendsPage() {
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
+    if (currentUser.friendCode) {
+      syncNetworkRequests(currentUser.friendCode, currentUser.name);
+    }
+
+    const handleStorageChange = () => {
+      if (currentUser.friendCode) {
+        syncNetworkRequests(currentUser.friendCode, currentUser.name);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    const interval = setInterval(handleStorageChange, 3000);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      clearInterval(interval);
+    };
+  }, [currentUser.friendCode, currentUser.name, syncNetworkRequests]);
 
   const handleCopyCode = () => {
     navigator.clipboard.writeText(currentUser.friendCode || "");
@@ -57,7 +74,7 @@ export default function FriendsPage() {
 
   const handleAddFriendSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (sendFriendRequest(inputCode)) {
+    if (sendFriendRequest(inputCode, currentUser.friendCode, currentUser.name, currentUser.avatarUrl)) {
       setInputCode("");
     }
   };
@@ -93,16 +110,16 @@ export default function FriendsPage() {
     <div className="space-y-6">
       {/* Toast Notification */}
       <AnimatePresence>
-        {notification && (
+        {toastMessage && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             className="fixed top-6 right-6 z-50 rounded-2xl bg-indigo-950/90 text-white border border-indigo-500/40 p-4 shadow-2xl flex items-center space-x-3 text-xs font-semibold backdrop-blur-xl"
           >
-            <span>{notification}</span>
+            <span>{toastMessage}</span>
             <button
-              onClick={clearNotification}
+              onClick={clearToast}
               className="rounded-lg bg-white/10 p-1 hover:bg-white/20 text-gray-300"
             >
               <X className="h-3.5 w-3.5" />
@@ -211,7 +228,7 @@ export default function FriendsPage() {
 
                     <div className="flex items-center space-x-2">
                       <button
-                        onClick={() => acceptFriendRequest(req.id)}
+                        onClick={() => acceptFriendRequest(req.id, currentUser.friendCode)}
                         className="rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 text-xs font-bold shadow-md flex items-center space-x-1 transition-transform active:scale-95"
                       >
                         <CheckCircle2 className="h-4 w-4" />
@@ -250,25 +267,16 @@ export default function FriendsPage() {
                     className="flex items-center justify-between rounded-2xl bg-indigo-950/30 p-2.5 border border-indigo-500/20"
                   >
                     <div className="flex items-center space-x-3">
-                      <span className="text-xs text-indigo-300 font-mono font-bold">{req.senderCode}</span>
+                      <span className="text-xs text-indigo-300 font-mono font-bold">{req.targetCode}</span>
                       <span className="text-[10px] text-gray-400">⏳ Yanıt bekleniyor</span>
                     </div>
 
-                    <div className="flex items-center space-x-2">
-                      <button
-                        onClick={() => simulatePartnerAccept(req.id)}
-                        className="text-[10px] font-bold text-emerald-300 bg-emerald-500/20 hover:bg-emerald-500/30 px-2.5 py-1 rounded-lg border border-emerald-500/30 transition-transform active:scale-95"
-                        title="Simülasyon: Karşı taraf kabul ettiğinde arkadaş listesine geçmesini test edin"
-                      >
-                        ✓ Onaylandı (Test Et)
-                      </button>
-                      <button
-                        onClick={() => cancelSentRequest(req.id)}
-                        className="text-[10px] font-bold text-rose-400 hover:text-rose-300 bg-rose-500/10 px-2.5 py-1 rounded-lg border border-rose-500/20"
-                      >
-                        İptal Et
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => cancelSentRequest(req.id)}
+                      className="text-[10px] font-bold text-rose-400 hover:text-rose-300 bg-rose-500/10 px-2.5 py-1.5 rounded-lg border border-rose-500/20"
+                    >
+                      İptal Et
+                    </button>
                   </div>
                 ))}
               </div>
