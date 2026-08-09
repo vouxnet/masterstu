@@ -10,6 +10,7 @@ import { useExamHistoryStore } from "@/src/lib/store/useExamHistoryStore";
 import MemoryDecayWidget from "@/src/components/dashboard/MemoryDecayWidget";
 import { DailyFactWidget } from "@/src/components/dashboard/DailyFactWidget";
 import { DailyQuestWidget } from "@/src/components/dashboard/DailyQuestWidget";
+import { DuoFriendsWidget } from "@/src/components/dashboard/DuoFriendsWidget";
 import { Brain, Clock, Flame, BookOpen, TrendingUp, Sparkles, Camera, Calendar } from "lucide-react";
 import { formatTimeRemaining } from "@/src/lib/utils";
 
@@ -97,6 +98,7 @@ export default function DashboardPage() {
         {/* Left Column (lg:col-span-2) */}
         <div className="lg:col-span-2 space-y-6">
           <DailyQuestWidget />
+          <DuoFriendsWidget />
           
           {/* Haftalık İstatistik Bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
