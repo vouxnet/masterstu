@@ -294,14 +294,26 @@ export default function CurriculumPage() {
                             ) : (
                               <Circle className="h-5 w-5 text-gray-600 flex-shrink-0" />
                             )}
-                            <div>
-                              <h4 className="font-display font-bold text-white text-xs sm:text-sm">
-                                {topic.topic}
-                              </h4>
-                              <p className="text-[11px] text-gray-400">
-                                ÖSYM Tahmini: ~{topic.questionWeight} Soru
-                              </p>
-                            </div>
+                              <div>
+                                <div className="flex items-center space-x-2 flex-wrap gap-y-1">
+                                  <h4 className="font-display font-bold text-white text-xs sm:text-sm">
+                                    {topic.topic}
+                                  </h4>
+                                  {topic.osymFrequencyPercent !== undefined && (
+                                    <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-bold text-amber-300 border border-amber-500/30">
+                                      %{topic.osymFrequencyPercent} Çıkma İhtimali
+                                    </span>
+                                  )}
+                                  {topic.osymAnalysisNote && (
+                                    <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                                      {topic.osymAnalysisNote}
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-[11px] text-gray-400 mt-0.5">
+                                  ÖSYM Tahmini: ~{topic.questionWeight} Soru
+                                </p>
+                              </div>
                           </div>
 
                           <span

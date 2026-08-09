@@ -26,10 +26,11 @@ export default function QuestionDistributionPage() {
     case "kpss_onlisans":
       courses = ["Türkçe", "Matematik", "Tarih", "Coğrafya", "Vatandaşlık"];
       currentDataset = kpssOnlisansDistributionData;
-      title = `${currentUser.name || "Kullanıcı"} - ÖSYM Önlisans Soru Dağılımları`;
-      description = `${currentUser.name || "Kullanıcı"} için Önlisans sayfasındaki TÜM derslerin (2016-2024) 10 yıllık ÖSYM soru sayıları`;
-      successText = `${currentUser.name || "Kullanıcı"} için ÖSYM Önlisans Tabloları %100 Hazır!`;
-      successSubtext = "ÖSYM Önlisans Türkçe, Matematik, Tarih, Coğrafya ve Vatandaşlık soru verileri eksiksiz işlendi.";
+      years = ["2012", "2014", "2016", "2018", "2020", "2022", "2023"];
+      title = `${currentUser.name || "Kullanıcı"} - ÖSYM Önlisans Soru Dağılımları (2012-2023)`;
+      description = `${currentUser.name || "Kullanıcı"} için ÖSYM Önlisans Matematik ve tüm derslerin tam çıkmış soru sayıları ve ihtimal yüzdeleri (%)`;
+      successText = `${currentUser.name || "Kullanıcı"} için ÖSYM Önlisans Tabloları ve % İhtimal Analizleri %100 Hazır!`;
+      successSubtext = "ÖSYM Önlisans Matematik (2012-2023), Türkçe, Tarih, Coğrafya ve Vatandaşlık soru verileri %100 eksiksiz işlendi.";
       badgeText = `${currentUser.name || "Kullanıcı"} (Önlisans)`;
       break;
     case "kpss_ortaogretim":
@@ -151,6 +152,7 @@ export default function QuestionDistributionPage() {
                 {years.map((y, i) => (
                   <th key={i} className="px-3 py-4 text-center">{y}</th>
                 ))}
+                <th className="px-4 py-4 text-center text-amber-400">% Soru Çıkma İhtimali</th>
                 <th className="px-4 py-4 text-center text-emerald-400">Ortalama</th>
                 <th className="px-4 py-4 text-center">Soru Yoğunluğu</th>
               </tr>
@@ -162,12 +164,19 @@ export default function QuestionDistributionPage() {
                   return (
                     <tr key={idx} className="hover:bg-white/5 transition-colors">
                       <td className="px-5 py-4 font-bold text-white flex items-center space-x-2">
-                        <span className="h-2 w-2 rounded-full bg-indigo-500" />
+                        <span className="h-2 w-2 rounded-full bg-indigo-500 flex-shrink-0" />
                         <span>{row.topic}</span>
                       </td>
                       {yKeys.map((k, i) => (
-                        <td key={i} className="px-3 py-4 text-center text-gray-400">{row[k]} Soru</td>
+                        <td key={i} className="px-3 py-4 text-center text-gray-400 font-mono">
+                          {row[k] !== undefined ? `${row[k]} Soru` : "—"}
+                        </td>
                       ))}
+                      <td className="px-4 py-4 text-center">
+                        <span className="rounded-full bg-amber-500/20 px-2.5 py-1 text-xs font-black text-amber-300 border border-amber-500/30 whitespace-nowrap">
+                          %{row.probabilityPercent !== undefined ? row.probabilityPercent : (row.avg > 1 ? 100 : Math.round(row.avg * 50))} Çıkma İhtimali
+                        </span>
+                      </td>
                       <td className="px-4 py-4 text-center font-display font-bold text-emerald-400 text-sm">
                         ~{row.avg} Soru
                       </td>

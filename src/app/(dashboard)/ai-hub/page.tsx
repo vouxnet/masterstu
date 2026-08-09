@@ -188,12 +188,12 @@ export default function AIHubPage() {
   const distributionData = activeExam === "kpss_onlisans" ? kpssOnlisansDistributionData : kpssLisansDistributionData;
   
   const allTopics = Object.entries(distributionData).flatMap(([subject, topics]) =>
-    topics.map(t => ({ 
+    (topics as any[]).map(t => ({ 
       subject, 
       topic: t.topic, 
       avg: t.avg, 
       importance: t.importance,
-      trend: t.y2024 >= t.y2022 ? "rising" : "falling" 
+      trend: (t.y2024 || t.y2023 || 0) >= (t.y2022 || 0) ? "rising" : "falling" 
     }))
   );
   
