@@ -8,49 +8,57 @@ export interface CurriculumTopic {
   status: "not_started" | "studying" | "solved" | "review";
 }
 
-export const initialCurriculumData: CurriculumTopic[] = [
-  // ==================== KPSS ÖNLİSANS (54 MİKRO KONU) ====================
+export const initialCurriculumData: CurriculumTopic[] = [  // ==================== KPSS ÖNLİSANS (RESMİ ÖSYM KONU LİSTESİ) ====================
   // 1. TÜRKÇE (30 SORU)
-  { id: "sen-tr-1", userRole: "onlisans", course: "Türkçe", unit: "Sözcükte Anlam", topic: "Sözcükte Anlam, Gerçek/Mecaz/Yan Anlam ve Terim Anlam", questionWeight: 1, status: "not_started" },
-  { id: "sen-tr-2", userRole: "onlisans", course: "Türkçe", unit: "Sözcükte Anlam", topic: "Sözcük Grupları, İkilemeler, Deyimler ve Atasözleri", questionWeight: 1, status: "not_started" },
-  { id: "sen-tr-3", userRole: "onlisans", course: "Türkçe", unit: "Cümlede Anlam", topic: "Cümlede Anlam İlişkileri (Neden-Sonuç, Amaç-Sonuç, Koşul)", questionWeight: 1, status: "not_started" },
-  { id: "sen-tr-4", userRole: "onlisans", course: "Türkçe", unit: "Cümlede Anlam", topic: "Cümle Yorumu, Örtülü Anlam ve Anlatım Biçimleri", questionWeight: 2, status: "not_started" },
-  { id: "sen-tr-5", userRole: "onlisans", course: "Türkçe", unit: "Paragrafta Anlam", topic: "Paragrafta Ana Düşünce ve Konu Bulma", questionWeight: 5, status: "not_started" },
-  { id: "sen-tr-6", userRole: "onlisans", course: "Türkçe", unit: "Paragrafta Anlam", topic: "Paragrafta Yardımcı Düşüncüler ve Değinilmeyeni Bulma", questionWeight: 4, status: "not_started" },
-  { id: "sen-tr-7", userRole: "onlisans", course: "Türkçe", unit: "Paragrafta Yapı", topic: "Paragrafı İkiye Bölme ve Akışı Bozan Cümleyi Bulma", questionWeight: 3, status: "not_started" },
-  { id: "sen-tr-8", userRole: "onlisans", course: "Türkçe", unit: "Paragrafta Yapı", topic: "Paragrafta Cümle Yerleştirme ve Paragraf Tamamlama", questionWeight: 3, status: "not_started" },
-  { id: "sen-tr-9", userRole: "onlisans", course: "Türkçe", unit: "Dil Bilgisi", topic: "Sözcük Türleri (İsim, Sıfat, Zamir, Zarf, Edat, Bağlaç)", questionWeight: 1, status: "not_started" },
-  { id: "sen-tr-10", userRole: "onlisans", course: "Türkçe", unit: "Dil Bilgisi", topic: "Fiiller, Fiilimsiler ve Cümle Elemanları (Özne, Yüklem, Nesne)", questionWeight: 1, status: "not_started" },
-  { id: "sen-tr-11", userRole: "onlisans", course: "Türkçe", unit: "Yazım ve Noktalama", topic: "Büyük Harfler, Bitişik/Ayrı Yazım ve Yazım Kuralları", questionWeight: 1, status: "not_started" },
-  { id: "sen-tr-12", userRole: "onlisans", course: "Türkçe", unit: "Yazım ve Noktalama", topic: "Noktalama İşaretleri (Virgül, Noktalı Virgül, İki Nokta vb.)", questionWeight: 1, status: "not_started" },
-  { id: "sen-tr-13", userRole: "onlisans", course: "Türkçe", unit: "Sözel Mantık", topic: "Sözel Mantık Tablo Oluşturma ve Eşleştirme Soruları", questionWeight: 2, status: "not_started" },
-  { id: "sen-tr-14", userRole: "onlisans", course: "Türkçe", unit: "Sözel Mantık", topic: "Sözel Mantık Sıralama ve Mantıksal Çıkarım Soruları", questionWeight: 2, status: "not_started" },
+  { id: "onl-tr-1", userRole: "onlisans", course: "Türkçe", unit: "Anlam Bilgisi", topic: "Sözcükte Anlam ve Sözcük Grupları", questionWeight: 2, status: "not_started" },
+  { id: "onl-tr-2", userRole: "onlisans", course: "Türkçe", unit: "Anlam Bilgisi", topic: "Cümlede Anlam ve Cümle Yorumu", questionWeight: 2, status: "not_started" },
+  { id: "onl-tr-3", userRole: "onlisans", course: "Türkçe", unit: "Dil Bilgisi", topic: "Sözcük Türleri (İsim, Sıfat, Zamir, Zarf, Edat)", questionWeight: 1, status: "not_started" },
+  { id: "onl-tr-4", userRole: "onlisans", course: "Türkçe", unit: "Dil Bilgisi", topic: "Sözcükte Yapı ve Ekler", questionWeight: 1, status: "not_started" },
+  { id: "onl-tr-5", userRole: "onlisans", course: "Türkçe", unit: "Dil Bilgisi", topic: "Cümlenin Ögeleri ve Cümle Türleri", questionWeight: 1, status: "not_started" },
+  { id: "onl-tr-6", userRole: "onlisans", course: "Türkçe", unit: "Dil Bilgisi", topic: "Ses Olayları ve Ses Bilgisi", questionWeight: 1, status: "not_started" },
+  { id: "onl-tr-7", userRole: "onlisans", course: "Türkçe", unit: "Yazım ve Noktalama", topic: "Yazım Kuralları ve Büyük Harflerin Kullanımı", questionWeight: 1, status: "not_started" },
+  { id: "onl-tr-8", userRole: "onlisans", course: "Türkçe", unit: "Yazım ve Noktalama", topic: "Noktalama İşaretleri", questionWeight: 1, status: "not_started" },
+  { id: "onl-tr-9", userRole: "onlisans", course: "Türkçe", unit: "Dil Bilgisi", topic: "Anlatım Bozuklukları", questionWeight: 1, status: "not_started" },
+  { id: "onl-tr-10", userRole: "onlisans", course: "Türkçe", unit: "Paragraf", topic: "Paragrafta Anlam, Ana Düşünce ve Yardımcı Düşünce", questionWeight: 15, status: "not_started" },
+  { id: "onl-tr-11", userRole: "onlisans", course: "Türkçe", unit: "Paragraf", topic: "Paragrafta Yapı ve Anlatım Biçimleri", questionWeight: 1, status: "not_started" },
+  { id: "onl-tr-12", userRole: "onlisans", course: "Türkçe", unit: "Sözel Mantık", topic: "Sözel Mantık Tablo ve Sıralama Soruları", questionWeight: 4, status: "not_started" },
 
   // 2. MATEMATİK & GEOMETRİ (30 SORU)
-  { id: "sen-mat-1", userRole: "onlisans", course: "Matematik", unit: "Temel Sayılar", topic: "Temel Kavramlar, Sayı Kümeleri ve Tek-Çift Sayılar", questionWeight: 1, status: "not_started" },
-  { id: "sen-mat-2", userRole: "onlisans", course: "Matematik", unit: "Temel Sayılar", topic: "Ardışık Sayılar, Asal Sayılar ve Faktöriyel", questionWeight: 1, status: "not_started" },
-  { id: "sen-mat-3", userRole: "onlisans", course: "Matematik", unit: "Temel Sayılar", topic: "Bölme-Bölünebilme Kuralları ve EBOB-EKOK", questionWeight: 1, status: "not_started" },
-  { id: "sen-mat-4", userRole: "onlisans", course: "Matematik", unit: "Cebir", topic: "Rasyonel Sayılar, Ondalık ve Devirli Sayılar", questionWeight: 2, status: "not_started" },
-  { id: "sen-mat-5", userRole: "onlisans", course: "Matematik", unit: "Cebir", topic: "Üslü İfadeler ve Üslü Denklemler", questionWeight: 1, status: "not_started" },
-  { id: "sen-mat-6", userRole: "onlisans", course: "Matematik", unit: "Cebir", topic: "Köklü İfadeler ve Köklü Sayılarda İşlemler", questionWeight: 1, status: "not_started" },
-  { id: "sen-mat-7", userRole: "onlisans", course: "Matematik", unit: "Cebir", topic: "Mutlak Değer ve Özellikleri", questionWeight: 1, status: "not_started" },
-  { id: "sen-mat-8", userRole: "onlisans", course: "Matematik", unit: "Cebir", topic: "Basit Eşitsizlikler ve Aralıklar", questionWeight: 1, status: "not_started" },
-  { id: "sen-mat-9", userRole: "onlisans", course: "Matematik", unit: "Cebir", topic: "Çarpanlara Ayırma ve Özdeşlikler", questionWeight: 1, status: "not_started" },
-  { id: "sen-mat-10", userRole: "onlisans", course: "Matematik", unit: "Cebir", topic: "Oran-Orantı ve 1. Dereceden Denklemler", questionWeight: 1, status: "not_started" },
+  { id: "onl-mat-1", userRole: "onlisans", course: "Matematik", unit: "Temel Matematik", topic: "Temel Kavramlar ve Sayı Kümeleri", questionWeight: 1, status: "not_started" },
+  { id: "onl-mat-2", userRole: "onlisans", course: "Matematik", unit: "Temel Matematik", topic: "Sayılar, Bölünebilme ve EBOB-EKOK", questionWeight: 3, status: "not_started" },
+  { id: "onl-mat-3", userRole: "onlisans", course: "Matematik", unit: "Temel Matematik", topic: "Rasyonel Sayılar ve Ondalıklı Sayılar", questionWeight: 2, status: "not_started" },
+  { id: "onl-mat-4", userRole: "onlisans", course: "Matematik", unit: "Cebir", topic: "Basit Eşitsizlikler ve Mutlak Değer", questionWeight: 1, status: "not_started" },
+  { id: "onl-mat-5", userRole: "onlisans", course: "Matematik", unit: "Cebir", topic: "Üslü Sayılar ve Köklü Sayılar", questionWeight: 2, status: "not_started" },
+  { id: "onl-mat-6", userRole: "onlisans", course: "Matematik", unit: "Cebir", topic: "Denklem Çözme ve Çarpanlara Ayırma", questionWeight: 1, status: "not_started" },
+  { id: "onl-mat-7", userRole: "onlisans", course: "Matematik", unit: "Problemler", topic: "Sayı ve Kesir Problemleri", questionWeight: 2, status: "not_started" },
+  { id: "onl-mat-8", userRole: "onlisans", course: "Matematik", unit: "Problemler", topic: "Yaş, İşçi ve Havuz Problemleri", questionWeight: 1, status: "not_started" },
+  { id: "onl-mat-9", userRole: "onlisans", course: "Matematik", unit: "Problemler", topic: "Hareket-Hız ve Yüzde-Kâr-Zarar Problemleri", questionWeight: 1, status: "not_started" },
+  { id: "onl-mat-10", userRole: "onlisans", course: "Matematik", unit: "Problemler", topic: "Karışım ve Grafik Problemleri", questionWeight: 2, status: "not_started" },
+  { id: "onl-mat-11", userRole: "onlisans", course: "Matematik", unit: "Mantık & Kümeler", topic: "Kümeler, Fonksiyonlar ve Olasılık", questionWeight: 3, status: "not_started" },
+  { id: "onl-mat-12", userRole: "onlisans", course: "Matematik", unit: "Sayısal Mantık", topic: "Sayısal Mantık ve Şekil-Sayı İlişkileri", questionWeight: 3, status: "not_started" },
 
   // 3. TARİH (27 SORU)
-  { id: "sen-tar-1", userRole: "onlisans", course: "Tarih", unit: "İslamiyet Öncesi Türk Tarihi", topic: "İlk Türk Devletleri (Hunlar, Göktürkler, Uygurlar)", questionWeight: 1, status: "not_started" },
-  { id: "sen-tar-2", userRole: "onlisans", course: "Tarih", unit: "Türk-İslam Tarihi", topic: "İlk Türk-İslam Devletleri (Karahanlı, Gazneli, Büyük Selçuklu)", questionWeight: 1, status: "not_started" },
-  { id: "sen-tar-3", userRole: "onlisans", course: "Tarih", unit: "Osmanlı Medeniyeti", topic: "Osmanlı Devlet Teşkilatı, Saray ve Taşra İdaresi", questionWeight: 2, status: "not_started" },
-  { id: "sen-tar-4", userRole: "onlisans", course: "Tarih", unit: "İnkılap Tarihi", topic: "Amasya Genelgesi, Erzurum ve Sivas Kongreleri", questionWeight: 2, status: "not_started" },
+  { id: "onl-tar-1", userRole: "onlisans", course: "Tarih", unit: "İslamiyet Öncesi Türk Tarihi", topic: "İslamiyet Öncesi Türk Tarihi ve Kültür Medeniyeti", questionWeight: 2, status: "not_started" },
+  { id: "onl-tar-2", userRole: "onlisans", course: "Tarih", unit: "Türk-İslam Tarihi", topic: "İlk Türk İslam Devletleri ve Kültür Medeniyeti", questionWeight: 3, status: "not_started" },
+  { id: "onl-tar-3", userRole: "onlisans", course: "Tarih", unit: "Osmanlı Siyasi Tarihi", topic: "Osmanlı Devleti Kuruluş, Yükselme ve Duraklama Dönemleri", questionWeight: 3, status: "not_started" },
+  { id: "onl-tar-4", userRole: "onlisans", course: "Tarih", unit: "Osmanlı Siyasi Tarihi", topic: "Osmanlı Devleti Gerileme, Dağılma ve 20. Yüzyıl", questionWeight: 2, status: "not_started" },
+  { id: "onl-tar-5", userRole: "onlisans", course: "Tarih", unit: "Osmanlı Medeniyeti", topic: "Osmanlı Devleti Kültür ve Medeniyeti", questionWeight: 4, status: "not_started" },
+  { id: "onl-tar-6", userRole: "onlisans", course: "Tarih", unit: "Milli Mücadele", topic: "Milli Mücadele Hazırlık ve Muharebeler Dönemi", questionWeight: 4, status: "not_started" },
+  { id: "onl-tar-7", userRole: "onlisans", course: "Tarih", unit: "İnkılap Tarihi", topic: "Atatürk İnkılapları, İlkeleri ve İç/Dış Politikalar", questionWeight: 5, status: "not_started" },
+  { id: "onl-tar-8", userRole: "onlisans", course: "Tarih", unit: "Çağdaş Tarih", topic: "Çağdaş Türk ve Dünya Tarihi", questionWeight: 4, status: "not_started" },
 
   // 4. COĞRAFYA (18 SORU)
-  { id: "sen-cog-1", userRole: "onlisans", course: "Coğrafya", unit: "Coğrafi Konum", topic: "Türkiye'nin Matematiksel ve Göreceli Konumu", questionWeight: 1, status: "not_started" },
-  { id: "sen-cog-2", userRole: "onlisans", course: "Coğrafya", unit: "Fiziki Coğrafya", topic: "Türkiye'nin Dağları, Ovaları ve Platoları", questionWeight: 2, status: "not_started" },
+  { id: "onl-cog-1", userRole: "onlisans", course: "Coğrafya", unit: "Coğrafi Konum", topic: "Türkiye'nin Coğrafi Konumu ve Özellikleri", questionWeight: 2, status: "not_started" },
+  { id: "onl-cog-2", userRole: "onlisans", course: "Coğrafya", unit: "Fiziki Coğrafya", topic: "Türkiye'nin İklimi, Bitki Örtüsü ve Fiziki Özellikleri", questionWeight: 6, status: "not_started" },
+  { id: "onl-cog-3", userRole: "onlisans", course: "Coğrafya", unit: "Beşeri Coğrafya", topic: "Türkiye'de Nüfus, Yerleşme ve Göçler", questionWeight: 2, status: "not_started" },
+  { id: "onl-cog-4", userRole: "onlisans", course: "Coğrafya", unit: "Ekonomik Coğrafya", topic: "Tarım, Hayvancılık, Madenler ve Enerji Kaynakları", questionWeight: 4, status: "not_started" },
+  { id: "onl-cog-5", userRole: "onlisans", course: "Coğrafya", unit: "Ekonomik Coğrafya", topic: "Sanayi, Ulaşım, Ticaret ve Turizm", questionWeight: 4, status: "not_started" },
 
   // 5. VATANDAŞLIK (9 SORU)
-  { id: "sen-vat-1", userRole: "onlisans", course: "Vatandaşlık", unit: "Hukuka Giriş", topic: "Hukukun Temel Kavramları ve Sosyal Hayat Kuralları", questionWeight: 1, status: "not_started" },
-  { id: "sen-vat-2", userRole: "onlisans", course: "Vatandaşlık", unit: "Devlet Organları", topic: "1982 Anayasası Yasama ve Yürütme Organları", questionWeight: 2, status: "not_started" },
+  { id: "onl-vat-1", userRole: "onlisans", course: "Vatandaşlık", unit: "Hukuka Giriş", topic: "Temel Hukuk Kavramları ve Hukuk Düzeni", questionWeight: 3, status: "not_started" },
+  { id: "onl-vat-2", userRole: "onlisans", course: "Vatandaşlık", unit: "Anayasa Hukuku", topic: "Anayasal Kavramlar, Yasama ve Yargı Organları", questionWeight: 2, status: "not_started" },
+  { id: "onl-vat-3", userRole: "onlisans", course: "Vatandaşlık", unit: "Anayasa Hukuku", topic: "1982 Anayasası Yürütme Organı ve Cumhurbaşkanlığı", questionWeight: 2, status: "not_started" },
+  { id: "onl-vat-4", userRole: "onlisans", course: "Vatandaşlık", unit: "İdare Hukuku", topic: "İdare Hukuku ve İdari Teşkilat Yapısı", questionWeight: 2, status: "not_started" },
 
   // ==================== KPSS LİSANS + ALAN ====================
   { id: "h-1", userRole: "lisans_alan", course: "Hukuk", unit: "Anayasa Hukuku", topic: "Anayasa Hukukunun Temel Kavramları ve Devlet Biçimleri", questionWeight: 2, status: "not_started" },
