@@ -35,7 +35,7 @@ Tüm dashboard sayfaları `(dashboard)` route grubu içindedir ve `layout.tsx` i
 | `(dashboard)/question-distribution/page.tsx` | ÖSYM 10 Yıllık Soru Dağılımları — Gerçek veri, kullanıcıya göre | ✅ Aktif |
 | `(dashboard)/settings/page.tsx` | Profil & Ayarlar — İsim/email/avatar güncelleme | ✅ Aktif |
 | `(dashboard)/shared-qa/page.tsx` | Canlı Soru Akışı — 3 kademeli görünürlük, CRUD | ✅ Aktif |
-| `login/page.tsx` | Giriş — Bülent/Sena seçimi, hardcoded şifre (123456) | ⚠️ Demo |
+| `login/page.tsx` | Giriş — Supabase Auth (Email + Google OAuth) ve Ziyaretçi | ✅ Aktif |
 | `onboarding/page.tsx` | Sınav Seçimi — Çoklu sınav, aktif sınav ayarı | ✅ Aktif |
 
 ### 🧠 B. State Management (`src/lib/store/`)
@@ -54,15 +54,16 @@ Tüm dashboard sayfaları `(dashboard)` route grubu içindedir ve `layout.tsx` i
 |-------|--------|-------|
 | `curriculumData.ts` | 5 sınav tipi × konu listeleri. Lisans: 10, Önlisans: 26, Ortaöğretim: 3, YDS: 3, ALES: 2 konu | 10 KB |
 | `flashcardsData.ts` | 21 flashcard (Lisans: 16, Önlisans: 5). ÖSYM etiketli, hafıza ipuçlu. İlerleme `asimptot_flashcard_progress_v1` ile persist | 9 KB |
-| `bulentFullDistribution.ts` | KPSS Lisans 10 yıllık soru dağılımı. 9 ders, 83 konu. ✅ Encoding hatası yok | 17 KB |
-| `senaFullDistribution.ts` | KPSS Önlisans 10 yıllık soru dağılımı. 5 ders, 64 konu | 10 KB |
+| `kpssLisansDistribution.ts` | KPSS Lisans 10 yıllık soru dağılımı. 9 ders, 83 konu. ✅ Encoding hatası yok | 17 KB |
+| `kpssOnlisansDistribution.ts` | KPSS Önlisans 10 yıllık soru dağılımı. 5 ders, 64 konu | 10 KB |
 
 ### 🔌 D. Servisler ve Altyapı (`src/lib/services/`, `src/lib/supabase/`)
 
 | Dosya | İçerik |
 |-------|--------|
-| `services/db.ts` | Mock DB servisleri — `fetchCurriculumProgress`, `updateTopicStatus`, `fetchMistakes`, `fetchFeedPosts` hepsi `setTimeout` + null döndürüyor |
-| `supabase/client.ts` | `@supabase/ssr` browser client — placeholder URL/key ile kurulu, .env.local bekleniyor |
+| `services/db.ts` | Gerçek Supabase çağrılarına taşındı (eski Mock sistem silindi) |
+| `supabase/client.ts` | `@supabase/ssr` browser client |
+| `supabase/server.ts` | `@supabase/ssr` server client |
 
 ### 🧩 E. Bileşenler (`src/components/`)
 
@@ -76,11 +77,11 @@ Tüm dashboard sayfaları `(dashboard)` route grubu içindedir ve `layout.tsx` i
 | `dashboard/TodoSummary.tsx` | Günlük yapılacaklar listesi, ekleme/tamamlama |
 | `dashboard/QuickNavHub.tsx` | 6 modüle hızlı erişim kartları |
 | `modals/QuickActionModal.tsx` | Hızlı soru/not ekleme modalı |
+| `exam-sim/ExamSimulator.tsx` | React Portal kullanılarak tam ekran ÖSYM simülasyonu |
 
 ### 🔒 F. Middleware (`src/middleware.ts`)
-- Korumalı rotalar: `/`, `/curriculum`, `/flashcards`, `/mistakes`, `/exams`, `/shared-qa`
-- `kpss_session` cookie kontrolü
-- Development modunda otomatik demo cookie
+- Sadece Supabase session kontrolü yapar
+- Korumalı rotalar için geçerli auth kontrolü (Ziyaretçi veya Login)
 
 ---
 
@@ -109,7 +110,7 @@ Detaylar için `README.md`'deki "GELİŞTİRME YOL HARİTASI" bölümüne bakın
 | Faz 4 | Elit Özellikler — 6 dalga (aşağıda detay) | ✅ TAMAMLANDI (2026-08-08) |
 | Faz 4.5 | İçerik Genişletme (200+ soru, 150 fact, 3 yeni sınav, 51 flashcard, 3 distribution) | ✅ TAMAMLANDI (2026-08-09) |
 | Faz 5 | Haksız Rekabet Avantajı — Dalga 1: 5/6 tamamlandı (aşağıda detay) | ✅ DALGA 1 TAMAMLANDI (2026-08-09) |
-| Faz 6 | Bulut Geçişi (Supabase Auth/DB/Storage/Realtime, Vercel deploy) | BEKLİYOR |
+| Faz 6 | Bulut Geçişi (Supabase Auth/DB, Vercel deploy `masterstu.vercel.app`) | ✅ KISMEN TAMAM (2026-08-09) |
 
 ### Faz 4 — Elit Özellikler (6 Dalga)
 

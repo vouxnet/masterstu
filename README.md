@@ -22,6 +22,15 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 
 ---
 
+## 🚀 Deployment ve Kaynak Kod
+
+- **Canlı Sistem:** [masterstu.vercel.app](https://masterstu.vercel.app)
+- **Kaynak Kod:** [github.com/asimptotnet/masterstu](https://github.com/asimptotnet/masterstu)
+- **Veritabanı:** Supabase PostgreSQL (Frankfurt)
+- **Auth:** Supabase Auth (Email + Google OAuth)
+
+---
+
 **Asimptot**, Türkiye'deki tüm ÖSYM sınav adayları için (*KPSS Lisans + A Grubu, KPSS Önlisans, KPSS Ortaöğretim, YDS/YÖKDİL, ALES/DGS, YKS-TYT, YKS-AYT*) geliştirilmiş **uçtan uca sınav hazırlık ekosistemidir**.
 
 - 🎯 **Kişiselleştirilmiş Hazırlık**: Öğrenci sınavını seçtiği anda tüm platform (müfredat, kartlar, takvim, denemeler) o sınava göre şekillenir
@@ -34,7 +43,7 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 
 ---
 
-## ⚠️ PROJE DURUMU (SON GÜNCELLEME: 2026-08-08)
+## ⚠️ PROJE DURUMU (SON GÜNCELLEME: 2026-08-09)
 
 ### Aktif Sınav Tipleri (Tam İçerikli)
 | Sınav | Müfredat | Flashcard | Soru Dağılımı | Puan Hesaplama |
@@ -52,10 +61,11 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 | 🔒 YKS - AYT | Eklenecek |
 
 ### Mevcut Mimari
-- **Demo Modu**: Tüm veri LocalStorage + Zustand persist ile tarayıcıda saklanıyor
-- **Auth**: Sahte (hardcoded Bülent/Sena, şifre: 123456)
+- **Auth**: Supabase Auth (Email + Google OAuth) + Ziyaretçi (Guest) Modu
+- **Database**: Supabase PostgreSQL (Frankfurt bölgesi, 10 tablo, RLS aktif, auto-profile tetikleyicisi)
+- **Deployment**: Vercel (`masterstu.vercel.app`)
+- **State**: Zustand + localStorage (kısmen Supabase'e taşındı)
 - **AI Modülleri**: Algoritma bazlı (LLM API kullanılmıyor, maliyet $0)
-- **Backend**: Henüz bağlanmadı (Supabase planlanıyor)
 
 ---
 
@@ -66,7 +76,7 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 | Rota | Sayfa | Durum | Açıklama |
 |------|-------|-------|----------|
 | `/` | Gösterge Paneli | ✅ Aktif | Geri sayım, Pomodoro, Todo, Sprint Modu, Hafıza Barları, Rakip Radarı, Günün Bilgisi |
-| `/login` | Giriş Ekranı | ⚠️ Demo | Hardcoded şifre (123456), Bülent/Sena seçimi |
+| `/login` | Giriş Ekranı | ✅ Aktif | Supabase Auth + Google OAuth |
 | `/onboarding` | Sınav Seçimi | ✅ Aktif | Çoklu sınav seçimi, aktif sınav ayarı |
 | `/curriculum` | Müfredat Takibi | ✅ Aktif | Akordiyon konular, durum döngüsü, sınav bazlı filtreleme |
 | `/flashcards` | Bilgi Kartları | ✅ Aktif | Tinder-tarzı kaydırma, SRS Leitner, sınav bazlı filtreleme |
@@ -97,8 +107,8 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 |-------|--------|
 | `curriculumData.ts` | 5 sınav tipi için 44 konu (lisans 10, önlisans 26, diğerleri az) |
 | `flashcardsData.ts` | 21 flashcard (lisans 16, önlisans 5) |
-| `bulentFullDistribution.ts` | KPSS Lisans 10 yıllık soru dağılımı (9 ders, 83 konu) |
-| `senaFullDistribution.ts` | KPSS Önlisans 10 yıllık soru dağılımı (5 ders, 64 konu) |
+| `kpssLisansDistribution.ts` | KPSS Lisans 10 yıllık soru dağılımı (9 ders, 83 konu) |
+| `kpssOnlisansDistribution.ts` | KPSS Önlisans 10 yıllık soru dağılımı (5 ders, 64 konu) |
 | `duelQuestions.ts` | 60 gerçek KPSS sorusu (7 ders) — düello + ÖSYM simülasyonu |
 | `placementData.ts` | 🆕 40 kadro (25 Lisans + 15 Önlisans, merkez/taşra, zorluk) |
 | `dailyFacts.ts` | 🆕 60 hap bilgi (7 kategori, kaynak referansları) |
@@ -139,7 +149,7 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 - [x] `useAuthStore`'a `persist` middleware eklendi (`asimptot_auth_v1`)
 - [x] OCR Sorumatik ve sahte TTS Podcast sekmeleri AI Hub'dan kaldırıldı
 - [x] Tüm sayfalardan ölü importlar temizlendi
-- [x] `bulentFullDistribution.ts` encoding — dosya zaten temizdi
+- [x] `kpssLisansDistribution.ts` encoding — dosya zaten temizdi
 - [x] İki `schema.sql` tek unified dosyada birleştirildi (10 tablo + RLS + indexler)
 - [x] Flashcard ilerleme durumu LocalStorage'a kaydediliyor (`asimptot_flashcard_progress_v1`)
 - [x] Ayarlar sayfası pasif butonlar → "Yakında" rozeti
@@ -160,7 +170,7 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 - [x] **PomodoroWidget stale closure**: `useRef` pattern ile düzeltildi — doğru ders/sınav logu atılıyor
 - [x] **Onboarding → Müfredat sync**: `resetAllTopics(role)` sınav değişiminde tetikleniyor
 - [x] **sendFriendRequest**: `pendingRequests`'e gerçekten ekliyor, duplicate kontrolü var
-- [x] **Bülent/Sena tutarsızlığı**: Yorum eklendi, Faz 5'te Supabase ile tam çözülecek
+- [x] **Misafir Kullanıcı (Guest)**: Gerçek Supabase Auth eklendi, eski test kullanıcıları temizlendi
 - [x] **supabase/schema.sql silindi**: Eski dosya kaldırıldı
 - [x] **Curriculum store key**: `kpss_curriculum_storage_v3` → `asimptot_curriculum_v1`
 - [x] **Müfredat log**: Konu tıklanınca `addLog({ activityType: "curriculum" })` çağrılıyor
@@ -181,7 +191,7 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 - [x] **60 gerçek KPSS sorusu** (`duelQuestions.ts`) — Anayasa(12), İdare(10), Tarih(10), Coğrafya(8), İktisat(8), Türkçe(6), Matematik(6)
 - [x] **Yeni düello mekanizması**: 5 tur / 30sn geri sayım / 4 seçenekli (A-B-C-D) / bot rakip / doğru-yanlış renklendirme / skor tablosu
 - [x] **Podcast Arşivi tab'ı**: 6 mock episode, play butonu, süre, dinlenme sayısı, resmi rozet (gerçek upload Faz 5'te)
-- [x] **Konu Tahmini tab'ı**: `bulentFullDistribution` + `senaFullDistribution` verilerinden top 15 konu, yükseliş/düşüş trendi, önem derecesi
+- [x] **Konu Tahmini tab'ı**: `kpssLisansDistribution` + `kpssOnlisansDistribution` verilerinden top 15 konu, yükseliş/düşüş trendi, önem derecesi
 
 #### 🧠 AI Modülleri Gerçek Veriye Bağlanma
 - [x] **AI Koç**: İstatistik satırı (Bugün/Seri/Bu Hafta/Son Net) + zayıf konular (not_started/studying) + güçlü konular (solved) + net trend analizi
@@ -254,7 +264,7 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 - [x] "Kendi kadro hedefini gir" custom target seçeneği
 
 ##### ⑦ Acımasız ÖSYM Simülasyonu
-- [x] `src/components/exam-sim/ExamSimulator.tsx` — Fullscreen API + durdurulamaz timer
+- [x] `src/components/exam-sim/ExamSimulator.tsx` — Fullscreen API + durdurulamaz timer (React Portal ile düzgün render için güncellendi)
 - [x] AI Hub'a 6. sekme: "🔥 ÖSYM Simülasyonu"
 - [x] Sınav süresi seçimi: 30dk (15 soru) / 60dk (30 soru) / 120dk (60 soru)
 - [x] Fullscreen çıkış: 1. uyarı (10sn geri sayım), 2. "PES ETTİ" damgası
@@ -467,12 +477,7 @@ src/
 
 ---
 
-## 🎓 DEMO KULLANICILAR
 
-| Kullanıcı | Rol | Şifre | Sınav |
-|-----------|-----|-------|-------|
-| **Bülent** | lisans_alan | 123456 | KPSS Lisans + A Grubu, YDS |
-| **Sena** | onlisans | 123456 | KPSS Önlisans |
 
 ---
 
