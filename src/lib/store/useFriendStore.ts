@@ -409,9 +409,14 @@ export const useFriendStore = create<FriendState>()(
       },
 
       markNotificationsRead: () => {
-        set((state) => ({
-          notifications: state.notifications.map((n) => ({ ...n, read: true })),
-        }));
+        const updated = get().notifications.map((n) => ({ ...n, read: true }));
+        set({ notifications: updated });
+
+        try {
+          const globalNotifs = getGlobalNotifications();
+          const updatedGlobal = globalNotifs.map((gn) => ({ ...gn, read: true }));
+          saveGlobalNotifications(updatedGlobal);
+        } catch (e) {}
       },
 
       clearNotifications: () => set({ notifications: [] }),

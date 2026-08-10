@@ -197,14 +197,21 @@ function buildProfileFromUser(user: User, existing: UserProfile, fallbackName?: 
     savedActive = (localStorage.getItem('asimptot_active_exam') as ExamType) || null;
   }
 
-  const selectedExams: ExamType[] = meta.selectedExams || (existing.selectedExams && existing.selectedExams.length > 0 ? existing.selectedExams : (savedActive ? [savedActive] : ['kpss_lisans']));
-  // Priority: 1) localStorage saved exam, 2) existing persisted state, 3) Supabase metadata, 4) first selected exam
-  const activeExam: ExamType = savedActive || existing.activeExam || meta.activeExam || selectedExams[0] || 'kpss_lisans';
+  // Priority: 1) localStorage saved active, 2) Supabase user metadata activeExam, 3) existing state activeExam, 4) meta.selectedExams[0], 5) 'kpss_lisans'
+  const activeExam: ExamType = savedActive || meta.activeExam || existing.activeExam || (meta.selectedExams && meta.selectedExams[0]) || 'kpss_lisans';
+  
+  const selectedExams: ExamType[] = meta.selectedExams || (existing.selectedExams && existing.selectedExams.length > 0 ? existing.selectedExams : [activeExam]);
+
   const role = activeExam === 'kpss_onlisans' ? 'onlisans' : (meta.role || existing.role || 'lisans_alan');
   const label = EXAM_METADATA[activeExam]?.shortLabel || 'KPSS';
   const roleLabel = `${name} (${label})`;
   const friendCode = meta.friendCode || existing.friendCode || generateFriendCode(name);
   const avatarUrl = meta.avatar_url || existing.avatarUrl || DEFAULT_ASIMPTOT_AVATAR;
+
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('asimptot_active_exam', activeExam);
+    document.cookie = `asimptot_active_exam=${activeExam}; path=/; max-age=31536000`;
+  }
 
   return {
     ...guestUser,
@@ -446,11 +453,11 @@ export const useAuthStore = create<AuthState>()(
       signOut: async () => {
         const supabase = createClient();
         await supabase.auth.signOut();
-        clearAllUserStats('kpss_lisans');
+        const currentActive = get().currentUser.activeExam || (typeof window !== 'undefined' ? localStorage.getItem('asimptot_active_exam') as ExamType : null) || 'kpss_lisans';
         set({ 
           authMode: 'supabase',
           supabaseUser: null,
-          currentUser: guestUser,
+          currentUser: { ...guestUser, activeExam: currentActive, selectedExams: [currentActive] },
           partnerUser: null
         });
       },
