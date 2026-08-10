@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthStore, EXAM_METADATA, ExamType } from "@/src/lib/store/useAuthStore";
+import { useAuthStore, EXAM_METADATA, ExamType, generateFriendCode } from "@/src/lib/store/useAuthStore";
 import { clearAllUserStats } from "@/src/lib/utils/resetStats";
 import { useCurriculumStore } from "@/src/lib/store/useCurriculumStore";
 import {
@@ -26,7 +26,7 @@ export default function OnboardingPage() {
   const { resetAllTopics } = useCurriculumStore();
 
   const [name, setName] = useState(currentUser.name || "Aday");
-  const initialCode = currentUser.friendCode || `#${(currentUser.name || "ADAY").toUpperCase().replace(/[^A-Z0-9]/g, '') || 'ADAY'}2026`;
+  const initialCode = currentUser.friendCode || generateFriendCode(currentUser.name || "Aday");
   const [friendCode, setFriendCodeState] = useState(initialCode);
   const [selectedExams, setSelectedExamsState] = useState<ExamType[]>(
     currentUser.selectedExams && currentUser.selectedExams.length > 0
@@ -127,19 +127,13 @@ export default function OnboardingPage() {
 
           <div>
             <p className="text-[10px] text-amber-300 font-semibold uppercase mb-1">
-              ✨ Kendi Arkadaş Kodunu Belirle:
+              ✨ Otomatik Duo Arkadaş Kodunuz (Değiştirilemez Özel Kimlik):
             </p>
-            <div className="flex items-center space-x-1 bg-gray-900/80 px-3 py-1.5 rounded-xl border border-amber-500/30">
-              <span className="text-amber-400 font-bold text-sm">#</span>
-              <input
-                type="text"
-                value={friendCode.replace('#', '')}
-                onChange={(e) => setFriendCodeState(`#${e.target.value.toUpperCase().replace(/\s+/g, '')}`)}
-                className="w-full bg-transparent font-mono font-bold text-amber-300 text-sm focus:outline-none uppercase tracking-wider"
-                placeholder="AHMET2026"
-              />
+            <div className="flex items-center space-x-2 bg-gray-900/90 px-3.5 py-2 rounded-xl border border-amber-500/40">
+              <span className="font-mono font-extrabold text-amber-300 text-sm tracking-wider">{friendCode}</span>
+              <span className="text-[9px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-500/30 ml-auto font-bold">Özel Kod</span>
             </div>
-            <p className="text-[9px] text-gray-400 mt-1">Başkaları bu kod ile seni arkadaş ekleyebilecek.</p>
+            <p className="text-[9px] text-gray-400 mt-1">Sistem tarafından adınıza özel oluşturulmuştur. Başkaları bu kod ile sizi arkadaş ekleyebilir.</p>
           </div>
         </div>
 

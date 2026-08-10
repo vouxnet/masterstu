@@ -172,6 +172,22 @@ const guestUser: UserProfile = {
   streakCount: 0,
 };
 
+export function generateFriendCode(name: string): string {
+  const cleanName = (name || "ADAY")
+    .toUpperCase()
+    .replace(/Ğ/g, 'G')
+    .replace(/Ü/g, 'U')
+    .replace(/Ş/g, 'S')
+    .replace(/İ/g, 'I')
+    .replace(/Ö/g, 'O')
+    .replace(/Ç/g, 'C')
+    .replace(/[^A-Z0-9]/g, '');
+
+  const prefix = cleanName.length > 0 ? cleanName.slice(0, 8) : "ADAY";
+  const hex = Math.floor(0x1000 + Math.random() * 0x8F00).toString(16).toUpperCase();
+  return `#${prefix}-${hex}`;
+}
+
 function buildProfileFromUser(user: User, existing: UserProfile, fallbackName?: string): UserProfile {
   const meta = user.user_metadata || {};
   const name = meta.name || fallbackName || existing.name || user.email?.split('@')[0] || "Aday";
@@ -187,7 +203,7 @@ function buildProfileFromUser(user: User, existing: UserProfile, fallbackName?: 
   const role = activeExam === 'kpss_onlisans' ? 'onlisans' : (meta.role || existing.role || 'lisans_alan');
   const label = EXAM_METADATA[activeExam]?.shortLabel || 'KPSS';
   const roleLabel = `${name} (${label})`;
-  const friendCode = meta.friendCode || existing.friendCode || `#${name.toUpperCase().replace(/[^A-Z0-9]/g, '') || 'ADAY'}2026`;
+  const friendCode = meta.friendCode || existing.friendCode || generateFriendCode(name);
   const avatarUrl = meta.avatar_url || existing.avatarUrl || DEFAULT_ASIMPTOT_AVATAR;
 
   return {
@@ -380,7 +396,7 @@ export const useAuthStore = create<AuthState>()(
 
       signUpWithEmail: async (email, password, name) => {
         const supabase = createClient();
-        const initialCode = `#${name.toUpperCase().replace(/[^A-Z0-9]/g, '') || 'ADAY'}2026`;
+        const initialCode = generateFriendCode(name);
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
