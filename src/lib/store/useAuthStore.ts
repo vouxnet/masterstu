@@ -193,23 +193,44 @@ function buildProfileFromUser(user: User, existing: UserProfile, fallbackName?: 
   const name = meta.name || fallbackName || existing.name || user.email?.split('@')[0] || "Aday";
 
   let savedActive: ExamType | null = null;
+  let savedSelected: ExamType[] | null = null;
   if (typeof window !== 'undefined') {
     savedActive = (localStorage.getItem('asimptot_active_exam') as ExamType) || null;
+    const rawSelected = localStorage.getItem('asimptot_selected_exams');
+    if (rawSelected) {
+      try {
+        savedSelected = JSON.parse(rawSelected);
+      } catch (e) {}
+    }
   }
 
-  // Priority: 1) localStorage saved active, 2) Supabase user metadata activeExam, 3) existing state activeExam, 4) meta.selectedExams[0], 5) 'kpss_lisans'
+  // Priority for activeExam: 1) localStorage saved active, 2) Supabase user metadata activeExam, 3) existing state activeExam, 4) meta.selectedExams[0], 5) 'kpss_lisans'
   const activeExam: ExamType = savedActive || meta.activeExam || existing.activeExam || (meta.selectedExams && meta.selectedExams[0]) || 'kpss_lisans';
   
-  const selectedExams: ExamType[] = meta.selectedExams || (existing.selectedExams && existing.selectedExams.length > 0 ? existing.selectedExams : [activeExam]);
+  // Priority for selectedExams: 1) localStorage saved selected, 2) Supabase user metadata selectedExams, 3) existing selectedExams, 4) [activeExam]
+  const selectedExams: ExamType[] = (savedSelected && savedSelected.length > 0)
+    ? savedSelected
+    : (meta.selectedExams && meta.selectedExams.length > 0)
+    ? meta.selectedExams
+    : (existing.selectedExams && existing.selectedExams.length > 0)
+    ? existing.selectedExams
+    : [activeExam];
 
   const role = activeExam === 'kpss_onlisans' ? 'onlisans' : (meta.role || existing.role || 'lisans_alan');
   const label = EXAM_METADATA[activeExam]?.shortLabel || 'KPSS';
   const roleLabel = `${name} (${label})`;
-  const friendCode = meta.friendCode || existing.friendCode || generateFriendCode(name);
+
+  // Friend code generation: NEVER default to static #ADAY2026 if name exists
+  let friendCode = meta.friendCode || existing.friendCode;
+  if (!friendCode || friendCode === '#ADAY2026' || friendCode === '#ADAY-2026') {
+    friendCode = generateFriendCode(name);
+  }
+
   const avatarUrl = meta.avatar_url || existing.avatarUrl || DEFAULT_ASIMPTOT_AVATAR;
 
   if (typeof window !== 'undefined') {
     localStorage.setItem('asimptot_active_exam', activeExam);
+    localStorage.setItem('asimptot_selected_exams', JSON.stringify(selectedExams));
     document.cookie = `asimptot_active_exam=${activeExam}; path=/; max-age=31536000`;
   }
 
@@ -250,6 +271,7 @@ export const useAuthStore = create<AuthState>()(
 
         if (typeof window !== 'undefined') {
           localStorage.setItem('asimptot_active_exam', newActive);
+          localStorage.setItem('asimptot_selected_exams', JSON.stringify(exams));
           document.cookie = `asimptot_active_exam=${newActive}; path=/; max-age=31536000`;
         }
         

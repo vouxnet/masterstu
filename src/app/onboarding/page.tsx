@@ -25,6 +25,15 @@ export default function OnboardingPage() {
   const { currentUser, setSelectedExams, setActiveExam, updateUserProfile } = useAuthStore();
   const { resetAllTopics } = useCurriculumStore();
 
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const onboarded = localStorage.getItem("asimptot_onboarded");
+      if (onboarded === "true") {
+        window.location.href = "/";
+      }
+    }
+  }, []);
+
   const [name, setName] = useState(currentUser.name || "Aday");
   const initialCode = currentUser.friendCode || generateFriendCode(currentUser.name || "Aday");
   const [friendCode, setFriendCodeState] = useState(initialCode);
@@ -59,27 +68,22 @@ export default function OnboardingPage() {
     e.preventDefault();
     
     const cleanCode = friendCode.trim().startsWith("#") ? friendCode.trim().toUpperCase() : `#${friendCode.trim().toUpperCase()}`;
+    const activeChoice = selectedExams[0] || "kpss_lisans";
+
+    // Synchronously write to localStorage and cookies FIRST to avoid race conditions
+    if (typeof window !== "undefined") {
+      localStorage.setItem('asimptot_active_exam', activeChoice);
+      localStorage.setItem('asimptot_selected_exams', JSON.stringify(selectedExams));
+      localStorage.setItem('asimptot_onboarded', 'true');
+      document.cookie = `asimptot_active_exam=${activeChoice}; path=/; max-age=31536000`;
+    }
+
     updateUserProfile(name, currentUser.email, currentUser.avatarUrl, cleanCode);
     setSelectedExams(selectedExams);
-    setActiveExam(selectedExams[0]);
+    setActiveExam(activeChoice);
 
-    // Seçilen sınava göre müfredatı sıfırla/güncelle
-    const examToRole: Record<string, string> = {
-      kpss_lisans: "lisans_alan",
-      kpss_onlisans: "onlisans",
-      kpss_ortaogretim: "ortaogretim",
-      yds: "yds",
-      ales: "ales",
-      yks_tyt: "yks_tyt",
-      yks_ayt: "yks_ayt",
-    };
-    const role = examToRole[selectedExams[0]] || "lisans_alan";
-    // Sınav seçimi yapılınca tüm istatistik ve verileri 0'dan sıfırla
-    clearAllUserStats(selectedExams[0]);
-
-    localStorage.setItem('asimptot_onboarded', 'true');
-
-    router.push("/");
+    // Hard redirect so dashboard mounts cleanly with active exam state
+    window.location.href = "/";
   };
 
   return (

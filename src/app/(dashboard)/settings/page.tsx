@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthStore, DEFAULT_ASIMPTOT_AVATAR } from "@/src/lib/store/useAuthStore";
+import { useAuthStore, DEFAULT_ASIMPTOT_AVATAR, generateFriendCode } from "@/src/lib/store/useAuthStore";
 import { User, Bell, Lock, Save, LogOut, Camera, CheckCircle2, AlertCircle, KeyRound, Shield } from "lucide-react";
 
 export default function SettingsPage() {
@@ -216,14 +216,21 @@ export default function SettingsPage() {
                     <div className="flex items-center space-x-2">
                       <input
                         type="text"
-                        value={currentUser.friendCode || "#ADAY-2026"}
+                        value={
+                          currentUser.friendCode && !currentUser.friendCode.includes("ADAY")
+                            ? currentUser.friendCode
+                            : generateFriendCode(currentUser.name || "Aday")
+                        }
                         readOnly
                         className="w-full bg-gray-900/60 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-amber-300 font-mono font-bold cursor-default tracking-wider"
                       />
                       <button
                         type="button"
                         onClick={() => {
-                          navigator.clipboard.writeText(currentUser.friendCode || "#ADAY-2026");
+                          const code = currentUser.friendCode && !currentUser.friendCode.includes("ADAY")
+                            ? currentUser.friendCode
+                            : generateFriendCode(currentUser.name || "Aday");
+                          navigator.clipboard.writeText(code);
                           setProfileMessage("📋 Arkadaş kodunuz panoya kopyalandı!");
                           setTimeout(() => setProfileMessage(null), 3000);
                         }}
