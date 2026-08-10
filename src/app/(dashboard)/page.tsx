@@ -142,28 +142,28 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Layer 3: Daily Quests & Focus Timer (Equal 2-Column) */}
+      {/* Layer 3: Güncel Olaylar Akışı (Tam Genişlik — Stat Bar Altı) */}
+      <LiveCurrentNewsWidget />
+
+      {/* Layer 4: Günün Bilgisi (Tam Genişlik) */}
+      <DailyFactWidget />
+
+      {/* Layer 5: Daily Quests & Focus Timer (Equal 2-Column) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <DailyQuestWidget />
         <PomodoroWidget />
       </div>
 
-      {/* Layer 4: Social & Daily Planning (Duo + Todo side by side) */}
+      {/* Layer 6: Social & Daily Planning (Duo + Todo) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <DuoFriendsWidget />
         <TodoSummary />
       </div>
 
-      {/* Layer 5: Neuro-Science & Micro-Learning (Brain Decay + Daily Fact) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <MemoryDecayWidget />
-        <DailyFactWidget />
-      </div>
+      {/* Layer 7: Hafıza Çürümesi (Full Width) */}
+      <MemoryDecayWidget />
 
-      {/* Layer 6: Current Affairs Stream (Full Width) */}
-      <LiveCurrentNewsWidget />
-
-      {/* Layer 7: Quick Module Access (Full Width) */}
+      {/* Layer 8: Quick Module Access (Full Width) */}
       <div>
         <h3 className="font-display font-bold text-white text-lg mb-4 flex items-center space-x-2.5">
           <Sparkles className="h-5 w-5 text-indigo-400" />

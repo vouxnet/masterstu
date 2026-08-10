@@ -72,20 +72,19 @@ export function LiveCurrentNewsWidget() {
   const currentItem = CURRENT_NEWS_DATA[currentIndex];
 
   return (
-    <div className="rounded-3xl glass-panel p-6 border border-white/10 shadow-xl relative overflow-hidden">
+    <div className="rounded-3xl glass-panel p-4 sm:p-5 border border-white/10 shadow-xl relative overflow-hidden">
       {/* Background Glow */}
       <div className="pointer-events-none absolute -right-16 -bottom-16 h-48 w-48 rounded-full bg-cyan-500/8 blur-3xl" />
       <div className="pointer-events-none absolute -left-10 -top-10 h-32 w-32 rounded-full bg-indigo-500/8 blur-3xl" />
 
       {/* Top Header Row */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-3">
         <div className="flex items-center space-x-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
-            <Newspaper className="h-5 w-5" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+            <Newspaper className="h-4 w-4" />
           </div>
           <div>
-            <h3 className="font-display font-bold text-white text-base sm:text-lg">2026 Güncel Olaylar Akışı</h3>
-            <p className="text-xs text-gray-400 mt-0.5">Sınavda çıkabilecek güncel genel kültür haberleri</p>
+            <h3 className="font-display font-bold text-white text-sm sm:text-base">2026 Güncel Olaylar Akışı</h3>
           </div>
         </div>
 
@@ -98,7 +97,7 @@ export function LiveCurrentNewsWidget() {
       </div>
 
       {/* Main Content — Horizontal Layout */}
-      <div className="flex flex-col md:flex-row items-stretch gap-4">
+      <div className="flex flex-col md:flex-row items-stretch gap-3">
         {/* Left: Navigation */}
         <button
           onClick={prevNews}
@@ -108,14 +107,14 @@ export function LiveCurrentNewsWidget() {
         </button>
 
         {/* Center: Content Card */}
-        <div className="flex-1 rounded-2xl bg-black/30 p-5 border border-white/5 flex flex-col sm:flex-row items-start gap-4">
+        <div className="flex-1 rounded-2xl bg-black/30 p-4 border border-white/5 flex flex-col sm:flex-row items-start gap-3">
           {/* Emoji Icon */}
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 text-3xl shrink-0 border border-white/5">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-2xl shrink-0 border border-white/5">
             {currentItem.emoji}
           </div>
           
           {/* Text Content */}
-          <div className="flex-1 min-w-0 space-y-2">
+          <div className="flex-1 min-w-0 space-y-1.5">
             <div className="flex items-center flex-wrap gap-2">
               <span className="rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 px-2.5 py-0.5 text-xs font-bold">
                 {currentItem.category}
@@ -123,16 +122,16 @@ export function LiveCurrentNewsWidget() {
               <span className="text-xs text-gray-400 font-semibold">{currentItem.date}</span>
             </div>
 
-            <h4 className="font-display font-bold text-white text-sm sm:text-base leading-snug">
+            <h4 className="font-display font-bold text-white text-xs sm:text-sm leading-snug">
               {currentItem.title}
             </h4>
 
-            <p className="text-xs sm:text-sm text-gray-300 leading-relaxed font-medium">
+            <p className="text-[11px] sm:text-xs text-gray-300 leading-relaxed font-medium line-clamp-2">
               {currentItem.detail}
             </p>
 
-            <div className="pt-2">
-              <span className="text-xs font-bold text-amber-300 bg-amber-500/10 px-3 py-1.5 rounded-lg border border-amber-500/20 inline-block">
+            <div className="pt-1">
+              <span className="text-[10px] font-bold text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20 inline-block">
                 {currentItem.osymNote}
               </span>
             </div>

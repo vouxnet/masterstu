@@ -1,10 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Lightbulb, ChevronRight, BookOpen } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Lightbulb, ChevronRight, ChevronLeft, BookOpen } from "lucide-react";
 import { getTodaysFact, dailyFacts, DailyFact } from "@/src/lib/data/dailyFacts";
-
 import { useAuthStore } from "@/src/lib/store/useAuthStore";
 
 export function DailyFactWidget() {
@@ -33,6 +31,14 @@ export function DailyFactWidget() {
     const facts = getFilteredFacts();
     const randomIndex = Math.floor(Math.random() * facts.length);
     setCurrentFact(facts[randomIndex]);
+  };
+
+  const handlePrevFact = () => {
+    const facts = getFilteredFacts();
+    if (!currentFact) return;
+    const idx = facts.findIndex(f => f.id === currentFact.id);
+    const prev = idx > 0 ? idx - 1 : facts.length - 1;
+    setCurrentFact(facts[prev]);
   };
 
   if (!currentFact) return null;
@@ -73,76 +79,71 @@ export function DailyFactWidget() {
   };
 
   return (
-    <div className="rounded-3xl glass-panel p-[1px] shadow-xl relative overflow-hidden group">
-      {/* Subtle gradient border animation effect wrapper */}
-      <div className="absolute inset-0 bg-gradient-to-r from-amber-500/40 via-orange-500/40 to-yellow-500/40 opacity-20 group-hover:opacity-100 transition-opacity duration-700 blur-sm z-0" />
-      
-      <div className="relative z-10 bg-[#13111C]/90 backdrop-blur-xl rounded-[23px] p-6 h-full flex flex-col justify-between">
-        <div>
-          {/* Header */}
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-display text-base sm:text-lg font-bold text-white flex items-center space-x-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30">
-                <Lightbulb className="h-5 w-5" />
+    <div className="rounded-3xl glass-panel p-4 sm:p-5 border border-white/10 shadow-xl relative overflow-hidden group">
+      {/* Gradient glow */}
+      <div className="pointer-events-none absolute -right-12 -bottom-12 h-36 w-36 rounded-full bg-amber-500/8 blur-3xl" />
+
+      {/* Header */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center space-x-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30">
+            <Lightbulb className="h-4 w-4" />
+          </div>
+          <h3 className="font-display font-bold text-white text-sm sm:text-base">Günün Bilgisi</h3>
+        </div>
+        <div className="flex items-center space-x-2">
+          <div className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${getCategoryColor(currentFact.category)}`}>
+            {getCategoryName(currentFact.category)}
+          </div>
+          <span className={`text-[10px] px-2 py-0.5 rounded-md font-bold uppercase ${getRelevanceColor(currentFact.examRelevance)}`}>
+            {currentFact.examRelevance}
+          </span>
+        </div>
+      </div>
+
+      {/* Content — Horizontal */}
+      <div className="flex flex-col md:flex-row items-stretch gap-3">
+        <button onClick={handlePrevFact} className="hidden md:flex items-center justify-center w-10 shrink-0 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white transition-all">
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+
+        <div className="flex-1 rounded-2xl bg-black/30 p-4 border border-white/5 flex flex-col sm:flex-row items-start gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-2xl shrink-0 border border-white/5">
+            {currentFact.emoji}
+          </div>
+          <div className="flex-1 min-w-0 space-y-1">
+            <h4 className="font-display font-bold text-white text-xs sm:text-sm leading-snug">
+              {currentFact.title}
+            </h4>
+            <p className="text-[11px] sm:text-xs text-gray-300 leading-relaxed font-medium line-clamp-2">
+              {currentFact.content}
+            </p>
+            {currentFact.source && (
+              <span className="text-[10px] text-gray-500 italic flex items-center space-x-1 font-medium">
+                <BookOpen className="h-3 w-3 shrink-0" />
+                <span>{currentFact.source}</span>
               </span>
-              <span>Günün Bilgisi</span>
-            </h2>
-            <div className={`px-3 py-1 rounded-full text-xs font-bold border ${getCategoryColor(currentFact.category)}`}>
-              {getCategoryName(currentFact.category)}
-            </div>
-          </div>
-
-          {/* Content */}
-          <div>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentFact.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="space-y-3"
-              >
-                <div className="flex items-start space-x-3.5">
-                  <span className="text-3xl mt-0.5 shrink-0">{currentFact.emoji}</span>
-                  <div>
-                    <h3 className="text-sm sm:text-base font-bold text-white mb-1.5 leading-snug">
-                      {currentFact.title}
-                    </h3>
-                    <p className="text-xs text-gray-300 leading-relaxed font-medium">
-                      {currentFact.content}
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-between pt-2 pl-11 text-xs">
-                  {currentFact.source ? (
-                    <span className="text-gray-400 italic flex items-center space-x-1.5 font-medium">
-                      <BookOpen className="h-3.5 w-3.5 shrink-0" />
-                      <span>{currentFact.source}</span>
-                    </span>
-                  ) : <span />}
-                  
-                  <span className={`text-[10px] px-2.5 py-1 rounded-md font-bold uppercase tracking-wide ${getRelevanceColor(currentFact.examRelevance)}`}>
-                    {currentFact.examRelevance} Çıkma İhtimali
-                  </span>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+            )}
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between">
-          <p className="text-xs text-gray-400 font-medium">Her gün yeni bir bilgi! Sınav için birikir.</p>
-          <button
-            onClick={handleNextFact}
-            className="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center space-x-1 transition-colors"
-          >
-            <span>Rastgele Bilgi</span>
-            <ChevronRight className="h-4 w-4" />
-          </button>
-        </div>
+        <button onClick={handleNextFact} className="hidden md:flex items-center justify-center w-10 shrink-0 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white transition-all">
+          <ChevronRight className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* Mobile Nav */}
+      <div className="flex md:hidden items-center justify-center space-x-3 mt-3">
+        <button onClick={handlePrevFact} className="rounded-xl bg-white/5 hover:bg-white/10 p-2 text-gray-300 hover:text-white border border-white/10 transition-all">
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+        <button onClick={handleNextFact} className="rounded-xl bg-amber-500/20 hover:bg-amber-500/30 px-4 py-2 text-xs font-bold text-amber-300 border border-amber-500/30 transition-all flex items-center space-x-1">
+          <span>Rastgele Bilgi</span>
+          <ChevronRight className="h-3.5 w-3.5" />
+        </button>
+        <button onClick={handleNextFact} className="rounded-xl bg-white/5 hover:bg-white/10 p-2 text-gray-300 hover:text-white border border-white/10 transition-all">
+          <ChevronRight className="w-4 h-4" />
+        </button>
       </div>
     </div>
   );
