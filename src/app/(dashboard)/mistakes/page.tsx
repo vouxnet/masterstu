@@ -16,6 +16,7 @@ import {
   Upload,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { BlindSpotWidget } from "@/src/components/dashboard/BlindSpotWidget";
 
 export interface CommentItem {
   id: string;
@@ -234,6 +235,9 @@ export default function MistakesPage() {
           <span>+ Yeni Yanlış Soru Ekle 📷</span>
         </button>
       </div>
+
+      {/* AI Kör Nokta Teşhisi */}
+      <BlindSpotWidget mistakes={userMistakes} />
 
       {/* Grid List */}
       {userMistakes.length > 0 ? (

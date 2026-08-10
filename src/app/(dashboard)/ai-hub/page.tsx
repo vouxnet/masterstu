@@ -25,6 +25,10 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import ExamSimulator, { SimulationResult } from "@/src/components/exam-sim/ExamSimulator";
+import { podcastService, PodcastEpisode } from "@/src/lib/services/podcastService";
+import { AudioPlayerBar } from "@/src/components/podcast/AudioPlayerBar";
+import { UploadPodcastModal } from "@/src/components/podcast/UploadPodcastModal";
+import { Plus } from "lucide-react";
 
 const QuestionReviewCard = ({ q, index }: { q: DuelQuestion, index: number }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -91,6 +95,15 @@ export default function AIHubPage() {
 
   // Active AI Tab
   const [activeTab, setActiveTab] = useState<"coach" | "topics" | "podcast" | "triage" | "simulation">("coach");
+
+  // Podcast State
+  const [episodes, setEpisodes] = useState<PodcastEpisode[]>([]);
+  const [playingEpisode, setPlayingEpisode] = useState<PodcastEpisode | null>(null);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+
+  useEffect(() => {
+    setEpisodes(podcastService.getEpisodes());
+  }, []);
 
   // Simulation State
   const [simStatus, setSimStatus] = useState<"idle" | "running" | "finished">("idle");
@@ -403,42 +416,86 @@ export default function AIHubPage() {
       {/* 4. PODCAST */}
       {activeTab === "podcast" && (
         <div className="rounded-3xl glass-panel p-6 border border-white/10 shadow-2xl space-y-5">
-          <div className="flex items-center space-x-3 border-b border-white/10 pb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-600/30 text-emerald-300 border border-emerald-500/40">
-              <Headphones className="h-7 w-7" />
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+            <div className="flex items-center space-x-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-600/30 text-emerald-300 border border-emerald-500/40">
+                <Headphones className="h-7 w-7" />
+              </div>
+              <div>
+                <h3 className="font-display text-lg font-bold text-white">Podcast Arşivi & Sesli Dersler</h3>
+                <p className="text-xs text-gray-400">Yolda, otobüste veya yatmadan önce dinle! Kendi ses kaydını yükle.</p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-display text-lg font-bold text-white">Podcast Arşivi</h3>
-              <p className="text-xs text-gray-400">Yolda, otobüste veya yatmadan önce dinle!</p>
-            </div>
+
+            <button
+              onClick={() => setIsUploadModalOpen(true)}
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs transition-all shadow-lg shadow-emerald-600/20 flex items-center justify-center space-x-1.5 shrink-0"
+            >
+              <Plus className="w-4 h-4" />
+              <span>🎙️ Podcast Yükle</span>
+            </button>
           </div>
           
           <div className="space-y-3">
-            {podcastEpisodes.map(podcast => (
-              <div key={podcast.id} className="rounded-2xl glass-card p-4 border border-white/5 flex items-center space-x-4 hover:bg-white/5 transition-colors cursor-pointer group">
-                <div className="flex-shrink-0 h-10 w-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition-colors">
-                  <Play className="h-4 w-4 ml-0.5" fill="currentColor" />
+            {episodes.map(podcast => (
+              <div
+                key={podcast.id}
+                onClick={() => setPlayingEpisode(podcast)}
+                className={`rounded-2xl glass-card p-4 border transition-all cursor-pointer group flex items-center space-x-4 ${
+                  playingEpisode?.id === podcast.id
+                    ? "bg-indigo-600/20 border-indigo-500 text-indigo-300 shadow-xl shadow-indigo-600/10"
+                    : "border-white/5 hover:bg-white/5"
+                }`}
+              >
+                <div className="flex-shrink-0 h-11 w-11 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition-colors border border-emerald-500/30">
+                  <Play className="h-5 w-5 ml-0.5" fill="currentColor" />
                 </div>
+
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2">
                     <h4 className="text-sm font-bold text-white truncate">{podcast.title}</h4>
-                    {podcast.isOfficial && (
-                      <span className="flex-shrink-0 rounded-full bg-indigo-500/20 px-1.5 py-0.5 text-[9px] font-bold text-indigo-300">
-                        Resmi
+                    {podcast.isOfficial ? (
+                      <span className="flex-shrink-0 rounded-full bg-indigo-500/20 px-2 py-0.5 text-[9px] font-bold text-indigo-300 border border-indigo-500/30">
+                        Resmi Dersi
+                      </span>
+                    ) : (
+                      <span className="flex-shrink-0 rounded-full bg-purple-500/20 px-2 py-0.5 text-[9px] font-bold text-purple-300 border border-purple-500/30">
+                        Topluluk
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center space-x-3 text-xs text-gray-400 mt-1">
-                    <span className="text-emerald-300">{podcast.subject}</span>
+
+                  <div className="flex items-center space-x-3 text-xs text-gray-400 mt-1 flex-wrap gap-y-1">
+                    <span className="text-emerald-300 font-semibold">{podcast.subject}</span>
                     <span>•</span>
-                    <span>{podcast.duration}</span>
+                    <span>⏱️ {podcast.duration}</span>
                     <span>•</span>
-                    <span>{podcast.plays} Dinlenme</span>
+                    <span>👤 {podcast.authorName}</span>
                   </div>
                 </div>
+
+                {playingEpisode?.id === podcast.id && (
+                  <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-xl border border-emerald-500/30 animate-pulse">
+                    ▶ Oynatılıyor
+                  </span>
+                )}
               </div>
             ))}
           </div>
+
+          <UploadPodcastModal
+            isOpen={isUploadModalOpen}
+            onClose={() => setIsUploadModalOpen(false)}
+            onSuccess={(newEp) => {
+              setEpisodes(podcastService.getEpisodes());
+              setPlayingEpisode(newEp);
+            }}
+          />
+
+          <AudioPlayerBar
+            episode={playingEpisode}
+            onClose={() => setPlayingEpisode(null)}
+          />
         </div>
       )}
       {/* 5. TRIAGE */}

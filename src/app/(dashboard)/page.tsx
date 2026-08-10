@@ -15,6 +15,7 @@ import { DuoFriendsWidget } from "@/src/components/dashboard/DuoFriendsWidget";
 import { Brain, Clock, Flame, BookOpen, TrendingUp, Sparkles, Camera, Calendar } from "lucide-react";
 import { formatTimeRemaining } from "@/src/lib/utils";
 import { LiveCurrentNewsWidget } from "@/src/components/dashboard/LiveCurrentNewsWidget";
+import { BlindSpotWidget } from "@/src/components/dashboard/BlindSpotWidget";
 
 export default function DashboardPage() {
   const { currentUser, partnerUser } = useAuthStore();
@@ -156,6 +157,9 @@ export default function DashboardPage() {
 
       {/* Layer 4: Günün Bilgisi (Tam Genişlik) */}
       <DailyFactWidget />
+
+      {/* Layer 4.5: AI Kör Nokta Teşhis Raporu */}
+      <BlindSpotWidget />
 
       {/* Layer 5: Daily Quests & Focus Timer (Equal 2-Column) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
