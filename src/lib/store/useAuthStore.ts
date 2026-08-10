@@ -194,9 +194,13 @@ function buildProfileFromUser(user: User, existing: UserProfile, fallbackName?: 
 
   let savedActive: ExamType | null = null;
   let savedSelected: ExamType[] | null = null;
+  
   if (typeof window !== 'undefined') {
-    savedActive = (localStorage.getItem('asimptot_active_exam') as ExamType) || null;
-    const rawSelected = localStorage.getItem('asimptot_selected_exams');
+    const userActiveKey = user.id ? `asimptot_active_exam_${user.id}` : 'asimptot_active_exam';
+    const userSelectedKey = user.id ? `asimptot_selected_exams_${user.id}` : 'asimptot_selected_exams';
+
+    savedActive = (localStorage.getItem(userActiveKey) as ExamType) || (localStorage.getItem('asimptot_active_exam') as ExamType) || null;
+    const rawSelected = localStorage.getItem(userSelectedKey) || localStorage.getItem('asimptot_selected_exams');
     if (rawSelected) {
       try {
         savedSelected = JSON.parse(rawSelected);
@@ -204,17 +208,33 @@ function buildProfileFromUser(user: User, existing: UserProfile, fallbackName?: 
     }
   }
 
-  // Priority for activeExam: 1) localStorage saved active, 2) Supabase user metadata activeExam, 3) existing state activeExam, 4) meta.selectedExams[0], 5) 'kpss_lisans'
-  const activeExam: ExamType = savedActive || meta.activeExam || existing.activeExam || (meta.selectedExams && meta.selectedExams[0]) || 'kpss_lisans';
-  
-  // Priority for selectedExams: 1) localStorage saved selected, 2) Supabase user metadata selectedExams, 3) existing selectedExams, 4) [activeExam]
-  const selectedExams: ExamType[] = (savedSelected && savedSelected.length > 0)
-    ? savedSelected
-    : (meta.selectedExams && meta.selectedExams.length > 0)
+  // Priority for selectedExams:
+  // 1) Supabase user_metadata.selectedExams (most authoritative cloud preference)
+  // 2) Saved localStorage selected (user-keyed or global)
+  // 3) Existing Zustand store selectedExams
+  // 4) Supabase user_metadata.activeExam
+  // 5) Default ['kpss_lisans'] ONLY if nothing else exists
+  const selectedExams: ExamType[] = (meta.selectedExams && meta.selectedExams.length > 0)
     ? meta.selectedExams
+    : (savedSelected && savedSelected.length > 0)
+    ? savedSelected
     : (existing.selectedExams && existing.selectedExams.length > 0)
     ? existing.selectedExams
-    : [activeExam];
+    : (meta.activeExam ? [meta.activeExam] : ['kpss_lisans']);
+
+  // Priority for activeExam:
+  // 1) Supabase user_metadata.activeExam
+  // 2) Saved localStorage active
+  // 3) Existing Zustand store activeExam
+  // 4) First item in selectedExams
+  // 5) Default 'kpss_lisans'
+  const activeExam: ExamType = (meta.activeExam && selectedExams.includes(meta.activeExam))
+    ? meta.activeExam
+    : (savedActive && selectedExams.includes(savedActive))
+    ? savedActive
+    : (existing.activeExam && selectedExams.includes(existing.activeExam))
+    ? existing.activeExam
+    : (selectedExams[0] || 'kpss_lisans');
 
   const role = activeExam === 'kpss_onlisans' ? 'onlisans' : (meta.role || existing.role || 'lisans_alan');
   const label = EXAM_METADATA[activeExam]?.shortLabel || 'KPSS';
@@ -229,8 +249,13 @@ function buildProfileFromUser(user: User, existing: UserProfile, fallbackName?: 
   const avatarUrl = meta.avatar_url || existing.avatarUrl || DEFAULT_ASIMPTOT_AVATAR;
 
   if (typeof window !== 'undefined') {
+    const userActiveKey = user.id ? `asimptot_active_exam_${user.id}` : 'asimptot_active_exam';
+    const userSelectedKey = user.id ? `asimptot_selected_exams_${user.id}` : 'asimptot_selected_exams';
+
     localStorage.setItem('asimptot_active_exam', activeExam);
     localStorage.setItem('asimptot_selected_exams', JSON.stringify(selectedExams));
+    localStorage.setItem(userActiveKey, activeExam);
+    localStorage.setItem(userSelectedKey, JSON.stringify(selectedExams));
     document.cookie = `asimptot_active_exam=${activeExam}; path=/; max-age=31536000`;
   }
 
@@ -264,6 +289,7 @@ export const useAuthStore = create<AuthState>()(
       todos: [],
 
       setSelectedExams: (exams) => {
+        const userId = get().currentUser.id;
         const currentActive = get().currentUser.activeExam;
         const newActive = exams.includes(currentActive) ? currentActive : (exams[0] || 'kpss_lisans');
         const role = newActive === 'kpss_onlisans' ? 'onlisans' : 'lisans_alan';
@@ -272,6 +298,10 @@ export const useAuthStore = create<AuthState>()(
         if (typeof window !== 'undefined') {
           localStorage.setItem('asimptot_active_exam', newActive);
           localStorage.setItem('asimptot_selected_exams', JSON.stringify(exams));
+          if (userId) {
+            localStorage.setItem(`asimptot_active_exam_${userId}`, newActive);
+            localStorage.setItem(`asimptot_selected_exams_${userId}`, JSON.stringify(exams));
+          }
           document.cookie = `asimptot_active_exam=${newActive}; path=/; max-age=31536000`;
         }
         
@@ -292,11 +322,15 @@ export const useAuthStore = create<AuthState>()(
       },
 
       setActiveExam: (exam) => {
+        const userId = get().currentUser.id;
         const role = exam === 'kpss_onlisans' ? 'onlisans' : 'lisans_alan';
         const label = EXAM_METADATA[exam]?.shortLabel || 'KPSS';
 
         if (typeof window !== 'undefined') {
           localStorage.setItem('asimptot_active_exam', exam);
+          if (userId) {
+            localStorage.setItem(`asimptot_active_exam_${userId}`, exam);
+          }
           document.cookie = `asimptot_active_exam=${exam}; path=/; max-age=31536000`;
         }
 

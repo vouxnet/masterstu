@@ -69,11 +69,16 @@ export default function OnboardingPage() {
     
     const cleanCode = friendCode.trim().startsWith("#") ? friendCode.trim().toUpperCase() : `#${friendCode.trim().toUpperCase()}`;
     const activeChoice = selectedExams[0] || "kpss_lisans";
+    const userId = currentUser.id;
 
     // Synchronously write to localStorage and cookies FIRST to avoid race conditions
     if (typeof window !== "undefined") {
       localStorage.setItem('asimptot_active_exam', activeChoice);
       localStorage.setItem('asimptot_selected_exams', JSON.stringify(selectedExams));
+      if (userId) {
+        localStorage.setItem(`asimptot_active_exam_${userId}`, activeChoice);
+        localStorage.setItem(`asimptot_selected_exams_${userId}`, JSON.stringify(selectedExams));
+      }
       localStorage.setItem('asimptot_onboarded', 'true');
       document.cookie = `asimptot_active_exam=${activeChoice}; path=/; max-age=31536000`;
     }
@@ -81,6 +86,20 @@ export default function OnboardingPage() {
     updateUserProfile(name, currentUser.email, currentUser.avatarUrl, cleanCode);
     setSelectedExams(selectedExams);
     setActiveExam(activeChoice);
+
+    try {
+      const { createClient } = await import("@/src/lib/supabase/client");
+      const supabase = createClient();
+      await supabase.auth.updateUser({
+        data: {
+          selectedExams: selectedExams,
+          activeExam: activeChoice,
+          role: activeChoice === 'kpss_onlisans' ? 'onlisans' : 'lisans_alan',
+          friendCode: cleanCode,
+          name: name,
+        }
+      });
+    } catch (e) {}
 
     // Hard redirect so dashboard mounts cleanly with active exam state
     window.location.href = "/";
