@@ -7,9 +7,12 @@ import { useStudyLogStore } from "@/src/lib/store/useStudyLogStore";
 import { ALL_EXAM_PACKS, ExamPack } from "@/src/lib/data/examPacks";
 import ExamSimulator, { SimulationResult } from "@/src/components/exam-sim/ExamSimulator";
 import { Calculator, Save, Trash2, Trophy, ChevronDown, ChevronUp, Play, BookOpen, Clock, Sparkles, CheckCircle2, XCircle, Lightbulb } from "lucide-react";
+import { useAdminStore } from "@/src/lib/store/useAdminStore";
 
 export default function ExamsPage() {
   const { currentUser } = useAuthStore();
+  const getCmsContent = useAdminStore((state) => state.getCmsContent);
+  const cmsExamsHeader = getCmsContent("exams_header", "Deneme Sınavları Merkezi & ÖSYM Hesaplayıcı", "ÖSYM standart katsayıları ile P3 (Lisans) ve P93 (Önlisans) Puan Hesaplama & Canlı Deneme Çözümü", "Gerçek sınav süresi, optik form soru geçiş gridi ve açıklamalı soru analizleriyle canlı çözün");
   const { addResult, deleteResult, results } = useExamHistoryStore();
   const { addLog } = useStudyLogStore();
 
@@ -182,10 +185,10 @@ export default function ExamsPage() {
             </span>
           </div>
           <h1 className="mt-2 font-display text-2xl font-extrabold text-white">
-            Deneme Sınavları Merkezi & ÖSYM Hesaplayıcı
+            {cmsExamsHeader.title}
           </h1>
           <p className="text-xs text-gray-300 mt-1">
-            ÖSYM standart katsayıları ile P3 (Lisans) ve P93 (Önlisans) Puan Hesaplama & Canlı Deneme Çözümü
+            {cmsExamsHeader.subtitle}
           </p>
         </div>
       </div>
@@ -203,7 +206,7 @@ export default function ExamsPage() {
                 <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs border border-emerald-500/30 font-mono">120 SORU / 130 DK</span>
               </h2>
               <p className="text-xs text-gray-300">
-                Gerçek sınav süresi, optik form soru geçiş gridi ve açıklamalı soru analizleriyle canlı çözün
+                {cmsExamsHeader.bodyText}
               </p>
             </div>
           </div>

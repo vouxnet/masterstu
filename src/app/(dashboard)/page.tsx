@@ -16,9 +16,12 @@ import { Brain, Clock, Flame, BookOpen, TrendingUp, Sparkles, Camera, Calendar }
 import { formatTimeRemaining } from "@/src/lib/utils";
 import { LiveCurrentNewsWidget } from "@/src/components/dashboard/LiveCurrentNewsWidget";
 import { BlindSpotWidget } from "@/src/components/dashboard/BlindSpotWidget";
+import { useAdminStore } from "@/src/lib/store/useAdminStore";
 
 export default function DashboardPage() {
   const { currentUser, partnerUser } = useAuthStore();
+  const getCmsContent = useAdminStore((state) => state.getCmsContent);
+  const cmsWelcome = getCmsContent("home_welcome", `Merhaba, ${currentUser.name}! 🎯`, "", "Bugün hedeflerini tamamla ve harika bir seri yakala!");
 
   const { getTodayStats, getWeeklyStats, getStreakCount } = useStudyLogStore();
   const { getLastN } = useExamHistoryStore();
@@ -75,10 +78,10 @@ export default function DashboardPage() {
             <span className="text-xs text-gray-400 font-medium">Hoş Geldin! 👋</span>
           </div>
           <h1 className="mt-2 font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            Merhaba, {currentUser.name}! 🎯
+            {cmsWelcome.title.replace("{kullanıcı}", currentUser.name)}
           </h1>
           <p className="mt-1 text-xs text-gray-300">
-            {partnerUser ? `Bugün hedeflerini tamamla ve ${partnerUser.name} ile ortak serini koru!` : 'Bugün hedeflerini tamamla ve harika bir seri yakala!'}
+            {cmsWelcome.bodyText}
           </p>
         </div>
 
