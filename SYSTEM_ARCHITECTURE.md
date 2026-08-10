@@ -24,38 +24,45 @@ Tüm dashboard sayfaları `(dashboard)` route grubu içindedir ve `layout.tsx` i
 
 | Dosya | İşlev | Durum |
 |-------|-------|-------|
-| `(dashboard)/page.tsx` | Ana Dashboard — CountdownTimer, PartnerWidget, PomodoroWidget, TodoSummary, QuickNavHub | ✅ Aktif |
-| `(dashboard)/ai-hub/page.tsx` | Akıllı Çalışma Merkezi — AI Koç, 1v1 Düello (yeniden tasarlanacak) | ⚠️ Kısmi |
-| `(dashboard)/ai-schedule/page.tsx` | AI Haftalık Takvim — 7 günlük program | ⚠️ %100 Mock |
-| `(dashboard)/curriculum/page.tsx` | Müfredat Takibi — Akordiyon konular, durum döngüsü, persist kalıcı | ✅ Aktif |
-| `(dashboard)/exams/page.tsx` | Deneme & Net Hesaplama — GY/GK/Alan net, ÖSYM P3/P93/P48 puan formülü | ⚠️ Kayıt yok |
-| `(dashboard)/flashcards/page.tsx` | Bilgi Kartları — Tinder-tarzı sürükleme, ders filtresi | ⚠️ Persist eksik |
-| `(dashboard)/friends/page.tsx` | Arkadaşlık & Duo — Kod ile ekleme, dürt, tebrik, konfeti | ✅ Aktif |
-| `(dashboard)/mistakes/page.tsx` | Yanlış Kutusu — Tam CRUD, etiketler, partner yorum, fotoğraf | ✅ Aktif |
-| `(dashboard)/question-distribution/page.tsx` | ÖSYM 10 Yıllık Soru Dağılımları — Gerçek veri, kullanıcıya göre | ✅ Aktif |
-| `(dashboard)/settings/page.tsx` | Profil & Ayarlar — İsim/email/avatar güncelleme | ✅ Aktif |
-| `(dashboard)/shared-qa/page.tsx` | Canlı Soru Akışı — 3 kademeli görünürlük, CRUD | ✅ Aktif |
-| `login/page.tsx` | Giriş — Supabase Auth (Email + Google OAuth) ve Ziyaretçi | ✅ Aktif |
-| `onboarding/page.tsx` | Sınav Seçimi — Çoklu sınav, aktif sınav ayarı | ✅ Aktif |
+| `(dashboard)/page.tsx` | Ana Dashboard — CountdownTimer, PartnerWidget, PomodoroWidget, TodoSummary, QuickNavHub, MemoryDecay, RivalRadar, SprintMode, 22 Güncel Bilgi | ✅ Aktif |
+| `(dashboard)/ai-hub/page.tsx` | Akıllı Çalışma Merkezi — AI Koç, Konu Tahmini, Podcast Arşivi, 📊 Triyaj, 🔥 120 Soruluk ÖSYM Simülasyonu | ✅ Aktif |
+| `(dashboard)/ai-schedule/page.tsx` | AI Haftalık Takvim — Dinamik 7 günlük ders çalışma programı | ✅ Aktif |
+| `(dashboard)/curriculum/page.tsx` | Müfredat Takibi — Akordiyon konular, durum döngüsü, sınav bazlı filtreleme | ✅ Aktif |
+| `(dashboard)/exams/page.tsx` | Deneme & Net Hesaplama — GY/GK/Alan net, ÖSYM P3/P93/P48 puan hesaplama, geçmiş kayıtlar | ✅ Aktif |
+| `(dashboard)/flashcards/page.tsx` | Bilgi Kartları — Tinder-tarzı kaydırma, ders filtresi, Leitner SRS | ✅ Aktif |
+| `(dashboard)/friends/page.tsx` | Arkadaşlık & Duo — Otomatik `#İSİM-HEX` kopyalanabilir sabit kod ile ekleme, dürt, tebrik, konfeti | ✅ Aktif |
+| `(dashboard)/mistakes/page.tsx` | Yanlış Kutusu — Tam CRUD, etiketler, partner yorum, fotoğraf desteği | ✅ Aktif |
+| `(dashboard)/placement/page.tsx` | Atama Hedefi — 40 KPSS kadrosu, net hedefi, progress bar | ✅ Aktif |
+| `(dashboard)/question-distribution/page.tsx` | ÖSYM 10 Yıllık Soru Dağılımları — Gerçek ÖSYM verisi (Lisans / Önlisans) | ✅ Aktif |
+| `(dashboard)/settings/page.tsx` | Profil & Ayarlar — Cihazdan fotoğraf yükleme (Base64), şifre güncelleme, sabit Duo kodu | ✅ Aktif |
+| `(dashboard)/shared-qa/page.tsx` | Canlı Soru Akışı — 3 kademeli görünürlük, CRUD, resim yükleme | ✅ Aktif |
+| `(dashboard)/skill-tree/page.tsx` | RPG Yetenek Ağacı — 5 seviyeli kilit açma, XP hesabı | ✅ Aktif |
+| `login/page.tsx` | Giriş — Supabase Auth (Email + Google OAuth) ve Zorunlu Onboarding yönlendirmesi | ✅ Aktif |
+| `onboarding/page.tsx` | Sınav Seçimi — Çoklu sınav seçimi, aktif sınav ayarı, otomatik Duo kodu ataması | ✅ Aktif |
 
 ### 🧠 B. State Management (`src/lib/store/`)
 
 | Dosya | Persist | İçerik | Durum |
 |-------|---------|--------|-------|
-| `useAuthStore.ts` | ✅ `asimptot_auth_v1` | currentUser, partnerUser, selectedExams, activeExam (YKS-TYT/AYT dahil), todos, sharedQuestions, switchUserRole, updateUserProfile | Persist eklendi (Faz 1) |
-| `useCurriculumStore.ts` | ✅ `kpss_curriculum_storage_v3` | topics dizisi, toggleTopicStatus (not_started→studying→solved döngüsü), resetAllTopics | Aktif |
-| `useFriendStore.ts` | ✅ `kpss_friends_v2` | friends dizisi, pendingRequests, sendFriendRequest, sendPoke, sendCheer | Aktif |
-| `useStudyLogStore.ts` | ✅ `asimptot_study_log_v1` | logs dizisi, addLog, getTodayStats, getWeeklyStats, getStreakCount, getLogsForDate | Oluşturuldu (Faz 2) |
-| `useExamHistoryStore.ts` | ✅ `asimptot_exam_history_v1` | results dizisi, addResult, deleteResult, getLastN, getBestScore, getTrend | Oluşturuldu (Faz 2) |
+| `useAuthStore.ts` | ✅ `asimptot_auth_v1` | Profile, partner, activeExam (localStorage öncelikli), updateUserPassword, default Asimptot SVG avatar | ✅ Persist Aktif |
+| `useCurriculumStore.ts` | ✅ `kpss_curriculum_storage_v3` | topics dizisi, toggleTopicStatus, resetAllTopics | ✅ Persist Aktif |
+| `useFriendStore.ts` | ✅ `kpss_friends_v2` | friends dizisi (oturum kapansa da silinmez, kalıcı), pendingRequests, sendFriendRequest, sendPoke, sendCheer | ✅ Persist Aktif |
+| `useDailyQuestStore.ts` | ✅ `asimptot_daily_quests_v1` | Günlük görevler, XP takip motoru, `updateQuestProgress` | ✅ Persist Aktif |
+| `useStudyLogStore.ts` | ✅ `asimptot_study_log_v1` | Aktivite logları, streak freeze (🧊), examType filtreli getter'lar | ✅ Persist Aktif |
+| `useExamHistoryStore.ts` | ✅ `asimptot_exam_history_v1` | Deneme ve ÖSYM simülasyon geçmişi, examType filtreli getter'lar | ✅ Persist Aktif |
 
 ### 📊 C. Statik Veri Dosyaları (`src/lib/data/`)
 
 | Dosya | İçerik | Boyut |
 |-------|--------|-------|
-| `curriculumData.ts` | 5 sınav tipi × konu listeleri. Lisans: 10, Önlisans: 26, Ortaöğretim: 3, YDS: 3, ALES: 2 konu | 10 KB |
-| `flashcardsData.ts` | 21 flashcard (Lisans: 16, Önlisans: 5). ÖSYM etiketli, hafıza ipuçlu. İlerleme `asimptot_flashcard_progress_v1` ile persist | 9 KB |
-| `kpssLisansDistribution.ts` | KPSS Lisans 10 yıllık soru dağılımı. 9 ders, 83 konu. ✅ Encoding hatası yok | 17 KB |
-| `kpssOnlisansDistribution.ts` | KPSS Önlisans 10 yıllık soru dağılımı. 5 ders, 64 konu | 10 KB |
+| `curriculumData.ts` | 5 sınav tipi × konu listeleri (83+ konu) | 14 KB |
+| `flashcardsData.ts` | 51 ÖSYM etiketli flashcard | 18 KB |
+| `kpssLisansDistribution.ts` | KPSS Lisans 10 yıllık soru dağılımı (9 ders, 83 konu) | 17 KB |
+| `kpssOnlisansDistribution.ts` | KPSS Önlisans 10 yıllık soru dağılımı (5 ders, 64 konu) | 10 KB |
+| `duelQuestions.ts` | **235+ Açıklamalı ÖSYM Sorusu** (Önlisans + Lisans ayrımı, 120 soruluk tam sınav havuzu) | 105 KB |
+| `placementData.ts` | 40 kadro (25 Lisans + 15 Önlisans) | 12 KB |
+| `dailyFacts.ts` | 150 hap bilgi (7 kategori) | 22 KB |
+| `skillTreeData.ts` | RPG yetenek ağacı (~20 node, 5 seviye) | 8 KB |
 
 ### 🔌 D. Servisler ve Altyapı (`src/lib/services/`, `src/lib/supabase/`)
 

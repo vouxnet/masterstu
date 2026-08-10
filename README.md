@@ -43,29 +43,30 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 
 ---
 
-## ⚠️ PROJE DURUMU (SON GÜNCELLEME: 2026-08-09)
+## ⚠️ PROJE DURUMU (SON GÜNCELLEME: 2026-08-10)
 
 ### Aktif Sınav Tipleri (Tam İçerikli)
-| Sınav | Müfredat | Flashcard | Soru Dağılımı | Puan Hesaplama |
-|-------|----------|-----------|---------------|----------------|
-| ✅ KPSS Lisans + A Grubu | ✅ | ✅ (16 kart) | ✅ (10 yıl) | ✅ |
-| ✅ KPSS Önlisans | ✅ | ✅ (5 kart) | ✅ (10 yıl) | ✅ |
+| Sınav | Müfredat | Flashcard | Soru Dağılımı | Puan Hesaplama | ÖSYM Simülasyon |
+|-------|----------|-----------|---------------|----------------|-----------------|
+| ✅ KPSS Lisans + A Grubu | ✅ (10 yıl verisi) | ✅ (16 kart) | ✅ (83 konu) | ✅ | ✅ (120 Soru / 130 Dk) |
+| ✅ KPSS Önlisans | ✅ (10 yıl verisi) | ✅ (5 kart) | ✅ (64 konu) | ✅ | ✅ (120 Soru / 130 Dk) |
 
 ### Pasif Sınav Tipleri (Kilitli — "Yakında" Rozeti)
 | Sınav | Durum |
 |-------|-------|
-| 🔒 KPSS Ortaöğretim | Metadata var, içerik eksik |
-| 🔒 YDS / YÖKDİL | Metadata var, içerik eksik |
-| 🔒 ALES / DGS | Metadata var, içerik eksik |
+| 🔒 KPSS Ortaöğretim | Metadata var, içerik hazırlanıyor |
+| 🔒 YDS / YÖKDİL | Metadata var, içerik hazırlanıyor |
+| 🔒 ALES / DGS | Metadata var, içerik hazırlanıyor |
 | 🔒 YKS - TYT | Eklenecek |
 | 🔒 YKS - AYT | Eklenecek |
 
-### Mevcut Mimari
-- **Auth**: Supabase Auth (Email + Google OAuth) + Ziyaretçi (Guest) Modu
+### Mevcut Mimari & Güvenlik
+- **Auth**: Supabase Auth (Email + Google OAuth) + Zorunlu Onboarding Yönlendirmesi
+- **Duo Kodu**: `#İSİM-HEX` formatında otomatik atanan, değiştirilemez sabit kimlik (`#BULENT-4A8E`, `#SENA-91F4`)
 - **Database**: Supabase PostgreSQL (Frankfurt bölgesi, 10 tablo, RLS aktif, auto-profile tetikleyicisi)
 - **Deployment**: Vercel (`masterstu.vercel.app`)
-- **State**: Zustand + localStorage (kısmen Supabase'e taşındı)
-- **AI Modülleri**: Algoritma bazlı (LLM API kullanılmıyor, maliyet $0)
+- **State**: Zustand + localStorage (oturumlar arası arkadaşlıklar ve sınav seçimleri kalıcı)
+- **AI & Algoritmalar**: %100 Algoritmik Triyaj (ROI) + Ebbinghaus Unutma Eğrisi ($0 API Maliyeti)
 
 ---
 
@@ -75,44 +76,44 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 
 | Rota | Sayfa | Durum | Açıklama |
 |------|-------|-------|----------|
-| `/` | Gösterge Paneli | ✅ Aktif | Geri sayım, Pomodoro, Todo, Sprint Modu, Hafıza Barları, Rakip Radarı, Günün Bilgisi |
-| `/login` | Giriş Ekranı | ✅ Aktif | Supabase Auth + Google OAuth |
-| `/onboarding` | Sınav Seçimi | ✅ Aktif | Çoklu sınav seçimi, aktif sınav ayarı |
+| `/` | Gösterge Paneli | ✅ Aktif | Geri sayım, Pomodoro, Todo, Sprint Modu, Hafıza Barları, Rakip Radarı, 22 Güncel Bilgi |
+| `/login` | Giriş Ekranı | ✅ Aktif | Supabase Auth + Google OAuth (Onboarding korumalı) |
+| `/onboarding` | Sınav Seçimi | ✅ Aktif | Çoklu sınav seçimi, aktif sınav ataması, otomatik `#İSİM-HEX` Duo kodu |
 | `/curriculum` | Müfredat Takibi | ✅ Aktif | Akordiyon konular, durum döngüsü, sınav bazlı filtreleme |
 | `/flashcards` | Bilgi Kartları | ✅ Aktif | Tinder-tarzı kaydırma, SRS Leitner, sınav bazlı filtreleme |
-| `/mistakes` | Yanlış Kutusu | ✅ Aktif | Tam CRUD, partner yorum, LocalStorage kalıcı |
+| `/mistakes` | Yanlış Kutusu | ✅ Aktif | Tam CRUD, partner yorum, fotoğraf desteği, LocalStorage kalıcı |
 | `/exams` | Deneme & Net | ✅ Aktif | Puan hesaplama, deneme kaydetme, sınav bazlı filtreleme |
-| `/question-distribution` | Soru Dağılımları | ✅ Aktif | 10 yıllık gerçek ÖSYM verisi |
-| `/shared-qa` | Canlı Soru Akışı | ✅ Aktif | 3 kademeli görünürlük, LocalStorage kalıcı |
-| `/friends` | Arkadaşlık Pano | ✅ Aktif | Kod ile ekleme, dürt, tebrik, asimetrik performans karşılaştırma |
-| `/ai-hub` | Akıllı Çalışma Merkezi | ✅ Aktif | 6 sekme: Koç, PvP, Konular, Podcast, 📊 Triyaj, 🔥 ÖSYM Simülasyonu |
+| `/question-distribution` | Soru Dağılımları | ✅ Aktif | 10 yıllık gerçek ÖSYM verisi (Lisans/Önlisans) |
+| `/shared-qa` | Canlı Soru Akışı | ✅ Aktif | 3 kademeli görünürlük, CRUD, görsel yükleme |
+| `/friends` | Arkadaşlık Pano | ✅ Aktif | Sabit kod ile ekleme, dürt, tebrik, asimetrik performans karşılaştırma |
+| `/ai-hub` | Akıllı Çalışma Merkezi | ✅ Aktif | 5 sekme: AI Koç, Konu Tahmini, Podcast, 📊 Triyaj, 🔥 ÖSYM Simülasyonu |
 | `/ai-schedule` | AI Haftalık Takvim | ✅ Aktif | Müfredat + log verisiyle dinamik 7 günlük plan |
-| `/placement` | 🆕 Atama Hedefi | ✅ Aktif | 40 kadro, arama/filtre, progress bar, ✅🟡⛔ kartlar |
-| `/skill-tree` | 🆕 Yetenek Ağacı | ✅ Aktif | RPG skill tree, 5 seviye, XP barı, yumuşak kilit, konfeti |
-| `/settings` | Profil & Ayarlar | ✅ Aktif | İsim/email/avatar güncelleme, pasif butonlar → "Yakında" |
+| `/placement` | Atama Hedefi | ✅ Aktif | 40 kadro, arama/filtre, progress bar, ✅🟡⛔ kartlar |
+| `/skill-tree` | Yetenek Ağacı | ✅ Aktif | RPG skill tree, 5 seviye, XP barı, yumuşak kilit, konfeti |
+| `/settings` | Profil & Ayarlar | ✅ Aktif | Cihazdan fotoğraf yükleme (Base64), şifre değiştirme, sabit Duo kodu |
 
 ### 🧠 State Management (Zustand Store'ları)
 
 | Store | Persist Key | Açıklama | Durum |
 |-------|-------------|----------|---------|
-| `useAuthStore.ts` | `asimptot_auth_v1` | Kullanıcı profili, partner, todo, shared questions, YKS/TYT/AYT dahil tüm sınav tipleri | ✅ Persist eklendi (Faz 1) |
-| `useCurriculumStore.ts` | `asimptot_curriculum_v1` | Konu ilerleme, `getTopicsForExam()`, `examTypeToRole()` | ✅ Aktif + Dalga 0 refaktör |
-| `useFriendStore.ts` | `kpss_friends_v2` | Arkadaş listesi | ✅ Aktif |
-| `useStudyLogStore.ts` | `asimptot_study_log_v1` | Aktivite logları, examType filtreli getter'lar, `getLogsForExam()` | ✅ Dalga 0 refaktör |
-| `useExamHistoryStore.ts` | `asimptot_exam_history_v1` | Deneme geçmişi, examType filtreli getter'lar, `getResultsForExam()` | ✅ Dalga 0 refaktör |
+| `useAuthStore.ts` | `asimptot_auth_v1` | Profil, partner, `activeExam` öncelikli kalıcılık, `updateUserPassword`, default Asimptot SVG avatar | ✅ Persist Aktif |
+| `useCurriculumStore.ts` | `asimptot_curriculum_v1` | Konu ilerleme, `getTopicsForExam()`, `examTypeToRole()` | ✅ Persist Aktif |
+| `useFriendStore.ts` | `kpss_friends_v2` | Arkadaş listesi (Oturum kapansa da silinmez, kalıcı) | ✅ Persist Aktif |
+| `useStudyLogStore.ts` | `asimptot_study_log_v1` | Aktivite logları, streak freeze (🧊), examType filtreli getter'lar | ✅ Persist Aktif |
+| `useExamHistoryStore.ts` | `asimptot_exam_history_v1` | Deneme geçmişi, examType filtreli getter'lar | ✅ Persist Aktif |
 
 ### 📂 Veri Dosyaları (`src/lib/data/`)
 
 | Dosya | İçerik |
 |-------|--------|
-| `curriculumData.ts` | 5 sınav tipi için 44 konu (lisans 10, önlisans 26, diğerleri az) |
-| `flashcardsData.ts` | 21 flashcard (lisans 16, önlisans 5) |
+| `curriculumData.ts` | 5 sınav tipi için 83+ konu |
+| `flashcardsData.ts` | 51 flashcard (ÖSYM etiketli) |
 | `kpssLisansDistribution.ts` | KPSS Lisans 10 yıllık soru dağılımı (9 ders, 83 konu) |
 | `kpssOnlisansDistribution.ts` | KPSS Önlisans 10 yıllık soru dağılımı (5 ders, 64 konu) |
-| `duelQuestions.ts` | 60 gerçek KPSS sorusu (7 ders) — düello + ÖSYM simülasyonu |
-| `placementData.ts` | 🆕 40 kadro (25 Lisans + 15 Önlisans, merkez/taşra, zorluk) |
-| `dailyFacts.ts` | 🆕 60 hap bilgi (7 kategori, kaynak referansları) |
-| `skillTreeData.ts` | 🆕 RPG yetenek ağacı (~20 node, 5 seviye, prerequisite'ler) |
+| `duelQuestions.ts` | **235+ Açıklamalı ÖSYM Sorusu** (Önlisans + Lisans ayrımı, 120 soruluk sınav havuzu) |
+| `placementData.ts` | 40 kadro (25 Lisans + 15 Önlisans, merkez/taşra, zorluk) |
+| `dailyFacts.ts` | 150 hap bilgi (7 kategori, kaynak referansları) |
+| `skillTreeData.ts` | RPG yetenek ağacı (~20 node, 5 seviye) |
 
 ### 🧩 Bileşenler (`src/components/`)
 
