@@ -359,18 +359,7 @@ export const useFriendStore = create<FriendState>()(
 
         saveGlobalNotifications([newOutboundNotif, ...globalNotifs]);
 
-        // Local confirmation notification for sender
-        const localSenderNotif: AppNotification = {
-          id: `notif-poke-local-${Date.now()}`,
-          type: "poke",
-          senderName: friend.name,
-          message: `👉 ${friend.name} (${friend.friendCode}) kullanıcısına ders hatırlatması gönderdiniz.`,
-          createdAt: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
-          read: false,
-        };
-
         set((state) => ({
-          notifications: [localSenderNotif, ...state.notifications],
           toastMessage: `👉 ${friend.name} kişisine dürtme bildirimi gönderildi!`,
         }));
       },
@@ -392,17 +381,7 @@ export const useFriendStore = create<FriendState>()(
 
         saveGlobalNotifications([newOutboundNotif, ...globalNotifs]);
 
-        const localSenderNotif: AppNotification = {
-          id: `notif-cheer-local-${Date.now()}`,
-          type: "cheer",
-          senderName: friend.name,
-          message: `🎉 ${friend.name} kullanıcısına tebrik ve motivasyon mesajı ilettiniz! (+10 XP)`,
-          createdAt: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
-          read: false,
-        };
-
         set((state) => ({
-          notifications: [localSenderNotif, ...state.notifications],
           toastMessage: `🎉 ${friend.name} kişisine tebrik bildirimi iletildi!`,
         }));
       },
@@ -424,17 +403,7 @@ export const useFriendStore = create<FriendState>()(
 
         saveGlobalNotifications([newOutboundNotif, ...globalNotifs]);
 
-        const localSenderNotif: AppNotification = {
-          id: `notif-q-local-${Date.now()}`,
-          type: "question",
-          senderName: friend.name,
-          message: `📩 ${friend.name} kullanıcısına sorunuz iletildi: "${text}"`,
-          createdAt: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
-          read: false,
-        };
-
         set((state) => ({
-          notifications: [localSenderNotif, ...state.notifications],
           toastMessage: `📩 ${friend.name} kullanıcısına sorunuz iletildi!`,
         }));
       },

@@ -63,7 +63,7 @@ export default function AIHubPage() {
 
   // Store data
   const { getTodayStats, getWeeklyStats, getStreakCount, logs } = useStudyLogStore();
-  const { results, getBestScore } = useExamHistoryStore();
+  const { results, getBestScore, addResult } = useExamHistoryStore();
   const { getTopicsForExam } = useCurriculumStore();
 
   const todayStats = getTodayStats(activeExam);
@@ -121,6 +121,28 @@ export default function AIHubPage() {
     const newHistory = [result, ...simHistory];
     setSimHistory(newHistory);
     localStorage.setItem('asimptot_simulations_v1', JSON.stringify(newHistory));
+
+    const examLabel = result.totalQuestions === 120 ? 'ÖSYM Simülasyonu (120 Soru)' : 'ÖSYM Simülasyonu (30 Soru)';
+    const stressNotes = result.gaveUp ? `PES ETTİ | Stres: ${result.stressScore}/100` : `Stres Skoru: ${result.stressScore}/100 | Süre: ${Math.floor(result.durationSeconds / 60)}dk`;
+
+    addResult({
+      examType: activeExam,
+      examLabel: examLabel,
+      gyCorrect: result.correct,
+      gyWrong: result.wrong,
+      gkCorrect: 0,
+      gkWrong: 0,
+      alanCorrect: 0,
+      alanWrong: 0,
+      gyNet: result.net,
+      gkNet: 0,
+      alanNet: 0,
+      totalNet: result.net,
+      estimatedScore: result.net,
+      scoreType: 'ÖSYM Simülasyon',
+      notes: stressNotes,
+      date: result.completedAt,
+    });
   };
 
   // Compute Konu Tahmini

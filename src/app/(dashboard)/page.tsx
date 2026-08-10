@@ -142,34 +142,34 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Layer 3: Daily Quests & Focus Center (Equal 2-Column Grid) */}
+      {/* Layer 3: Daily Quests & Focus Timer (Equal 2-Column) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <DailyQuestWidget />
         <PomodoroWidget />
       </div>
 
-      {/* Layer 4: Neuro-Science & Social Synergy (Equal 2-Column Grid) */}
+      {/* Layer 4: Social & Daily Planning (Duo + Todo side by side) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <DuoFriendsWidget />
+        <TodoSummary />
+      </div>
+
+      {/* Layer 5: Neuro-Science & Micro-Learning (Brain Decay + Daily Fact) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <MemoryDecayWidget />
-        <DuoFriendsWidget />
-      </div>
-
-      {/* Layer 5: Micro-Learning & Current Affairs Hub (Equal 2-Column Grid) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <DailyFactWidget />
-        <LiveCurrentNewsWidget />
       </div>
 
-      {/* Layer 6: Daily Checklist & Quick Navigation (Equal 2-Column Grid) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <TodoSummary />
-        <div>
-          <h3 className="font-display font-bold text-white text-base mb-3 flex items-center space-x-2">
-            <Sparkles className="h-4 w-4 text-indigo-400" />
-            <span>Hızlı Modül Erişimi</span>
-          </h3>
-          <QuickNavHub />
-        </div>
+      {/* Layer 6: Current Affairs Stream (Full Width) */}
+      <LiveCurrentNewsWidget />
+
+      {/* Layer 7: Quick Module Access (Full Width) */}
+      <div>
+        <h3 className="font-display font-bold text-white text-lg mb-4 flex items-center space-x-2.5">
+          <Sparkles className="h-5 w-5 text-indigo-400" />
+          <span>Hızlı Modül Erişimi</span>
+        </h3>
+        <QuickNavHub />
       </div>
     </div>
   );
