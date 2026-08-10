@@ -2,10 +2,10 @@ export interface DuelQuestion {
   id: string;
   subject: string;
   question: string;
-  options: [string, string, string, string];
+  options: string[];
   correctIndex: number;
-  difficulty: "easy" | "medium" | "hard";
-  examType: "kpss_lisans" | "kpss_onlisans" | "both";
+  difficulty?: "easy" | "medium" | "hard";
+  examType?: "kpss_lisans" | "kpss_onlisans" | "both";
   explanation?: string;
 }
 

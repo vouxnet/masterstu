@@ -4,12 +4,19 @@ import React, { useState } from "react";
 import { useAuthStore, EXAM_METADATA } from "@/src/lib/store/useAuthStore";
 import { useExamHistoryStore } from "@/src/lib/store/useExamHistoryStore";
 import { useStudyLogStore } from "@/src/lib/store/useStudyLogStore";
-import { Calculator, Save, Trash2, Trophy, ChevronDown, ChevronUp } from "lucide-react";
+import { ALL_EXAM_PACKS, ExamPack } from "@/src/lib/data/examPacks";
+import ExamSimulator, { SimulationResult } from "@/src/components/exam-sim/ExamSimulator";
+import { Calculator, Save, Trash2, Trophy, ChevronDown, ChevronUp, Play, BookOpen, Clock, Sparkles, CheckCircle2, XCircle, Lightbulb } from "lucide-react";
 
 export default function ExamsPage() {
   const { currentUser } = useAuthStore();
   const { addResult, deleteResult, results } = useExamHistoryStore();
   const { addLog } = useStudyLogStore();
+
+  // Active Simulator Pack
+  const [activePack, setActivePack] = useState<ExamPack | null>(null);
+  const [lastResult, setLastResult] = useState<{ result: SimulationResult; pack: ExamPack } | null>(null);
+  const [showReviewModal, setShowReviewModal] = useState(false);
 
   // Score Calculator Form state
   const [gyCorrect, setGyCorrect] = useState(45);
@@ -26,15 +33,97 @@ export default function ExamsPage() {
 
   const filteredResults = results.filter(r => r.examType === currentUser.activeExam);
 
+  // Handle Exam Completion
+  const handleSimulationComplete = (result: SimulationResult) => {
+    if (!activePack) return;
+
+    // Separate GY (Türkçe + Mat) vs GK (Tarih + Coğ + Vat)
+    let gyC = 0, gyW = 0, gkC = 0, gkW = 0;
+    activePack.questions.forEach((q, idx) => {
+      const ans = result.answers[idx];
+      const isGY = q.subject === "Türkçe" || q.subject === "Matematik";
+      if (ans !== undefined && ans !== null) {
+        if (ans === q.correctIndex) {
+          if (isGY) gyC++; else gkC++;
+        } else {
+          if (isGY) gyW++; else gkW++;
+        }
+      }
+    });
+
+    const gyN = Math.max(0, gyC - gyW / 4);
+    const gkN = Math.max(0, gkC - gkW / 4);
+    const totalN = parseFloat((gyN + gkN).toFixed(2));
+    const estimatedP93 = parseFloat((38 + gyN * 0.52 + gkN * 0.48).toFixed(2));
+
+    // Save to Exam History Store
+    addResult({
+      examType: currentUser.activeExam,
+      examLabel: activePack.title,
+      gyCorrect: gyC,
+      gyWrong: gyW,
+      gkCorrect: gkC,
+      gkWrong: gkW,
+      alanCorrect: 0,
+      alanWrong: 0,
+      gyNet: parseFloat(gyN.toFixed(2)),
+      gkNet: parseFloat(gkN.toFixed(2)),
+      alanNet: 0,
+      totalNet: totalN,
+      estimatedScore: estimatedP93,
+      scoreType: 'P93',
+      notes: `${activePack.title} Çözüldü. (Stres Skoru: %${result.stressScore})`,
+      date: new Date().toISOString().split('T')[0],
+    });
+
+    // Save to Study Log Store
+    addLog({
+      activityType: 'exam',
+      subject: activePack.title,
+      durationMinutes: Math.round(result.durationSeconds / 60),
+      questionsCount: activePack.totalQuestions,
+      examType: currentUser.activeExam,
+      date: new Date().toISOString().split('T')[0],
+    });
+
+    // Save wrong questions to Mistakes Vault (localStorage)
+    if (typeof window !== "undefined") {
+      try {
+        const existingMistakes = JSON.parse(localStorage.getItem('kpss_mistakes_v2') || '[]');
+        const newMistakes: any[] = [];
+        activePack.questions.forEach((q, idx) => {
+          const ans = result.answers[idx];
+          if (ans !== undefined && ans !== null && ans !== q.correctIndex) {
+            newMistakes.push({
+              id: `mistake-${Date.now()}-${idx}`,
+              subject: q.subject,
+              topic: q.subject,
+              questionText: q.question,
+              options: q.options,
+              userAnswer: ans,
+              correctAnswer: q.correctIndex,
+              explanation: q.explanation || "Detaylı çözüm veritabanında mevcuttur.",
+              date: new Date().toISOString().split('T')[0],
+              resolved: false,
+            });
+          }
+        });
+        if (newMistakes.length > 0) {
+          localStorage.setItem('kpss_mistakes_v2', JSON.stringify([...newMistakes, ...existingMistakes]));
+        }
+      } catch (e) {}
+    }
+
+    setLastResult({ result, pack: activePack });
+    setActivePack(null);
+    setShowReviewModal(true);
+  };
+
   // Net calculation: Correct - Wrong / 4
   const gyNet = Math.max(0, gyCorrect - gyWrong / 4);
   const gkNet = Math.max(0, gkCorrect - gkWrong / 4);
   const alanNet = Math.max(0, alanCorrect - alanWrong / 4);
 
-  // Standard ÖSYM Estimate Formula:
-  // P3 (Lisans): 40 + (GY_Net * 0.5) + (GK_Net * 0.45)
-  // P93 (Önlisans): 38 + (GY_Net * 0.52) + (GK_Net * 0.48)
-  // P37/P48 (A Grubu Alan): 30 + (GY_Net * 0.2) + (GK_Net * 0.2) + (Alan_Net * 0.6)
   const isLisans = currentUser.activeExam === "kpss_lisans";
 
   const p3Estimated = (40 + gyNet * 0.5 + gkNet * 0.45).toFixed(2);
@@ -74,22 +163,282 @@ export default function ExamsPage() {
 
   return (
     <div className="space-y-6">
+      {/* Active Simulator Launcher Portal */}
+      {activePack && (
+        <ExamSimulator
+          questions={activePack.questions}
+          durationMinutes={activePack.durationMinutes}
+          onComplete={handleSimulationComplete}
+          onCancel={() => setActivePack(null)}
+        />
+      )}
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-3xl glass-panel p-6 border border-white/10">
         <div>
           <div className="flex items-center space-x-2">
             <span className="rounded-full bg-purple-500/20 px-3 py-1 text-xs font-bold text-purple-300 border border-purple-500/30">
-              Net Takibi & ÖSYM Hesaplayıcı
+              ÖSYM Sınav Simülasyonu & Net Takibi
             </span>
           </div>
           <h1 className="mt-2 font-display text-2xl font-extrabold text-white">
-            Denemeler ve Tahmini Puan Hesaplama
+            Deneme Sınavları Merkezi & ÖSYM Hesaplayıcı
           </h1>
           <p className="text-xs text-gray-300 mt-1">
-            ÖSYM standart katsayıları ile P3 (Lisans), P93 (Önlisans) ve KPSS A Grubu Puan Hesaplama
+            ÖSYM standart katsayıları ile P3 (Lisans) ve P93 (Önlisans) Puan Hesaplama & Canlı Deneme Çözümü
           </p>
         </div>
       </div>
+
+      {/* 🔥 EXAM BOOKLET LIBRARY SECTION */}
+      <div className="rounded-3xl glass-panel p-6 border border-indigo-500/30 shadow-2xl space-y-6 bg-gradient-to-br from-indigo-950/40 via-purple-950/20 to-gray-950">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-indigo-600/30 text-indigo-400 border border-indigo-500/30">
+              <BookOpen className="h-5 w-5" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                <span>🔥 ÖSYM Canlı Deneme Sınavları Kütüphanesi</span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs border border-emerald-500/30 font-mono">120 SORU / 130 DK</span>
+              </h2>
+              <p className="text-xs text-gray-300">
+                Gerçek sınav süresi, optik form soru geçiş gridi ve açıklamalı soru analizleriyle canlı çözün
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {ALL_EXAM_PACKS.map((pack) => (
+            <div key={pack.id} className="p-5 rounded-2xl glass-card border border-indigo-500/30 hover:border-indigo-400/60 transition-all flex flex-col justify-between space-y-4 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/20 transition-all"></div>
+              
+              <div>
+                {pack.badge && (
+                  <span className="inline-block px-2.5 py-1 rounded-md bg-rose-500/20 text-rose-300 text-[11px] font-bold border border-rose-500/30 mb-2">
+                    {pack.badge}
+                  </span>
+                )}
+                <h3 className="text-base font-bold text-white group-hover:text-indigo-300 transition-colors">
+                  {pack.title}
+                </h3>
+                <p className="text-xs text-gray-400 mt-1 line-clamp-2 leading-relaxed">
+                  {pack.description}
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between pt-3 border-t border-white/10">
+                <div className="flex items-center space-x-3 text-xs text-gray-300 font-mono">
+                  <span className="flex items-center space-x-1">
+                    <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
+                    <span>{pack.totalQuestions} Soru</span>
+                  </span>
+                  <span className="flex items-center space-x-1">
+                    <Clock className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>{pack.durationMinutes} Dk</span>
+                  </span>
+                </div>
+
+                <button
+                  onClick={() => setActivePack(pack)}
+                  className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/30 transition-all transform active:scale-95"
+                >
+                  <Play className="w-3.5 h-3.5 fill-current" />
+                  <span>Sınavı Başlat</span>
+                </button>
+              </div>
+            </div>
+          ))}
+
+          {/* Branş Denemeleri Kartı */}
+          <div className="p-5 rounded-2xl glass-card border border-white/10 flex flex-col justify-between space-y-4">
+            <div>
+              <span className="inline-block px-2.5 py-1 rounded-md bg-purple-500/20 text-purple-300 text-[11px] font-bold border border-purple-500/30 mb-2">
+                ⚡ DERS BRANŞ DENEMELERİ
+              </span>
+              <h3 className="text-base font-bold text-white">
+                Ders Bazlı Branş Denemeleri
+              </h3>
+              <p className="text-xs text-gray-400 mt-1 leading-relaxed">
+                Zamanınız kısıtlıysa doğrudan Türkçe (30 Soru), Matematik (30 Soru) veya Tarih (27 Soru) çözün!
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-2 pt-3 border-t border-white/10">
+              <button
+                onClick={() => {
+                  const turkishPack: ExamPack = {
+                    id: "brans-turkce-1",
+                    title: "Türkçe Branş Denemesi #1 (30 Soru)",
+                    description: "Sözcük, Cümle, Paragraf, Dil Bilgisi ve Sözel Mantık 30 Soru",
+                    examType: "kpss_onlisans",
+                    totalQuestions: 30,
+                    durationMinutes: 35,
+                    questions: ALL_EXAM_PACKS[0].questions.filter(q => q.subject === "Türkçe")
+                  };
+                  setActivePack(turkishPack);
+                }}
+                className="px-3 py-1.5 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/30 text-indigo-300 text-xs font-bold transition-all"
+              >
+                📚 Türkçe (30 Soru)
+              </button>
+              <button
+                onClick={() => {
+                  const mathPack: ExamPack = {
+                    id: "brans-mat-1",
+                    title: "Matematik & Geometri Branş Denemesi #1 (30 Soru)",
+                    description: "İşlem, Problemler, Dairesel Grafik, Sayısal Mantık ve Geometri 30 Soru",
+                    examType: "kpss_onlisans",
+                    totalQuestions: 30,
+                    durationMinutes: 45,
+                    questions: ALL_EXAM_PACKS[0].questions.filter(q => q.subject === "Matematik")
+                  };
+                  setActivePack(mathPack);
+                }}
+                className="px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/30 text-cyan-300 text-xs font-bold transition-all"
+              >
+                📐 Matematik (30 Soru)
+              </button>
+              <button
+                onClick={() => {
+                  const tarihpPack: ExamPack = {
+                    id: "brans-tarih-1",
+                    title: "Tarih Branş Denemesi #1 (27 Soru)",
+                    description: "İslamiyet Öncesinden Çağdaş Türk ve Dünya Tarihine 27 Soru",
+                    examType: "kpss_onlisans",
+                    totalQuestions: 27,
+                    durationMinutes: 25,
+                    questions: ALL_EXAM_PACKS[0].questions.filter(q => q.subject === "Tarih")
+                  };
+                  setActivePack(tarihpPack);
+                }}
+                className="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/30 text-amber-300 text-xs font-bold transition-all"
+              >
+                🏛️ Tarih (27 Soru)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Post-Exam Review Modal */}
+      {showReviewModal && lastResult && (
+        <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-[#111] border border-indigo-500/40 rounded-3xl max-w-3xl w-full p-6 space-y-6 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <div>
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold border border-emerald-500/30">
+                  🎉 SINAV KART RAPORU & DETAYLI ÇÖZÜMLER
+                </span>
+                <h2 className="text-xl font-bold text-white mt-1">
+                  {lastResult.pack.title}
+                </h2>
+              </div>
+              <button
+                onClick={() => setShowReviewModal(false)}
+                className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl font-bold text-xs"
+              >
+                Kapat ✕
+              </button>
+            </div>
+
+            {/* Score Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-center">
+                <span className="text-xs text-gray-400">Doğru</span>
+                <p className="text-xl font-bold text-emerald-400">{lastResult.result.correct}</p>
+              </div>
+              <div className="p-3 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-center">
+                <span className="text-xs text-gray-400">Yanlış</span>
+                <p className="text-xl font-bold text-rose-400">{lastResult.result.wrong}</p>
+              </div>
+              <div className="p-3 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-center">
+                <span className="text-xs text-gray-400">Toplam Net</span>
+                <p className="text-xl font-bold text-cyan-300">{lastResult.result.net}</p>
+              </div>
+              <div className="p-3 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-center">
+                <span className="text-xs text-gray-400">Tahmini P93</span>
+                <p className="text-xl font-bold text-purple-300">
+                  {(38 + lastResult.result.net * 0.5).toFixed(2)}
+                </p>
+              </div>
+            </div>
+
+            {/* Detailed Question Review Accordion */}
+            <div className="space-y-4 pt-2">
+              <h3 className="text-sm font-bold text-gray-300 uppercase tracking-wider">
+                💡 Sorular ve Detaylı Çözümleri ({lastResult.pack.questions.length} Soru)
+              </h3>
+
+              <div className="space-y-3">
+                {lastResult.pack.questions.map((q, idx) => {
+                  const userAns = lastResult.result.answers[idx];
+                  const isCorrect = userAns === q.correctIndex;
+                  const isBlank = userAns === undefined || userAns === null;
+
+                  return (
+                    <div key={q.id} className="p-4 rounded-xl glass-card border border-white/10 space-y-3">
+                      <div className="flex items-start justify-between gap-2">
+                        <span className="text-xs font-bold text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded">
+                          {q.subject} - Soru {idx + 1}
+                        </span>
+                        {isCorrect ? (
+                          <span className="flex items-center space-x-1 text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            <span>Doğru</span>
+                          </span>
+                        ) : isBlank ? (
+                          <span className="text-xs font-bold text-gray-400 bg-white/10 px-2.5 py-0.5 rounded-full border border-white/10">
+                            Boş Bırakıldı
+                          </span>
+                        ) : (
+                          <span className="flex items-center space-x-1 text-xs font-bold text-rose-400 bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/20">
+                            <XCircle className="w-3.5 h-3.5" />
+                            <span>Yanlış</span>
+                          </span>
+                        )}
+                      </div>
+
+                      <p className="text-sm font-medium text-white leading-relaxed">
+                        {q.question}
+                      </p>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        {q.options.map((opt, oIdx) => (
+                          <div
+                            key={oIdx}
+                            className={`p-2.5 rounded-lg border ${
+                              oIdx === q.correctIndex
+                                ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-300 font-bold"
+                                : userAns === oIdx
+                                ? "bg-rose-500/20 border-rose-500/40 text-rose-300 font-bold"
+                                : "bg-white/5 border-white/10 text-gray-400"
+                            }`}
+                          >
+                            <span className="mr-2 font-bold">{String.fromCharCode(65 + oIdx)})</span>
+                            {opt}
+                          </div>
+                        ))}
+                      </div>
+
+                      {q.explanation && (
+                        <div className="p-3 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-xs text-indigo-300 flex items-start space-x-2">
+                          <Lightbulb className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
+                          <div>
+                            <span className="font-bold text-indigo-200">Detaylı Çözüm: </span>
+                            <span>{q.explanation}</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Score Calculator Card */}
       <div className="rounded-3xl glass-panel p-6 border border-white/10 shadow-xl space-y-6">
