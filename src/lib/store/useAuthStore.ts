@@ -87,7 +87,7 @@ export interface UserProfile {
   name: string;
   email: string;
   friendCode: string;
-  role: "lisans_alan" | "onlisans";
+  role: "lisans_alan" | "onlisans" | "admin";
   roleLabel: string;
   selectedExams: ExamType[];
   activeExam: ExamType;

@@ -18,6 +18,7 @@ import {
   Settings,
   Target,
   GitBranch,
+  ShieldCheck,
 } from "lucide-react";
 import { useAuthStore, EXAM_METADATA } from "@/src/lib/store/useAuthStore";
 
@@ -31,6 +32,7 @@ export const Sidebar: React.FC = () => {
 
   const coreLinks = [
     { href: "/", label: "Gösterge Paneli", icon: Home },
+    { href: "/admin", label: "👑 Admin Paneli", icon: ShieldCheck },
     { href: "/exams", label: "📝 Deneme Sınavları", icon: FileSpreadsheet },
     { href: "/ai-hub", label: "🤖 Asimptot AI Hub", icon: Bot },
     { href: "/curriculum", label: curriculumLabel, icon: BookOpen },

@@ -123,7 +123,7 @@ export default function MistakesPage() {
 
     const newItem: MistakeItem = {
       id: "m-" + Date.now(),
-      userRole: currentUser.role,
+      userRole: currentUser.role === "admin" ? "lisans_alan" : currentUser.role,
       examType: activeExam,
       subject,
       topic,
