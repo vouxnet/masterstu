@@ -40,11 +40,16 @@ export default function LoginPage() {
       if (error) {
         setErrorMessage(error);
       } else {
-        const isOnboarded = typeof window !== 'undefined' && localStorage.getItem('asimptot_onboarded') === 'true';
-        if (!isOnboarded) {
-          router.push("/onboarding");
+        const currentUser = useAuthStore.getState().currentUser;
+        if (realEmail.toLowerCase() === 'admin@asimptot.app' || currentUser?.role === 'admin') {
+          router.push("/admin");
         } else {
-          router.push("/");
+          const isOnboarded = typeof window !== 'undefined' && localStorage.getItem('asimptot_onboarded') === 'true';
+          if (!isOnboarded) {
+            router.push("/onboarding");
+          } else {
+            router.push("/");
+          }
         }
       }
     }

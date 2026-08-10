@@ -32,6 +32,10 @@ export default function DashboardPage() {
   const router = useRouter();
 
   useEffect(() => {
+    if (currentUser.role === "admin" || currentUser.email === "admin@asimptot.app") {
+      router.push("/admin");
+      return;
+    }
     if (typeof window !== "undefined") {
       const onboarded = localStorage.getItem("asimptot_onboarded");
       if (onboarded !== "true" && currentUser.id) {
