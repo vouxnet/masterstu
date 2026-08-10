@@ -31,6 +31,7 @@ export const Sidebar: React.FC = () => {
 
   const coreLinks = [
     { href: "/", label: "Gösterge Paneli", icon: Home },
+    { href: "/exams", label: "📝 Deneme Sınavları", icon: FileSpreadsheet },
     { href: "/ai-hub", label: "🤖 Asimptot AI Hub", icon: Bot },
     { href: "/curriculum", label: curriculumLabel, icon: BookOpen },
     { href: "/ai-schedule", label: "🗓️ AI Haftalık Takvim", icon: CalendarDays },
@@ -42,7 +43,6 @@ export const Sidebar: React.FC = () => {
     { href: "/shared-qa", label: "Canlı Panolar", icon: MessageSquarePlus },
     { href: "/mistakes", label: "Yanlış Kutusu", icon: Camera },
     { href: "/flashcards", label: "Bilgi Kartları", icon: Layers },
-    { href: "/exams", label: "Net Takibi", icon: FileSpreadsheet },
     { href: "/question-distribution", label: "📊 Soru Dağılımları", icon: BarChart3 },
     { href: "/skill-tree", label: "🌳 Yetenek Ağacı", icon: GitBranch },
   ];
