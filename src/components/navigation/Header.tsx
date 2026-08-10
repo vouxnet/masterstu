@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore, EXAM_METADATA, ExamType } from "@/src/lib/store/useAuthStore";
 import { useStudyLogStore } from "@/src/lib/store/useStudyLogStore";
-import { useLeagueStore, LEAGUE_CONFIG } from "@/src/lib/store/useLeagueStore";
+
 import { useFriendStore } from "@/src/lib/store/useFriendStore";
 import { GraduationCap, Flame, Plus, LogOut, Bell, Check, Trash2, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,7 +14,7 @@ export const Header: React.FC = () => {
   const router = useRouter();
   const { currentUser, setActiveExam } = useAuthStore();
   const streak = useStudyLogStore((state) => state.getStreakCount());
-  const { currentTier } = useLeagueStore();
+
   const { notifications, markNotificationsRead, clearNotifications } = useFriendStore();
 
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -102,9 +102,6 @@ export const Header: React.FC = () => {
           </span>
           <div className="flex items-center space-x-2 mt-0.5">
             <span className="text-[10px] text-gray-400 font-medium">{currentUser.friendCode}</span>
-            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white/5 border border-white/10" style={{ color: LEAGUE_CONFIG[currentTier].color }}>
-              {LEAGUE_CONFIG[currentTier].emoji} {LEAGUE_CONFIG[currentTier].name}
-            </span>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { useDailyQuestStore } from "@/src/lib/store/useDailyQuestStore";
 import { useAuthStore } from "@/src/lib/store/useAuthStore";
-import { useLeagueStore } from "@/src/lib/store/useLeagueStore";
+
 import { CheckCircle2, Circle, Trophy, Zap, Target, Clock, Brain, FileText, Flame, Check } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import confetti from "canvas-confetti";
@@ -19,7 +19,7 @@ const iconMap: Record<string, React.ElementType> = {
 export function DailyQuestWidget() {
   const { currentUser } = useAuthStore();
   const { generateDailyQuests, getTodayQuests, getCompletionRate, updateQuestProgress, totalXP } = useDailyQuestStore();
-  const { addXP } = useLeagueStore();
+
 
   const activeExam = currentUser.activeExam || "kpss_lisans";
 
@@ -35,7 +35,7 @@ export function DailyQuestWidget() {
     if (quest.completed) return;
 
     updateQuestProgress(quest.type, quest.target);
-    addXP(quest.xpReward);
+
 
     confetti({
       particleCount: 50,

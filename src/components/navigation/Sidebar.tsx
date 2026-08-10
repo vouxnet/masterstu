@@ -15,7 +15,6 @@ import {
   Bot,
   Sparkles,
   CalendarDays,
-  ShieldCheck,
   Settings,
   Target,
   GitBranch,
@@ -39,7 +38,6 @@ export const Sidebar: React.FC = () => {
 
   const practiceLinksRaw = [
     { href: "/placement", label: "🎯 Atama Hedefi", icon: Target },
-    { href: "/league", label: "🏆 Haftalık Lig", icon: ShieldCheck },
     { href: "/friends", label: "👥 Duo Pano", icon: Users },
     { href: "/shared-qa", label: "Canlı Panolar", icon: MessageSquarePlus },
     { href: "/mistakes", label: "Yanlış Kutusu", icon: Camera },

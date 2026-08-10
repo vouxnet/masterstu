@@ -6,7 +6,7 @@ import confetti from "canvas-confetti";
 import { useAuthStore, EXAM_METADATA } from "@/src/lib/store/useAuthStore";
 import { useCurriculumStore } from "@/src/lib/store/useCurriculumStore";
 import { useDailyQuestStore } from "@/src/lib/store/useDailyQuestStore";
-import { useLeagueStore } from "@/src/lib/store/useLeagueStore";
+
 import { useStudyLogStore } from "@/src/lib/store/useStudyLogStore";
 import { getSkillTreeForExam, skillTiers, SkillNode } from "@/src/lib/data/skillTreeData";
 
@@ -14,7 +14,7 @@ export default function SkillTreePage() {
   const { currentUser } = useAuthStore();
   const { topics } = useCurriculumStore();
   const { totalXP: dailyQuestXP } = useDailyQuestStore();
-  const { weeklyXP } = useLeagueStore();
+
   const { logs } = useStudyLogStore();
 
   const activeExam = currentUser.activeExam || "kpss_lisans";
@@ -28,8 +28,8 @@ export default function SkillTreePage() {
   const solvedTopicsCount = topics.filter((t) => t.status === "solved").length;
   const studyLogQuestions = logs.reduce((acc, l) => acc + (l.questionsCount || 0), 0);
   
-  // Total Cumulative XP formula: (Solved topics * 10) + (Daily Quest XP) + (League XP)
-  const calculatedXP = solvedTopicsCount * 10 + dailyQuestXP + weeklyXP;
+  // Total Cumulative XP formula: (Solved topics * 10) + (Daily Quest XP)
+  const calculatedXP = solvedTopicsCount * 10 + dailyQuestXP;
 
   useEffect(() => {
     setMounted(true);
@@ -121,8 +121,8 @@ export default function SkillTreePage() {
               <span className="font-bold text-indigo-300 text-xs">{studyLogQuestions} Soru</span>
             </div>
             <div className="bg-black/30 p-2 rounded-xl border border-white/5">
-              <span className="text-gray-400 block">Görev & Lig XP</span>
-              <span className="font-bold text-amber-400 text-xs">+{dailyQuestXP + weeklyXP} XP</span>
+              <span className="text-gray-400 block">Görev XP</span>
+              <span className="font-bold text-amber-400 text-xs">+{dailyQuestXP} XP</span>
             </div>
           </div>
         </div>

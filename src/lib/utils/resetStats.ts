@@ -5,14 +5,14 @@ export function clearAllUserStats(examType: string = 'kpss_lisans') {
     const { useExamHistoryStore } = require("@/src/lib/store/useExamHistoryStore");
     const { useDailyQuestStore } = require("@/src/lib/store/useDailyQuestStore");
     const { useFriendStore } = require("@/src/lib/store/useFriendStore");
-    const { useLeagueStore } = require("@/src/lib/store/useLeagueStore");
+
     const { useCurriculumStore, examTypeToRole } = require("@/src/lib/store/useCurriculumStore");
 
     if (useStudyLogStore?.getState()?.clearLogs) useStudyLogStore.getState().clearLogs();
     if (useExamHistoryStore?.getState()?.clearHistory) useExamHistoryStore.getState().clearHistory();
     if (useDailyQuestStore?.getState()?.resetQuests) useDailyQuestStore.getState().resetQuests();
     if (useFriendStore?.getState()?.resetFriends) useFriendStore.getState().resetFriends();
-    if (useLeagueStore?.getState()?.resetLeague) useLeagueStore.getState().resetLeague();
+
     
     const role = examTypeToRole ? examTypeToRole(examType) : "lisans_alan";
     if (useCurriculumStore?.getState()?.resetAllTopics) useCurriculumStore.getState().resetAllTopics(role);

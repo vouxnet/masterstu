@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useAuthStore, EXAM_METADATA } from "@/src/lib/store/useAuthStore";
-import { useLeagueStore } from "@/src/lib/store/useLeagueStore";
+
 import { Sparkles, Calendar as CalendarIcon, Clock, Target, Plus, Trash2, Edit3, CheckCircle2, Circle, Save, RotateCcw, Zap, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
@@ -131,7 +131,7 @@ const PRESET_PROGRAMS: Record<string, { title: string; desc: string; days: DaySc
 
 export default function AiSchedulePage() {
   const { currentUser } = useAuthStore();
-  const { addXP } = useLeagueStore();
+
 
   const activeExam = currentUser.activeExam || "kpss_lisans";
 
@@ -197,7 +197,6 @@ export default function AiSchedulePage() {
         blocks: d.blocks.map((b, bI) => {
           if (bI !== blockIdx) return b;
           const nextState = !b.completed;
-          if (nextState) addXP(15);
           return { ...b, completed: nextState };
         })
       };
