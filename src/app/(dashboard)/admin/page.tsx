@@ -23,8 +23,8 @@ export default function AdminDashboardPage() {
   const { currentUser } = useAuthStore();
   const [activeTab, setActiveTab] = useState<"users" | "questions" | "cms" | "curriculum" | "media">("users");
 
-  // Admin access control check
-  const isAdmin = true; // Enabled for super admin control center
+  // Strict Admin access control check
+  const isAdmin = currentUser.role === "admin" || currentUser.email === "admin@asimptot.app";
 
   if (!isAdmin) {
     return (

@@ -30,7 +30,9 @@ export const Sidebar: React.FC = () => {
   if (currentUser.activeExam === "kpss_lisans") curriculumLabel = "📚 Lisans Müfredatı";
   else if (currentUser.activeExam === "kpss_onlisans") curriculumLabel = "📚 Önlisans Müfredatı";
 
-  const coreLinks = [
+  const isAdminUser = currentUser.role === "admin" || currentUser.email === "admin@asimptot.app";
+
+  const coreLinksRaw = [
     { href: "/", label: "Gösterge Paneli", icon: Home },
     { href: "/admin", label: "👑 Admin Paneli", icon: ShieldCheck },
     { href: "/exams", label: "📝 Deneme Sınavları", icon: FileSpreadsheet },
@@ -38,6 +40,11 @@ export const Sidebar: React.FC = () => {
     { href: "/curriculum", label: curriculumLabel, icon: BookOpen },
     { href: "/ai-schedule", label: "🗓️ AI Haftalık Takvim", icon: CalendarDays },
   ];
+
+  const coreLinks = coreLinksRaw.filter((link) => {
+    if (link.href === "/admin") return isAdminUser;
+    return true;
+  });
 
   const practiceLinksRaw = [
     { href: "/placement", label: "🎯 Atama Hedefi", icon: Target },
