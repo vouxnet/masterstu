@@ -114,6 +114,7 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 | `placementData.ts` | 40 kadro (25 Lisans + 15 Önlisans, merkez/taşra, zorluk) |
 | `dailyFacts.ts` | 150 hap bilgi (7 kategori, kaynak referansları) |
 | `skillTreeData.ts` | RPG yetenek ağacı (~20 node, 5 seviye) |
+| `podcastService.ts` | 🆕 Mikro podcast yönetimi ve Supabase Audio Storage servisi |
 
 ### 🧩 Bileşenler (`src/components/`)
 
