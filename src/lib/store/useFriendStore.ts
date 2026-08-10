@@ -200,15 +200,17 @@ export const useFriendStore = create<FriendState>()(
         if (!cleanTarget) return false;
 
         const formattedTarget = cleanTarget.startsWith("#") ? cleanTarget : `#${cleanTarget}`;
-        const myCode = (currentUserCode || "#ADAY2026").trim().toUpperCase();
+        const myCode = (currentUserCode || "").trim().toUpperCase();
+        const myName = (currentUserName || "").trim().toUpperCase();
+        const targetClean = formattedTarget.replace("#", "");
 
-        if (formattedTarget === myCode) {
-          set({ toastMessage: "⚠️ Kendi arkadaşlık kodunuza istek gönderemezsiniz!" });
+        if (formattedTarget === myCode || targetClean === myCode.replace("#", "") || targetClean === myName) {
+          set({ toastMessage: "⚠️ Kendi arkadaşlık kodunuza veya kendinize istek gönderemezsiniz!" });
           return false;
         }
 
         // Check if already friends
-        const isFriend = get().friends.some((f) => f.friendCode.toUpperCase() === formattedTarget);
+        const isFriend = get().friends.some((f) => f.friendCode.toUpperCase() === formattedTarget || f.name.toUpperCase() === targetClean);
         if (isFriend) {
           set({ toastMessage: "⚠️ Bu kullanıcı zaten arkadaş listenizde ekli!" });
           return false;
@@ -424,7 +426,7 @@ export const useFriendStore = create<FriendState>()(
       resetFriends: () => set({ friends: [], pendingRequests: [], sentRequests: [], notifications: [], toastMessage: null }),
     }),
     {
-      name: "asimptot_friends_persist_v10",
+      name: "asimptot_friends_persist_v12",
     }
   )
 );

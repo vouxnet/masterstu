@@ -89,20 +89,38 @@ export default function FriendsPage() {
     });
   };
 
-  const partnerAsFriend: FriendUser | null = partnerUser ? {
-    id: partnerUser.id,
-    name: partnerUser.name,
-    friendCode: partnerUser.friendCode,
-    roleLabel: partnerUser.roleLabel,
-    avatarUrl: partnerUser.avatarUrl,
-    statusText: "Ders Çalışmaya Hazır ⏳",
-    isOnline: true,
-    streakCount: partnerUser.streakCount || 14
-  } : null;
+  // Filter out self and deduplicate friends by code & name
+  const myCodeNorm = (currentUser.friendCode || "").trim().toUpperCase();
+  const myNameNorm = (currentUser.name || "").trim().toUpperCase();
+  const myIdNorm = currentUser.id;
 
-  const displayFriends = partnerAsFriend 
-    ? [partnerAsFriend, ...friends.filter(f => f.id !== partnerUser?.id)]
-    : friends;
+  const validFriends = friends.filter((f) => {
+    const fCodeNorm = (f.friendCode || "").trim().toUpperCase();
+    const fNameNorm = (f.name || "").trim().toUpperCase();
+    
+    // Self filtering
+    if (f.id === myIdNorm) return false;
+    if (fCodeNorm && fCodeNorm === myCodeNorm) return false;
+    if (fNameNorm && fNameNorm === myNameNorm) return false;
+    return true;
+  });
+
+  // Deduplicate remaining friends
+  const seenCodes = new Set<string>();
+  const seenNames = new Set<string>();
+  const displayFriends: FriendUser[] = [];
+
+  for (const f of validFriends) {
+    const fCodeNorm = (f.friendCode || "").trim().toUpperCase();
+    const fNameNorm = (f.name || "").trim().toUpperCase();
+
+    if (fCodeNorm && seenCodes.has(fCodeNorm)) continue;
+    if (fNameNorm && seenNames.has(fNameNorm)) continue;
+
+    if (fCodeNorm) seenCodes.add(fCodeNorm);
+    if (fNameNorm) seenNames.add(fNameNorm);
+    displayFriends.push(f);
+  }
 
   if (!isClient) return null;
 
