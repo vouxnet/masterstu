@@ -138,10 +138,10 @@ export function DuoFriendsWidget() {
               </div>
 
               {/* Quick Interactive Actions */}
-              <div className="grid grid-cols-4 gap-1.5 pt-1">
+              <div className="grid grid-cols-2 gap-2 pt-1">
                 <button
                   onClick={() => sendPoke(friend, currentUser.name, currentUser.friendCode)}
-                  className="rounded-xl bg-amber-500/15 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 py-1.5 text-[10px] font-bold transition-all active:scale-95 flex items-center justify-center space-x-1"
+                  className="rounded-xl bg-amber-500/15 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 py-2 text-[10px] font-bold transition-all active:scale-95 flex items-center justify-center space-x-1"
                   title="Ders Çalış Hatırlatması Gönder"
                 >
                   <span>👉 Dürt</span>
@@ -149,7 +149,7 @@ export function DuoFriendsWidget() {
 
                 <button
                   onClick={() => handleCheer(friend)}
-                  className="rounded-xl bg-emerald-500/15 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 py-1.5 text-[10px] font-bold transition-all active:scale-95 flex items-center justify-center space-x-1"
+                  className="rounded-xl bg-emerald-500/15 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 py-2 text-[10px] font-bold transition-all active:scale-95 flex items-center justify-center space-x-1"
                   title="Tebrik Et ve Konfeti Patlat"
                 >
                   <span>🎉 Tebrik</span>
@@ -157,19 +157,19 @@ export function DuoFriendsWidget() {
 
                 <Link
                   href="/mistakes"
-                  className="rounded-xl bg-indigo-500/15 hover:bg-indigo-500/30 text-indigo-300 border border-indigo-500/30 py-1.5 text-[10px] font-bold transition-all active:scale-95 flex items-center justify-center space-x-1 text-center"
+                  className="rounded-xl bg-indigo-500/15 hover:bg-indigo-500/30 text-indigo-300 border border-indigo-500/30 py-2 text-[10px] font-bold transition-all active:scale-95 flex items-center justify-center space-x-1 text-center"
                   title="Yanlış Soru Kartlarını İncele"
                 >
-                  <BookOpen className="w-3 h-3" />
+                  <BookOpen className="w-3 h-3 shrink-0" />
                   <span>Yanlışlar</span>
                 </Link>
 
                 <button
                   onClick={() => setQuestionModalFriend(friend.name)}
-                  className="rounded-xl bg-purple-500/15 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 py-1.5 text-[10px] font-bold transition-all active:scale-95 flex items-center justify-center space-x-1"
+                  className="rounded-xl bg-purple-500/15 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 py-2 text-[10px] font-bold transition-all active:scale-95 flex items-center justify-center space-x-1"
                   title="Arkadaşına Özel Soru Gönder"
                 >
-                  <MessageSquare className="w-3 h-3" />
+                  <MessageSquare className="w-3 h-3 shrink-0" />
                   <span>Soru At</span>
                 </button>
               </div>
