@@ -28,7 +28,7 @@ export default function DashboardPage() {
   const targetDate = examMeta?.targetDate || "2026-09-06T10:15:00+03:00";
 
   const [time, setTime] = useState(formatTimeRemaining(targetDate));
-
+  const [mistakes, setMistakes] = useState<any[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -36,6 +36,13 @@ export default function DashboardPage() {
       const onboarded = localStorage.getItem("asimptot_onboarded");
       if (onboarded !== "true" && currentUser.id) {
         router.push("/onboarding");
+      }
+
+      const saved = localStorage.getItem("kpss_mistakes_v2");
+      if (saved) {
+        try {
+          setMistakes(JSON.parse(saved));
+        } catch (e) {}
       }
     }
     setTime(formatTimeRemaining(targetDate));
@@ -159,7 +166,7 @@ export default function DashboardPage() {
       <DailyFactWidget />
 
       {/* Layer 4.5: AI Kör Nokta Teşhis Raporu */}
-      <BlindSpotWidget />
+      <BlindSpotWidget mistakes={mistakes} />
 
       {/* Layer 5: Daily Quests & Focus Timer (Equal 2-Column) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
