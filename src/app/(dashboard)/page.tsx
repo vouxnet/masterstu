@@ -94,84 +94,82 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Layer 2: Main Area (Spacious 2-Column Responsive Layout) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Core Area (lg:col-span-7) */}
-        <div className="lg:col-span-7 space-y-6">
-          <DailyQuestWidget />
-          <DuoFriendsWidget />
-          
-          {/* Haftalık İstatistik Bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="rounded-2xl glass-card p-4 border border-white/10 flex items-center space-x-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 shrink-0">
-                <Flame className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-[10px] text-gray-400 font-semibold">Günlük Seri</p>
-                <p className="font-display font-bold text-white text-base flex items-center flex-wrap">
-                  {streak > 0 ? `${streak} Gün 🔥` : 'Başla!'}
-                  {streakFreezeInfo.freezes > 0 && (
-                    <span className="text-[9px] text-cyan-400 ml-1 bg-cyan-900/40 px-1.5 py-0.5 rounded border border-cyan-500/30">🧊×{streakFreezeInfo.freezes}</span>
-                  )}
-                </p>
-              </div>
-            </div>
-
-            <div className="rounded-2xl glass-card p-4 border border-white/10 flex items-center space-x-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 shrink-0">
-                <Clock className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-[10px] text-gray-400 font-semibold">Bu Hafta</p>
-                <p className="font-display font-bold text-white text-base">{weeklyStats.totalMinutes > 0 ? `${weeklyStats.totalMinutes} Dk` : '0 Dk'}</p>
-              </div>
-            </div>
-
-            <div className="rounded-2xl glass-card p-4 border border-white/10 flex items-center space-x-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">
-                <BookOpen className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-[10px] text-gray-400 font-semibold">Aktif Gün</p>
-                <p className="font-display font-bold text-white text-base">{weeklyStats.activeDays}/7</p>
-              </div>
-            </div>
-
-            <div className="rounded-2xl glass-card p-4 border border-white/10 flex items-center space-x-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30 shrink-0">
-                <TrendingUp className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-[10px] text-gray-400 font-semibold">Son Net</p>
-                <p className="font-display font-bold text-white text-base">{lastExams[0] ? `${lastExams[0].totalNet}` : '—'}</p>
-              </div>
-            </div>
+      {/* Layer 2: 4-Stat Executive Metric Bar */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="rounded-2xl glass-card p-4 border border-white/10 flex items-center space-x-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 shrink-0">
+            <Flame className="h-5 w-5" />
           </div>
-          
-          <MemoryDecayWidget />
+          <div>
+            <p className="text-[10px] text-gray-400 font-semibold uppercase">Günlük Seri</p>
+            <p className="font-display font-bold text-white text-base flex items-center flex-wrap">
+              {streak > 0 ? `${streak} Gün 🔥` : 'Başla!'}
+              {streakFreezeInfo.freezes > 0 && (
+                <span className="text-[9px] text-cyan-400 ml-1 bg-cyan-900/40 px-1.5 py-0.5 rounded border border-cyan-500/30">🧊×{streakFreezeInfo.freezes}</span>
+              )}
+            </p>
+          </div>
         </div>
 
-        {/* Right Core Area (lg:col-span-5) */}
-        <div className="lg:col-span-5 space-y-6">
-          <PomodoroWidget />
-          <TodoSummary />
+        <div className="rounded-2xl glass-card p-4 border border-white/10 flex items-center space-x-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 shrink-0">
+            <Clock className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-[10px] text-gray-400 font-semibold uppercase">Bu Hafta</p>
+            <p className="font-display font-bold text-white text-base">{weeklyStats.totalMinutes > 0 ? `${weeklyStats.totalMinutes} Dk` : '0 Dk'}</p>
+          </div>
+        </div>
+
+        <div className="rounded-2xl glass-card p-4 border border-white/10 flex items-center space-x-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">
+            <BookOpen className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-[10px] text-gray-400 font-semibold uppercase">Aktif Gün</p>
+            <p className="font-display font-bold text-white text-base">{weeklyStats.activeDays}/7</p>
+          </div>
+        </div>
+
+        <div className="rounded-2xl glass-card p-4 border border-white/10 flex items-center space-x-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30 shrink-0">
+            <TrendingUp className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-[10px] text-gray-400 font-semibold uppercase">Son Net</p>
+            <p className="font-display font-bold text-white text-base">{lastExams[0] ? `${lastExams[0].totalNet}` : '—'}</p>
+          </div>
         </div>
       </div>
 
-      {/* Layer 3: Micro-Learning & Current Affairs Hub (Full Width 2-Column Cards) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Layer 3: Daily Quests & Focus Center (Equal 2-Column Grid) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <DailyQuestWidget />
+        <PomodoroWidget />
+      </div>
+
+      {/* Layer 4: Neuro-Science & Social Synergy (Equal 2-Column Grid) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <MemoryDecayWidget />
+        <DuoFriendsWidget />
+      </div>
+
+      {/* Layer 5: Micro-Learning & Current Affairs Hub (Equal 2-Column Grid) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <DailyFactWidget />
         <LiveCurrentNewsWidget />
       </div>
 
-      {/* Layer 4: Bottom Quick Access */}
-      <div>
-        <h3 className="font-display font-bold text-white text-lg mb-3 flex items-center space-x-2">
-          <Sparkles className="h-5 w-5 text-indigo-400" />
-          <span>Hızlı Modül Erişimi</span>
-        </h3>
-        <QuickNavHub />
+      {/* Layer 6: Daily Checklist & Quick Navigation (Equal 2-Column Grid) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <TodoSummary />
+        <div>
+          <h3 className="font-display font-bold text-white text-base mb-3 flex items-center space-x-2">
+            <Sparkles className="h-4 w-4 text-indigo-400" />
+            <span>Hızlı Modül Erişimi</span>
+          </h3>
+          <QuickNavHub />
+        </div>
       </div>
     </div>
   );
