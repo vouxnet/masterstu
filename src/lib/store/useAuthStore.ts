@@ -242,9 +242,9 @@ function buildProfileFromUser(user: User, existing: UserProfile, fallbackName?: 
   const label = role === 'admin' ? 'Master Super Admin' : (EXAM_METADATA[activeExam]?.shortLabel || 'KPSS');
   const roleLabel = `${name} (${label})`;
 
-  // Friend code generation: NEVER default to static #ADAY2026 if name exists
-  let friendCode = meta.friendCode || existing.friendCode;
-  if (!friendCode || friendCode === '#ADAY2026' || friendCode === '#ADAY-2026') {
+  // Friend code generation: Admin has NO friend code
+  let friendCode = role === 'admin' ? "" : (meta.friendCode || existing.friendCode);
+  if (role !== 'admin' && (!friendCode || friendCode === '#ADAY2026' || friendCode === '#ADAY-2026')) {
     friendCode = generateFriendCode(name);
   }
 

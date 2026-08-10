@@ -75,7 +75,7 @@ const DEFAULT_USERS: AdminUserRecord[] = [
     email: "admin@asimptot.app",
     role: "admin",
     roleLabel: "Master Super Admin",
-    friendCode: "#ADMIN2026",
+    friendCode: "",
     selectedExams: ["kpss_lisans", "kpss_onlisans"],
     activeExam: "kpss_lisans",
     createdAt: "2026-01-01",

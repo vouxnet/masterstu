@@ -93,11 +93,15 @@ export const Header: React.FC = () => {
         </Link>
       </div>
 
-      {/* User Friend Code Badge */}
+      {/* User Friend Code or Admin Badge */}
       <div className="hidden lg:flex items-center space-x-2 rounded-2xl glass-card px-4 py-2 border border-indigo-500/30 shadow-lg">
         <div>
-          <span className="text-[10px] font-bold text-gray-400 uppercase">Arkadaş Kodun</span>
-          <p className="text-xs font-bold text-amber-400 font-mono">{currentUser.friendCode || "#ADAY2026"}</p>
+          <span className="text-[10px] font-bold text-gray-400 uppercase">
+            {currentUser.role === "admin" ? "Sistem Rolün" : "Arkadaş Kodun"}
+          </span>
+          <p className="text-xs font-bold text-amber-400 font-mono">
+            {currentUser.role === "admin" ? "👑 Master Super Admin" : (currentUser.friendCode || "#ADAY2026")}
+          </p>
         </div>
       </div>
 
