@@ -236,8 +236,10 @@ function buildProfileFromUser(user: User, existing: UserProfile, fallbackName?: 
     ? existing.activeExam
     : (selectedExams[0] || 'kpss_lisans');
 
-  const role = activeExam === 'kpss_onlisans' ? 'onlisans' : (meta.role || existing.role || 'lisans_alan');
-  const label = EXAM_METADATA[activeExam]?.shortLabel || 'KPSS';
+  const role = (user.email === 'admin@asimptot.app' || meta.role === 'admin' || existing.role === 'admin')
+    ? 'admin'
+    : (activeExam === 'kpss_onlisans' ? 'onlisans' : (meta.role || existing.role || 'lisans_alan'));
+  const label = role === 'admin' ? 'Master Super Admin' : (EXAM_METADATA[activeExam]?.shortLabel || 'KPSS');
   const roleLabel = `${name} (${label})`;
 
   // Friend code generation: NEVER default to static #ADAY2026 if name exists
