@@ -94,10 +94,11 @@ export default function AIHubPage() {
 
   // Simulation State
   const [simStatus, setSimStatus] = useState<"idle" | "running" | "finished">("idle");
-  const [simDuration, setSimDuration] = useState<number>(30); // 30, 60, 120
+  const [simDuration, setSimDuration] = useState<number>(activeExam === 'kpss_onlisans' ? 40 : 40);
   const [simResult, setSimResult] = useState<SimulationResult | null>(null);
   const [simHistory, setSimHistory] = useState<SimulationResult[]>([]);
   const [simQuestions, setSimQuestions] = useState<DuelQuestion[]>([]);
+  const [simAnswers, setSimAnswers] = useState<Record<number, number | null>>({});
 
   useEffect(() => {
     const saved = localStorage.getItem('asimptot_simulations_v1');
@@ -110,19 +111,24 @@ export default function AIHubPage() {
 
   const handleStartSimulation = () => {
     let qCount = 30;
-    if (simDuration === 130 || simDuration === 120) qCount = 60;
-    setSimQuestions(getRandomQuestions(qCount, activeExam));
+    if (simDuration === 130 || simDuration === 120) {
+      qCount = activeExam === 'kpss_onlisans' ? 60 : 60;
+    }
+    const questions = getRandomQuestions(qCount, activeExam);
+    setSimQuestions(questions);
+    setSimAnswers({});
     setSimStatus("running");
   };
 
   const handleCompleteSimulation = (result: SimulationResult) => {
     setSimResult(result);
+    setSimAnswers(result.answers || {});
     setSimStatus("finished");
     const newHistory = [result, ...simHistory];
     setSimHistory(newHistory);
     localStorage.setItem('asimptot_simulations_v1', JSON.stringify(newHistory));
 
-    const examLabel = result.totalQuestions === 120 ? 'ÖSYM Simülasyonu (120 Soru)' : 'ÖSYM Simülasyonu (30 Soru)';
+    const examLabel = result.totalQuestions >= 60 ? `ÖSYM Simülasyonu (${result.totalQuestions} Soru)` : `ÖSYM Simülasyonu (${result.totalQuestions} Soru)`;
     const stressNotes = result.gaveUp ? `PES ETTİ | Stres: ${result.stressScore}/100` : `Stres Skoru: ${result.stressScore}/100 | Süre: ${Math.floor(result.durationSeconds / 60)}dk`;
 
     addResult({
@@ -524,12 +530,15 @@ export default function AIHubPage() {
               <Flame className="w-16 h-16 text-rose-500 mx-auto" />
               <h3 className="font-display text-3xl font-bold text-white">Acımasız ÖSYM Simülasyonu</h3>
               <p className="text-gray-400">Gerçek sınav stresini yaşa. Timer durdurulamaz. Çıkarsan PES ETTİ damgası yersin.</p>
+              <span className="inline-block rounded-full bg-indigo-500/20 px-3 py-1 text-xs font-bold text-indigo-300 border border-indigo-500/30">
+                {activeExam === 'kpss_onlisans' ? '📋 Önlisans Soru Havuzu' : '📋 Lisans Soru Havuzu'}
+              </span>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-xl mx-auto">
                 <button
                   onClick={() => setSimDuration(40)}
                   className={`p-5 rounded-2xl font-bold transition-all border text-left flex flex-col justify-between ${
-                    simDuration === 40 || simDuration === 30
+                    simDuration === 40
                       ? 'bg-rose-600/20 border-rose-500 text-rose-300 shadow-xl shadow-rose-600/10'
                       : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10'
                   }`}
@@ -537,7 +546,11 @@ export default function AIHubPage() {
                   <div>
                     <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block mb-1">⚡ Tür 1 (Nokta Atışı)</span>
                     <span className="text-base font-black block text-white">30 Soruluk Özel Simülasyon</span>
-                    <span className="text-xs text-gray-400 block mt-1">%80+ çıkma ihtimalli tüm derslerden sıcak sorular</span>
+                    <span className="text-xs text-gray-400 block mt-1">
+                      {activeExam === 'kpss_onlisans'
+                        ? 'Önlisans müfredatından %80+ çıkma ihtimalli sorular'
+                        : 'Lisans GY-GK + Alan derslerinden sıcak sorular'}
+                    </span>
                   </div>
                   <span className="mt-4 text-xs font-bold text-rose-400 bg-rose-500/10 px-3 py-1.5 rounded-xl border border-rose-500/20 w-fit">
                     ⏱️ 40 Dakika Süre
@@ -547,15 +560,21 @@ export default function AIHubPage() {
                 <button
                   onClick={() => setSimDuration(130)}
                   className={`p-5 rounded-2xl font-bold transition-all border text-left flex flex-col justify-between ${
-                    simDuration === 130 || simDuration === 120
+                    simDuration === 130
                       ? 'bg-indigo-600/20 border-indigo-500 text-indigo-300 shadow-xl shadow-indigo-600/10'
                       : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10'
                   }`}
                 >
                   <div>
                     <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider block mb-1">🏆 Tür 2 (Tam Prova)</span>
-                    <span className="text-base font-black block text-white">120 Soruluk Önlisans Sınavı</span>
-                    <span className="text-xs text-gray-400 block mt-1">Birebir ÖSYM Önlisans soru ve konu dağılımı</span>
+                    <span className="text-base font-black block text-white">
+                      {activeExam === 'kpss_onlisans' ? '60 Soruluk Önlisans Sınavı' : '60 Soruluk Lisans Sınavı'}
+                    </span>
+                    <span className="text-xs text-gray-400 block mt-1">
+                      {activeExam === 'kpss_onlisans'
+                        ? 'Birebir ÖSYM Önlisans soru ve konu dağılımı'
+                        : 'Birebir ÖSYM Lisans GY-GK soru dağılımı'}
+                    </span>
                   </div>
                   <span className="mt-4 text-xs font-bold text-indigo-400 bg-indigo-500/10 px-3 py-1.5 rounded-xl border border-indigo-500/20 w-fit">
                     ⏱️ 130 Dakika Süre
@@ -567,7 +586,7 @@ export default function AIHubPage() {
                 onClick={handleStartSimulation}
                 className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-rose-600 to-indigo-600 hover:from-rose-500 hover:to-indigo-500 text-white font-black rounded-2xl text-lg transition-all shadow-xl shadow-rose-600/20 hover:scale-105 active:scale-95"
               >
-                🔥 Gerçek ÖSYM Simülasyonunu Başlat
+                🔥 {activeExam === 'kpss_onlisans' ? 'Önlisans' : 'Lisans'} ÖSYM Simülasyonunu Başlat
               </button>
 
               {simHistory.length > 0 && (
@@ -606,7 +625,7 @@ export default function AIHubPage() {
           )}
 
           {simStatus === "finished" && simResult && (
-            <div className="space-y-6 text-center max-w-xl mx-auto py-8">
+            <div className="space-y-6 text-center max-w-3xl mx-auto py-8">
               <Award className="w-16 h-16 text-amber-500 mx-auto" />
               <h3 className="font-display text-3xl font-bold text-white">Simülasyon Sonucu</h3>
               
@@ -651,12 +670,58 @@ export default function AIHubPage() {
                 Geri Dön
               </button>
 
-              {/* Simulation Results Review */}
+              {/* Detailed Per-Question Review with User Answers */}
               <div className="mt-8 text-left space-y-4 border-t border-white/10 pt-6">
-                <h4 className="text-lg font-bold text-white mb-2">Soru Özeti ve Açıklamalar</h4>
-                {simQuestions.map((q, idx) => (
-                  <QuestionReviewCard key={idx} q={q} index={idx} />
-                ))}
+                <h4 className="text-lg font-bold text-white mb-2">📋 Soru Detayları — Doğru / Yanlış / Boş</h4>
+                {simQuestions.map((q, idx) => {
+                  const userAnswer = simAnswers[idx];
+                  const isCorrect = userAnswer !== undefined && userAnswer !== null && userAnswer === q.correctIndex;
+                  const isWrong = userAnswer !== undefined && userAnswer !== null && userAnswer !== q.correctIndex;
+                  const isBlank = userAnswer === undefined || userAnswer === null;
+                  
+                  return (
+                    <div key={idx} className={`rounded-2xl p-4 border text-left space-y-2 ${
+                      isCorrect ? 'bg-emerald-950/30 border-emerald-500/30' :
+                      isWrong ? 'bg-rose-950/30 border-rose-500/30' :
+                      'bg-white/5 border-white/10'
+                    }`}>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-400 font-bold">Soru {idx + 1} ({q.subject})</span>
+                        <span className={`text-xs font-bold px-2 py-0.5 rounded ${
+                          isCorrect ? 'bg-emerald-500/20 text-emerald-400' :
+                          isWrong ? 'bg-rose-500/20 text-rose-400' :
+                          'bg-gray-500/20 text-gray-400'
+                        }`}>
+                          {isCorrect ? '✅ Doğru' : isWrong ? '❌ Yanlış' : '⬜ Boş'}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-200">{q.question}</p>
+                      <div className="space-y-1 mt-2">
+                        {q.options.map((opt, optIdx) => {
+                          const isUserChoice = userAnswer === optIdx;
+                          const isCorrectOption = q.correctIndex === optIdx;
+                          return (
+                            <div key={optIdx} className={`text-xs px-3 py-1.5 rounded-lg flex items-center space-x-2 ${
+                              isCorrectOption ? 'bg-emerald-500/15 text-emerald-300 font-bold' :
+                              isUserChoice && !isCorrectOption ? 'bg-rose-500/15 text-rose-300 line-through' :
+                              'text-gray-400'
+                            }`}>
+                              <span className="font-bold w-5">{String.fromCharCode(65 + optIdx)})</span>
+                              <span>{opt}</span>
+                              {isCorrectOption && <span className="ml-auto">✅</span>}
+                              {isUserChoice && !isCorrectOption && <span className="ml-auto">❌</span>}
+                            </div>
+                          );
+                        })}
+                      </div>
+                      {q.explanation && (
+                        <div className="mt-2 p-2.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20">
+                          <p className="text-xs text-indigo-300">💡 {q.explanation}</p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}

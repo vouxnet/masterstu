@@ -15,6 +15,7 @@ export interface SimulationResult {
   completedAt: string;
   gaveUp: boolean; // true if exited fullscreen twice
   stressScore: number; // 0-100, based on completion and time usage
+  answers: Record<number, number | null>; // user's answers map
 }
 
 interface ExamSimulatorProps {
@@ -159,7 +160,8 @@ export default function ExamSimulator({ questions, durationMinutes, onComplete, 
       durationSeconds,
       completedAt: new Date().toISOString(),
       gaveUp,
-      stressScore: Math.round(stressScore)
+      stressScore: Math.round(stressScore),
+      answers: { ...answers }
     };
   };
 

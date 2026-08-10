@@ -179,7 +179,8 @@ function buildProfileFromUser(user: User, existing: UserProfile, fallbackName?: 
   }
 
   const selectedExams: ExamType[] = meta.selectedExams || (existing.selectedExams && existing.selectedExams.length > 0 ? existing.selectedExams : (savedActive ? [savedActive] : ['kpss_lisans']));
-  const activeExam: ExamType = savedActive || meta.activeExam || existing.activeExam || selectedExams[0] || 'kpss_lisans';
+  // Priority: 1) localStorage saved exam, 2) existing persisted state, 3) Supabase metadata, 4) first selected exam
+  const activeExam: ExamType = savedActive || existing.activeExam || meta.activeExam || selectedExams[0] || 'kpss_lisans';
   const role = activeExam === 'kpss_onlisans' ? 'onlisans' : (meta.role || existing.role || 'lisans_alan');
   const label = EXAM_METADATA[activeExam]?.shortLabel || 'KPSS';
   const roleLabel = `${name} (${label})`;
@@ -428,12 +429,19 @@ export const useAuthStore = create<AuthState>()(
         const { data: { session } } = await supabase.auth.getSession();
         
         if (session?.user) {
-          const profile = buildProfileFromUser(session.user, get().currentUser);
-          set({
-            authMode: 'supabase',
-            supabaseUser: session.user,
-            currentUser: profile
-          });
+          const currentState = get().currentUser;
+          const profile = buildProfileFromUser(session.user, currentState);
+          // Only update if something actually changed to avoid re-render flicker
+          const shouldUpdate = profile.id !== currentState.id || profile.name !== currentState.name || profile.email !== currentState.email;
+          if (shouldUpdate || !currentState.id) {
+            set({
+              authMode: 'supabase',
+              supabaseUser: session.user,
+              currentUser: profile
+            });
+          } else {
+            set({ authMode: 'supabase', supabaseUser: session.user });
+          }
         } else {
           set({ authMode: 'supabase', supabaseUser: null });
         }
@@ -441,11 +449,14 @@ export const useAuthStore = create<AuthState>()(
         // Subscribe to auth changes
         supabase.auth.onAuthStateChange((_event, session) => {
           if (session?.user) {
-            const profile = buildProfileFromUser(session.user, get().currentUser);
+            const currentState = get().currentUser;
+            const profile = buildProfileFromUser(session.user, currentState);
+            // Preserve activeExam from persisted state — don't overwrite with Supabase metadata
+            const mergedProfile = { ...profile, activeExam: currentState.activeExam || profile.activeExam };
             set({
               authMode: 'supabase',
               supabaseUser: session.user,
-              currentUser: profile
+              currentUser: mergedProfile
             });
           } else {
             set({ authMode: 'supabase', supabaseUser: null });
