@@ -21,16 +21,18 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { useAuthStore, EXAM_METADATA } from "@/src/lib/store/useAuthStore";
+import { useAdminStore } from "@/src/lib/store/useAdminStore";
 
 export const Sidebar: React.FC = () => {
   const pathname = usePathname();
   const { setQuickActionOpen, currentUser } = useAuthStore();
+  const isAdminUser = currentUser.role === "admin" || currentUser.email === "admin@asimptot.app";
 
   let curriculumLabel = "📚 Müfredat";
   if (currentUser.activeExam === "kpss_lisans") curriculumLabel = "📚 Lisans Müfredatı";
   else if (currentUser.activeExam === "kpss_onlisans") curriculumLabel = "📚 Önlisans Müfredatı";
 
-  const isAdminUser = currentUser.role === "admin" || currentUser.email === "admin@asimptot.app";
+  const isPageVisible = useAdminStore((state) => state.isPageVisible);
 
   const coreLinksRaw = [
     { href: "/", label: "Gösterge Paneli", icon: Home },
@@ -43,7 +45,8 @@ export const Sidebar: React.FC = () => {
 
   const coreLinks = coreLinksRaw.filter((link) => {
     if (link.href === "/admin") return isAdminUser;
-    return true;
+    if (link.href === "/") return true;
+    return isPageVisible(link.href);
   });
 
   const practiceLinksRaw = [
@@ -57,6 +60,7 @@ export const Sidebar: React.FC = () => {
   ];
 
   const practiceLinks = practiceLinksRaw.filter((link) => {
+    if (!isPageVisible(link.href)) return false;
     if (link.href === "/placement" || link.href === "/question-distribution") {
       return currentUser.activeExam === "kpss_lisans" || currentUser.activeExam === "kpss_onlisans";
     }

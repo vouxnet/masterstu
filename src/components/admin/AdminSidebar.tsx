@@ -16,12 +16,13 @@ import {
   Database,
   Cpu,
   Sparkles,
+  GitBranch,
 } from "lucide-react";
 import Link from "next/link";
 import { useAuthStore } from "@/src/lib/store/useAuthStore";
 import { useAdminStore } from "@/src/lib/store/useAdminStore";
 
-export type AdminTabType = "overview" | "users" | "questions" | "cms" | "curriculum" | "flashcards" | "media";
+export type AdminTabType = "overview" | "pagenav" | "users" | "questions" | "cms" | "curriculum" | "flashcards" | "media";
 
 interface AdminSidebarProps {
   activeTab: AdminTabType;
@@ -41,6 +42,13 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActive
       icon: Activity,
       badge: "Özet",
       badgeColor: "bg-indigo-500/20 text-indigo-300 border-indigo-500/30",
+    },
+    {
+      id: "pagenav",
+      label: "Sayfa, Kategori & Rota Mimarı",
+      icon: GitBranch,
+      badge: "Dinamik Mimari",
+      badgeColor: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
     },
     {
       id: "users",

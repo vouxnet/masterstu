@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useAuthStore } from "@/src/lib/store/useAuthStore";
 import { AdminSidebar, AdminTabType } from "@/src/components/admin/AdminSidebar";
 import { AdminOverviewTab } from "@/src/components/admin/AdminOverviewTab";
+import { PageNavAdminTab } from "@/src/components/admin/PageNavAdminTab";
 import { UserManagementTab } from "@/src/components/admin/UserManagementTab";
 import { QuestionBankTab } from "@/src/components/admin/QuestionBankTab";
 import { CmsContentTab } from "@/src/components/admin/CmsContentTab";
@@ -50,6 +51,7 @@ export default function AdminDashboardPage() {
             transition={{ duration: 0.2 }}
           >
             {activeTab === "overview" && <AdminOverviewTab setActiveTab={setActiveTab} />}
+            {activeTab === "pagenav" && <PageNavAdminTab />}
             {activeTab === "users" && <UserManagementTab />}
             {activeTab === "questions" && <QuestionBankTab />}
             {activeTab === "cms" && <CmsContentTab />}
