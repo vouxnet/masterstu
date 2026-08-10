@@ -147,11 +147,14 @@ interface AuthState {
   
   // Supabase Actions
   setAuthMode: (mode: 'supabase') => void;
+  updateUserPassword: (newPassword: string) => Promise<{error: string | null}>;
   signUpWithEmail: (email: string, password: string, name: string) => Promise<{error: string | null}>;
   signInWithEmail: (email: string, password: string) => Promise<{error: string | null}>;
   signOut: () => Promise<void>;
   initAuth: () => Promise<void>;
 }
+
+export const DEFAULT_ASIMPTOT_AVATAR = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%234F46E5'/><stop offset='100%' stop-color='%237C3AED'/></linearGradient></defs><rect width='100' height='100' rx='30' fill='url(%23g)'/><path d='M30 50 c0-11 9-20 20-20 s20 9 20 20 -9 20 -20 20 -20-9 -20-20 Z M50 30 c-11 0 -20 9 -20 20 s9 20 20 20 20-9 20-20 -9-20 -20-20 Z' fill='none' stroke='white' stroke-width='6' stroke-linecap='round'/><circle cx='35' cy='50' r='5' fill='%2338BDF8'/><circle cx='65' cy='50' r='5' fill='%2334D399'/></svg>";
 
 const guestUser: UserProfile = {
   id: '',
@@ -162,7 +165,7 @@ const guestUser: UserProfile = {
   roleLabel: 'KPSS Lisans',
   selectedExams: ['kpss_lisans'],
   activeExam: 'kpss_lisans',
-  avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Misafir',
+  avatarUrl: DEFAULT_ASIMPTOT_AVATAR,
   dailyQuestionTarget: 100,
   completedQuestionsToday: 0,
   completedTopicsToday: 0,
@@ -185,7 +188,7 @@ function buildProfileFromUser(user: User, existing: UserProfile, fallbackName?: 
   const label = EXAM_METADATA[activeExam]?.shortLabel || 'KPSS';
   const roleLabel = `${name} (${label})`;
   const friendCode = meta.friendCode || existing.friendCode || `#${name.toUpperCase().replace(/[^A-Z0-9]/g, '') || 'ADAY'}2026`;
-  const avatarUrl = meta.avatar_url || existing.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}`;
+  const avatarUrl = meta.avatar_url || existing.avatarUrl || DEFAULT_ASIMPTOT_AVATAR;
 
   return {
     ...guestUser,
@@ -362,6 +365,18 @@ export const useAuthStore = create<AuthState>()(
       },
 
       setAuthMode: (mode) => set({ authMode: mode }),
+
+      updateUserPassword: async (newPassword) => {
+        try {
+          const supabase = createClient();
+          const { error } = await supabase.auth.updateUser({ password: newPassword });
+          if (error) return { error: error.message };
+          set({ notificationMessage: "🔒 Şifreniz başarıyla güncellendi!" });
+          return { error: null };
+        } catch (e: any) {
+          return { error: e?.message || "Şifre güncellenirken bir hata oluştu." };
+        }
+      },
 
       signUpWithEmail: async (email, password, name) => {
         const supabase = createClient();

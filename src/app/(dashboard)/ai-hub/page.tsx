@@ -112,7 +112,7 @@ export default function AIHubPage() {
   const handleStartSimulation = () => {
     let qCount = 30;
     if (simDuration === 130 || simDuration === 120) {
-      qCount = activeExam === 'kpss_onlisans' ? 60 : 60;
+      qCount = 120;
     }
     const questions = getRandomQuestions(qCount, activeExam);
     setSimQuestions(questions);
@@ -568,12 +568,12 @@ export default function AIHubPage() {
                   <div>
                     <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider block mb-1">🏆 Tür 2 (Tam Prova)</span>
                     <span className="text-base font-black block text-white">
-                      {activeExam === 'kpss_onlisans' ? '60 Soruluk Önlisans Sınavı' : '60 Soruluk Lisans Sınavı'}
+                      {activeExam === 'kpss_onlisans' ? '120 Soruluk Önlisans Sınavı' : '120 Soruluk Lisans Sınavı'}
                     </span>
                     <span className="text-xs text-gray-400 block mt-1">
                       {activeExam === 'kpss_onlisans'
-                        ? 'Birebir ÖSYM Önlisans soru ve konu dağılımı'
-                        : 'Birebir ÖSYM Lisans GY-GK soru dağılımı'}
+                        ? 'Birebir ÖSYM Önlisans 120 Soru (60 GY + 60 GK) Dağılımı'
+                        : 'Birebir ÖSYM Lisans 120 Soru (60 GY + 60 GK) Dağılımı'}
                     </span>
                   </div>
                   <span className="mt-4 text-xs font-bold text-indigo-400 bg-indigo-500/10 px-3 py-1.5 rounded-xl border border-indigo-500/20 w-fit">

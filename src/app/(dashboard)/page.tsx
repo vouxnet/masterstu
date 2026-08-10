@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { TodoSummary } from "@/src/components/dashboard/TodoSummary";
 import { QuickNavHub } from "@/src/components/dashboard/QuickNavHub";
 import { PomodoroWidget } from "@/src/components/dashboard/PomodoroWidget";
@@ -27,13 +28,21 @@ export default function DashboardPage() {
 
   const [time, setTime] = useState(formatTimeRemaining(targetDate));
 
+  const router = useRouter();
+
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const onboarded = localStorage.getItem("asimptot_onboarded");
+      if (onboarded !== "true" && currentUser.id) {
+        router.push("/onboarding");
+      }
+    }
     setTime(formatTimeRemaining(targetDate));
     const interval = setInterval(() => {
       setTime(formatTimeRemaining(targetDate));
     }, 1000);
     return () => clearInterval(interval);
-  }, [targetDate]);
+  }, [targetDate, currentUser.id, router]);
 
   const todayStats = getTodayStats(activeExam);
   const weeklyStats = getWeeklyStats(activeExam);

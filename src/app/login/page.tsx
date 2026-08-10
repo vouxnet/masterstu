@@ -40,7 +40,12 @@ export default function LoginPage() {
       if (error) {
         setErrorMessage(error);
       } else {
-        router.push("/");
+        const isOnboarded = typeof window !== 'undefined' && localStorage.getItem('asimptot_onboarded') === 'true';
+        if (!isOnboarded) {
+          router.push("/onboarding");
+        } else {
+          router.push("/");
+        }
       }
     }
   };
@@ -159,7 +164,7 @@ export default function LoginPage() {
             const { error } = await supabase.auth.signInWithOAuth({
               provider: 'google',
               options: {
-                redirectTo: `${window.location.origin}/`,
+                redirectTo: `${window.location.origin}/onboarding`,
               },
             });
             if (error) setErrorMessage(error.message);

@@ -11,7 +11,7 @@ export function clearAllUserStats(examType: string = 'kpss_lisans') {
     if (useStudyLogStore?.getState()?.clearLogs) useStudyLogStore.getState().clearLogs();
     if (useExamHistoryStore?.getState()?.clearHistory) useExamHistoryStore.getState().clearHistory();
     if (useDailyQuestStore?.getState()?.resetQuests) useDailyQuestStore.getState().resetQuests();
-    if (useFriendStore?.getState()?.resetFriends) useFriendStore.getState().resetFriends();
+    // Note: Friends list is preserved across logins/logouts
 
     
     const role = examTypeToRole ? examTypeToRole(examType) : "lisans_alan";
