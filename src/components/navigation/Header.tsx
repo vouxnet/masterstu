@@ -93,16 +93,11 @@ export const Header: React.FC = () => {
         </Link>
       </div>
 
-      {/* Center Duo Streak Badge */}
-      <div className="hidden lg:flex items-center space-x-2 rounded-2xl glass-card px-4 py-2 border border-amber-500/30 shadow-lg">
-        <Flame className="h-5 w-5 text-amber-400 animate-pulse" />
+      {/* User Friend Code Badge */}
+      <div className="hidden lg:flex items-center space-x-2 rounded-2xl glass-card px-4 py-2 border border-indigo-500/30 shadow-lg">
         <div>
-          <span className="text-xs font-bold text-amber-300">
-            Duo Streak: {streak} Gün
-          </span>
-          <div className="flex items-center space-x-2 mt-0.5">
-            <span className="text-[10px] text-gray-400 font-medium">{currentUser.friendCode}</span>
-          </div>
+          <span className="text-[10px] font-bold text-gray-400 uppercase">Arkadaş Kodun</span>
+          <p className="text-xs font-bold text-amber-400 font-mono">{currentUser.friendCode || "#ADAY2026"}</p>
         </div>
       </div>
 

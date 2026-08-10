@@ -210,7 +210,7 @@ export default function ExamsPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {ALL_EXAM_PACKS.map((pack) => (
+          {ALL_EXAM_PACKS.filter(pack => pack.examType === currentUser.activeExam || pack.examType === "both").map((pack) => (
             <div key={pack.id} className="p-5 rounded-2xl glass-card border border-indigo-500/30 hover:border-indigo-400/60 transition-all flex flex-col justify-between space-y-4 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/20 transition-all"></div>
               
@@ -268,14 +268,16 @@ export default function ExamsPage() {
             <div className="flex flex-wrap gap-2 pt-3 border-t border-white/10">
               <button
                 onClick={() => {
+                  const targetPack = ALL_EXAM_PACKS.find(p => p.examType === currentUser.activeExam) || ALL_EXAM_PACKS[0];
+                  const currentExamType = currentUser.activeExam === "kpss_lisans" ? "kpss_lisans" : "kpss_onlisans";
                   const turkishPack: ExamPack = {
-                    id: "brans-turkce-1",
-                    title: "Türkçe Branş Denemesi #1 (30 Soru)",
+                    id: `brans-turkce-${currentUser.activeExam}`,
+                    title: `Türkçe Branş Denemesi #1 (30 Soru)`,
                     description: "Sözcük, Cümle, Paragraf, Dil Bilgisi ve Sözel Mantık 30 Soru",
-                    examType: "kpss_onlisans",
+                    examType: currentExamType,
                     totalQuestions: 30,
                     durationMinutes: 35,
-                    questions: ALL_EXAM_PACKS[0].questions.filter(q => q.subject === "Türkçe")
+                    questions: targetPack.questions.filter(q => q.subject === "Türkçe")
                   };
                   setActivePack(turkishPack);
                 }}
@@ -285,14 +287,16 @@ export default function ExamsPage() {
               </button>
               <button
                 onClick={() => {
+                  const targetPack = ALL_EXAM_PACKS.find(p => p.examType === currentUser.activeExam) || ALL_EXAM_PACKS[0];
+                  const currentExamType = currentUser.activeExam === "kpss_lisans" ? "kpss_lisans" : "kpss_onlisans";
                   const mathPack: ExamPack = {
-                    id: "brans-mat-1",
-                    title: "Matematik & Geometri Branş Denemesi #1 (30 Soru)",
+                    id: `brans-mat-${currentUser.activeExam}`,
+                    title: `Matematik & Geometri Branş Denemesi #1 (30 Soru)`,
                     description: "İşlem, Problemler, Dairesel Grafik, Sayısal Mantık ve Geometri 30 Soru",
-                    examType: "kpss_onlisans",
+                    examType: currentExamType,
                     totalQuestions: 30,
                     durationMinutes: 45,
-                    questions: ALL_EXAM_PACKS[0].questions.filter(q => q.subject === "Matematik")
+                    questions: targetPack.questions.filter(q => q.subject === "Matematik")
                   };
                   setActivePack(mathPack);
                 }}
@@ -302,14 +306,16 @@ export default function ExamsPage() {
               </button>
               <button
                 onClick={() => {
+                  const targetPack = ALL_EXAM_PACKS.find(p => p.examType === currentUser.activeExam) || ALL_EXAM_PACKS[0];
+                  const currentExamType = currentUser.activeExam === "kpss_lisans" ? "kpss_lisans" : "kpss_onlisans";
                   const tarihpPack: ExamPack = {
-                    id: "brans-tarih-1",
-                    title: "Tarih Branş Denemesi #1 (27 Soru)",
+                    id: `brans-tarih-${currentUser.activeExam}`,
+                    title: `Tarih Branş Denemesi #1 (27 Soru)`,
                     description: "İslamiyet Öncesinden Çağdaş Türk ve Dünya Tarihine 27 Soru",
-                    examType: "kpss_onlisans",
+                    examType: currentExamType,
                     totalQuestions: 27,
                     durationMinutes: 25,
-                    questions: ALL_EXAM_PACKS[0].questions.filter(q => q.subject === "Tarih")
+                    questions: targetPack.questions.filter(q => q.subject === "Tarih")
                   };
                   setActivePack(tarihpPack);
                 }}
@@ -319,14 +325,16 @@ export default function ExamsPage() {
               </button>
               <button
                 onClick={() => {
+                  const targetPack = ALL_EXAM_PACKS.find(p => p.examType === currentUser.activeExam) || ALL_EXAM_PACKS[0];
+                  const currentExamType = currentUser.activeExam === "kpss_lisans" ? "kpss_lisans" : "kpss_onlisans";
                   const cografyaPack: ExamPack = {
-                    id: "brans-cografya-1",
-                    title: "Coğrafya Branş Denemesi #1 (18 Soru)",
+                    id: `brans-cografya-${currentUser.activeExam}`,
+                    title: `Coğrafya Branş Denemesi #1 (18 Soru)`,
                     description: "Fiziki, Beşeri, Ekonomik Coğrafya ve Bölgesel Projeler 18 Soru",
-                    examType: "kpss_onlisans",
+                    examType: currentExamType,
                     totalQuestions: 18,
                     durationMinutes: 20,
-                    questions: ALL_EXAM_PACKS[0].questions.filter(q => q.subject === "Coğrafya")
+                    questions: targetPack.questions.filter(q => q.subject === "Coğrafya")
                   };
                   setActivePack(cografyaPack);
                 }}
@@ -336,14 +344,16 @@ export default function ExamsPage() {
               </button>
               <button
                 onClick={() => {
+                  const targetPack = ALL_EXAM_PACKS.find(p => p.examType === currentUser.activeExam) || ALL_EXAM_PACKS[0];
+                  const currentExamType = currentUser.activeExam === "kpss_lisans" ? "kpss_lisans" : "kpss_onlisans";
                   const vatPack: ExamPack = {
-                    id: "brans-vat-1",
-                    title: "Vatandaşlık & Güncel Bilgiler Branş Denemesi #1 (15 Soru)",
+                    id: `brans-vat-${currentUser.activeExam}`,
+                    title: `Vatandaşlık & Güncel Bilgiler Branş Denemesi #1 (15 Soru)`,
                     description: "Hukukun Temel Kavramları, Anayasa, İdare Hukuku ve Güncel Bilgiler 15 Soru",
-                    examType: "kpss_onlisans",
+                    examType: currentExamType,
                     totalQuestions: 15,
                     durationMinutes: 15,
-                    questions: ALL_EXAM_PACKS[0].questions.filter(q => q.subject === "Vatandaşlık" || q.subject === "Güncel Bilgiler")
+                    questions: targetPack.questions.filter(q => q.subject === "Vatandaşlık" || q.subject === "Güncel Bilgiler")
                   };
                   setActivePack(vatPack);
                 }}

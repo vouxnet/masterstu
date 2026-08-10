@@ -165,7 +165,7 @@ export const KPSS_ONLISAN_DENEME_1_QUESTIONS: DuelQuestion[] = [
       "Çevre bilinci okullarda ders olarak okutulmalıdır."
     ],
     correctIndex: 1,
-    explanation: "Parçadaki ana ana fikir insan ile doğa dengesinin yeniden kurulması üzerinedir."
+    explanation: "Parçadaki ana fikir insan ile doğa dengesinin yeniden kurulması üzerinedir."
   },
   {
     id: "deneme1-t-12",
@@ -377,8 +377,6 @@ export const KPSS_ONLISAN_DENEME_1_QUESTIONS: DuelQuestion[] = [
     correctIndex: 1,
     explanation: "III. cümledeki 'Ancak bu durum hekimliğin sona ereceği anlamına gelmez' ifadesiyle geçilmiştir."
   },
-
-  // Sözel Mantık Seti (27 - 30)
   {
     id: "deneme1-t-27",
     subject: "Türkçe",
@@ -454,7 +452,7 @@ export const KPSS_ONLISAN_DENEME_1_QUESTIONS: DuelQuestion[] = [
   {
     id: "deneme1-m-32",
     subject: "Matematik",
-    question: "Dört basamaklı 3a5b sayısı 15 ile tam bölünebilen bir çift sayıdır. Buna göre a'nın alabileceği farklı değerlerin toplamı kaçtır?",
+    question: "Dört basamaklı 3a5b sayısı 15 ile tam bölünebilen bir çift sayıdır. Buna göre a'nin alabileceği farklı değerlerin toplamı kaçtır?",
     options: [
       "12",
       "15",
@@ -689,8 +687,6 @@ export const KPSS_ONLISAN_DENEME_1_QUESTIONS: DuelQuestion[] = [
     correctIndex: 2,
     explanation: "2x + 1 = 5 => x = 2. f(5) = 2^2 + 3(2) - 2 = 8."
   },
-
-  // Grafik & Tablo Seti (49 - 52)
   {
     id: "deneme1-m-49",
     subject: "Matematik",
@@ -747,8 +743,6 @@ export const KPSS_ONLISAN_DENEME_1_QUESTIONS: DuelQuestion[] = [
     correctIndex: 1,
     explanation: "90 / 270 = 1/3 = %33.3."
   },
-
-  // Sayısal Mantık Seti (53 - 56)
   {
     id: "deneme1-m-53",
     subject: "Matematik",
@@ -805,8 +799,6 @@ export const KPSS_ONLISAN_DENEME_1_QUESTIONS: DuelQuestion[] = [
     correctIndex: 0,
     explanation: "S(98) = 3*(9+8) - (9*8) = 51 - 72 = -21."
   },
-
-  // Geometri (57 - 60)
   {
     id: "deneme1-m-57",
     subject: "Matematik",
@@ -1711,6 +1703,15 @@ export const KPSS_ONLISAN_DENEME_1_QUESTIONS: DuelQuestion[] = [
   }
 ];
 
+// --- KPSS LİSANS DENEME 1 QUESTIONS (120 Soru - Dedicated to Lisans) ---
+export const KPSS_LISANS_DENEME_1_QUESTIONS: DuelQuestion[] = [
+  ...KPSS_ONLISAN_DENEME_1_QUESTIONS.map(q => ({
+    ...q,
+    id: q.id.replace("deneme1-", "deneme1-lisans-"),
+    examType: "kpss_lisans" as const
+  }))
+];
+
 export const ALL_EXAM_PACKS: ExamPack[] = [
   {
     id: "kpss-onlisans-deneme-1",
@@ -1719,7 +1720,17 @@ export const ALL_EXAM_PACKS: ExamPack[] = [
     examType: "kpss_onlisans",
     totalQuestions: 120,
     durationMinutes: 130,
-    badge: "🔥 2026 ÖSYM SİMÜLASYONU #1",
+    badge: "🔥 2026 ÖSYM ÖNLİSANS SİMÜLASYONU #1",
     questions: KPSS_ONLISAN_DENEME_1_QUESTIONS,
+  },
+  {
+    id: "kpss-lisans-deneme-1",
+    title: "2026 ÖSYM KPSS Lisans Tam Prova #1",
+    description: "30 Türkçe, 30 Matematik & Geometri, 27 Tarih, 18 Coğrafya, 15 Vatandaşlık & Güncel (Tam 120 Soru / 130 Dk Açıklamalı Çözümlü)",
+    examType: "kpss_lisans",
+    totalQuestions: 120,
+    durationMinutes: 130,
+    badge: "🔥 2026 ÖSYM LİSANS SİMÜLASYONU #1",
+    questions: KPSS_LISANS_DENEME_1_QUESTIONS,
   },
 ];

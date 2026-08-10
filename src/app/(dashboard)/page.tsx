@@ -93,68 +93,13 @@ export default function DashboardPage() {
            </div>
         </div>
 
-        {/* Right: Streak & Daily */}
-        <div className="flex items-center justify-end space-x-4 flex-1">
-          <div className="flex flex-col items-end">
-             <span className="text-[10px] text-gray-400 font-semibold uppercase">Günlük Seri</span>
-             <div className="font-display text-lg font-bold text-amber-400 flex items-center">
-               {streak > 0 ? `${streak} Gün 🔥` : 'Başla!'}
-             </div>
-          </div>
-          <div className="h-10 w-px bg-white/10"></div>
+        {/* Right: Daily Target */}
+        <div className="flex items-center justify-end flex-1">
           <div className="flex flex-col items-end">
             <span className="text-[10px] text-gray-400 font-semibold uppercase">Bugün</span>
             <span className="font-display text-lg font-bold text-emerald-400">
-              {todayStats.totalMinutes > 0 ? `${todayStats.totalMinutes} Dk` : `Hedef: ${currentUser.dailyQuestionTarget}`}
+              {todayStats.totalMinutes > 0 ? `${todayStats.totalMinutes} Dk` : `Hedef: ${currentUser.dailyQuestionTarget} Soru`}
             </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Layer 2: 4-Stat Executive Metric Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="rounded-2xl glass-card p-4 border border-white/10 flex items-center space-x-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 shrink-0">
-            <Flame className="h-5 w-5" />
-          </div>
-          <div>
-            <p className="text-[10px] text-gray-400 font-semibold uppercase">Günlük Seri</p>
-            <p className="font-display font-bold text-white text-base flex items-center flex-wrap">
-              {streak > 0 ? `${streak} Gün 🔥` : 'Başla!'}
-              {streakFreezeInfo.freezes > 0 && (
-                <span className="text-[9px] text-cyan-400 ml-1 bg-cyan-900/40 px-1.5 py-0.5 rounded border border-cyan-500/30">🧊×{streakFreezeInfo.freezes}</span>
-              )}
-            </p>
-          </div>
-        </div>
-
-        <div className="rounded-2xl glass-card p-4 border border-white/10 flex items-center space-x-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 shrink-0">
-            <Clock className="h-5 w-5" />
-          </div>
-          <div>
-            <p className="text-[10px] text-gray-400 font-semibold uppercase">Bu Hafta</p>
-            <p className="font-display font-bold text-white text-base">{weeklyStats.totalMinutes > 0 ? `${weeklyStats.totalMinutes} Dk` : '0 Dk'}</p>
-          </div>
-        </div>
-
-        <div className="rounded-2xl glass-card p-4 border border-white/10 flex items-center space-x-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">
-            <BookOpen className="h-5 w-5" />
-          </div>
-          <div>
-            <p className="text-[10px] text-gray-400 font-semibold uppercase">Aktif Gün</p>
-            <p className="font-display font-bold text-white text-base">{weeklyStats.activeDays}/7</p>
-          </div>
-        </div>
-
-        <div className="rounded-2xl glass-card p-4 border border-white/10 flex items-center space-x-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30 shrink-0">
-            <TrendingUp className="h-5 w-5" />
-          </div>
-          <div>
-            <p className="text-[10px] text-gray-400 font-semibold uppercase">Son Net</p>
-            <p className="font-display font-bold text-white text-base">{lastExams[0] ? `${lastExams[0].totalNet}` : '—'}</p>
           </div>
         </div>
       </div>

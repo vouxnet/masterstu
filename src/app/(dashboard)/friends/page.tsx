@@ -344,15 +344,10 @@ export default function FriendsPage() {
                   </div>
 
                   <div className="flex items-center space-x-2">
-                    <div className="flex items-center space-x-1.5 rounded-xl bg-amber-500/10 px-2.5 py-1 border border-amber-500/30 text-xs font-bold text-amber-400">
-                      <Flame className="h-4 w-4 text-amber-400 animate-bounce" />
-                      <span>{friend.streakCount} Gün</span>
-                    </div>
-
                     <button
                       onClick={() => removeFriend(friend.id)}
-                      className="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 transition-all hover:scale-105 active:scale-95"
-                      title="Arkadaşı Sil"
+                      className="rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 p-2 border border-rose-500/20 transition-transform active:scale-95"
+                      title="Arkadaşı Çıkar"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
