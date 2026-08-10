@@ -212,21 +212,18 @@ export default function SettingsPage() {
                   </div>
 
                   <div className="space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <label className="text-xs font-bold text-gray-300">Duo Arkadaş Kodu (Sabit Kimlik)</label>
-                      <span className="text-[9px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-500/30 font-bold">🔒 Değiştirilemez</span>
-                    </div>
+                    <label className="text-xs font-bold text-gray-300">Duo Arkadaş Kodu</label>
                     <div className="flex items-center space-x-2">
                       <input
                         type="text"
-                        value={currentUser.friendCode}
+                        value={currentUser.friendCode || "#ADAY-2026"}
                         readOnly
                         className="w-full bg-gray-900/60 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-amber-300 font-mono font-bold cursor-default tracking-wider"
                       />
                       <button
                         type="button"
                         onClick={() => {
-                          navigator.clipboard.writeText(currentUser.friendCode || "");
+                          navigator.clipboard.writeText(currentUser.friendCode || "#ADAY-2026");
                           setProfileMessage("📋 Arkadaş kodunuz panoya kopyalandı!");
                           setTimeout(() => setProfileMessage(null), 3000);
                         }}
