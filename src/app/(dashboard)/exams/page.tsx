@@ -317,6 +317,40 @@ export default function ExamsPage() {
               >
                 🏛️ Tarih (27 Soru)
               </button>
+              <button
+                onClick={() => {
+                  const cografyaPack: ExamPack = {
+                    id: "brans-cografya-1",
+                    title: "Coğrafya Branş Denemesi #1 (18 Soru)",
+                    description: "Fiziki, Beşeri, Ekonomik Coğrafya ve Bölgesel Projeler 18 Soru",
+                    examType: "kpss_onlisans",
+                    totalQuestions: 18,
+                    durationMinutes: 20,
+                    questions: ALL_EXAM_PACKS[0].questions.filter(q => q.subject === "Coğrafya")
+                  };
+                  setActivePack(cografyaPack);
+                }}
+                className="px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-300 text-xs font-bold transition-all"
+              >
+                🗺️ Coğrafya (18 Soru)
+              </button>
+              <button
+                onClick={() => {
+                  const vatPack: ExamPack = {
+                    id: "brans-vat-1",
+                    title: "Vatandaşlık & Güncel Bilgiler Branş Denemesi #1 (15 Soru)",
+                    description: "Hukukun Temel Kavramları, Anayasa, İdare Hukuku ve Güncel Bilgiler 15 Soru",
+                    examType: "kpss_onlisans",
+                    totalQuestions: 15,
+                    durationMinutes: 15,
+                    questions: ALL_EXAM_PACKS[0].questions.filter(q => q.subject === "Vatandaşlık" || q.subject === "Güncel Bilgiler")
+                  };
+                  setActivePack(vatPack);
+                }}
+                className="px-3 py-1.5 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 text-purple-300 text-xs font-bold transition-all"
+              >
+                ⚖️ Vatandaşlık & Güncel (15 Soru)
+              </button>
             </div>
           </div>
         </div>
