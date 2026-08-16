@@ -43,7 +43,7 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 
 ---
 
-## ⚠️ PROJE DURUMU (SON GÜNCELLEME: 2026-08-10)
+## ⚠️ PROJE DURUMU (SON GÜNCELLEME: 2026-08-16)
 
 ### Aktif Sınav Tipleri (Tam İçerikli)
 | Sınav | Müfredat | Flashcard | Soru Dağılımı | Puan Hesaplama | ÖSYM Simülasyon |
@@ -60,12 +60,15 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 | 🔒 YKS - TYT | Eklenecek |
 | 🔒 YKS - AYT | Eklenecek |
 
-### Mevcut Mimari & Güvenlik
-- **Auth**: Supabase Auth (Email + Google OAuth) + Zorunlu Onboarding Yönlendirmesi
-- **Duo Kodu**: `#İSİM-HEX` formatında otomatik atanan, değiştirilemez sabit kimlik (`#BULENT-4A8E`, `#SENA-91F4`)
+### Mevcut Mimari, Güvenlik & UI/UX Standartları
+- **Auth & Güvenlik**: Supabase Auth (Email + Google OAuth) + **6 Haneli E-Posta Onay Kodu (OTP)** Aktivasyon Akışı (`verifyOtp`)
+- **Tema Motoru**: **Koyu & Açık Tema (Dark & Light Mode)** desteği (`useThemeStore.ts`), Header & Login hızlı değiştirici, porselen cam tasarımı
+- **Ödüllü Minimalist Tasarım**: 3 Sütunlu Odaklanmış Çalışma Stüdyosu (Mastery Rings, Dynamic Learning Focus, Performans & Hafıza Hub)
+- **3 Çekirdekli Menü Mimarisi**: 🎯 Çalışma Stüdyosu, 📝 Deneme & Simülasyon, 📊 Gelişim & Analitik
+- **Duo Kodu**: `#İSİM-HEX` formatında otomatik atanan, değiştirilemez sabit kimlik
 - **Database**: Supabase PostgreSQL (Frankfurt bölgesi, 10 tablo, RLS aktif, auto-profile tetikleyicisi)
 - **Deployment**: Vercel (`masterstu.vercel.app`)
-- **State**: Zustand + localStorage (oturumlar arası arkadaşlıklar ve sınav seçimleri kalıcı)
+- **State**: Zustand + localStorage (oturumlar arası arkadaşlıklar, tema ve sınav seçimleri kalıcı)
 - **AI & Algoritmalar**: %100 Algoritmik Triyaj (ROI) + Ebbinghaus Unutma Eğrisi ($0 API Maliyeti)
 
 ---
@@ -76,8 +79,9 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 
 | Rota | Sayfa | Durum | Açıklama |
 |------|-------|-------|----------|
-| `/` | Gösterge Paneli | ✅ Aktif | Geri sayım, Pomodoro, Todo, Sprint Modu, Hafıza Barları, Rakip Radarı, 22 Güncel Bilgi |
-| `/login` | Giriş Ekranı | ✅ Aktif | Supabase Auth + Google OAuth (Onboarding korumalı) |
+| `/` | Gösterge Paneli | ✅ Aktif | 3 Sütunlu Stüdyo, Geri sayım, Dynamic Learning Focus, Mastery Rings, Performans Özeti |
+| `/login` | Giriş & Kayıt | ✅ Aktif | Supabase Auth + 6 Haneli OTP Onay Kodu Ekranı + Google OAuth + Tema Değiştirici |
+| `/admin` | Executive Studio | ✅ Aktif | Sol Menülü Özel Yönetim Stüdyosu, Sayfa & Rota Mimarı, 120 Soru Bankası, CMS, Üyeler |
 | `/onboarding` | Sınav Seçimi | ✅ Aktif | Çoklu sınav seçimi, aktif sınav ataması, otomatik `#İSİM-HEX` Duo kodu |
 | `/curriculum` | Müfredat Takibi | ✅ Aktif | Akordiyon konular, durum döngüsü, sınav bazlı filtreleme |
 | `/flashcards` | Bilgi Kartları | ✅ Aktif | Tinder-tarzı kaydırma, SRS Leitner, sınav bazlı filtreleme |
@@ -96,6 +100,8 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 
 | Store | Persist Key | Açıklama | Durum |
 |-------|-------------|----------|---------|
+| `useThemeStore.ts` | `asimptot_theme_preference` | Koyu / Açık tema tercihi (Dark & Light Mode) | ✅ Persist Aktif |
+| `useAdminStore.ts` | `asimptot_admin_store_v3` | Sayfa & Rota yönetimi, CMS metinleri, 120 Soru Bankası | ✅ Persist Aktif |
 | `useAuthStore.ts` | `asimptot_auth_v1` | Profil, partner, `activeExam` öncelikli kalıcılık, `updateUserPassword`, default Asimptot SVG avatar | ✅ Persist Aktif |
 | `useCurriculumStore.ts` | `asimptot_curriculum_v1` | Konu ilerleme, `getTopicsForExam()`, `examTypeToRole()` | ✅ Persist Aktif |
 | `useFriendStore.ts` | `kpss_friends_v2` | Arkadaş listesi (Oturum kapansa da silinmez, kalıcı) | ✅ Persist Aktif |
