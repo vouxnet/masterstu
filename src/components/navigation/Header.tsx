@@ -7,7 +7,8 @@ import { useAuthStore, EXAM_METADATA, ExamType } from "@/src/lib/store/useAuthSt
 import { useStudyLogStore } from "@/src/lib/store/useStudyLogStore";
 
 import { useFriendStore } from "@/src/lib/store/useFriendStore";
-import { GraduationCap, Flame, Plus, LogOut, Bell, Check, Trash2, X } from "lucide-react";
+import { GraduationCap, Flame, Plus, LogOut, Bell, Check, Trash2, X, Sun, Moon } from "lucide-react";
+import { useThemeStore } from "@/src/lib/store/useThemeStore";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const Header: React.FC = () => {
@@ -16,6 +17,7 @@ export const Header: React.FC = () => {
   const streak = useStudyLogStore((state) => state.getStreakCount());
 
   const { notifications, markNotificationsRead, clearNotifications } = useFriendStore();
+  const { theme, toggleTheme } = useThemeStore();
 
   const [isNotifOpen, setIsNotifOpen] = useState(false);
 
@@ -105,8 +107,17 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Right Controls: Notification Bell + User Profile + Logout */}
-      <div className="flex items-center space-x-3">
+      {/* Right Controls: Theme Toggle + Notification Bell + User Profile + Logout */}
+      <div className="flex items-center space-x-2.5">
+        {/* Theme Toggle Button */}
+        <button
+          onClick={toggleTheme}
+          className="rounded-2xl glass-card p-2.5 text-gray-300 hover:text-white border border-white/10 transition-transform active:scale-95 shadow-md"
+          title={theme === "dark" ? "Açık Temaya Geç" : "Koyu Temaya Geç"}
+        >
+          {theme === "dark" ? <Sun className="h-4 w-4 text-amber-400" /> : <Moon className="h-4 w-4 text-indigo-400" />}
+        </button>
+
         {/* Notification Bell Dropdown */}
         <div className="relative">
           <button
