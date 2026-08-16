@@ -8,7 +8,7 @@ import { Sidebar } from "@/src/components/navigation/Sidebar";
 import { BottomNav } from "@/src/components/navigation/BottomNav";
 import { QuickActionModal } from "@/src/components/modals/QuickActionModal";
 import { useAuthStore } from "@/src/lib/store/useAuthStore";
-import { ShieldCheck, LogOut, ArrowLeft, Activity, Database, Users, BookOpen, Layout, BarChart3, Image } from "lucide-react";
+import { ShieldCheck, LogOut, ArrowLeft } from "lucide-react";
 
 export default function DashboardLayout({
   children,
@@ -20,6 +20,7 @@ export default function DashboardLayout({
   const { currentUser, signOut } = useAuthStore();
 
   const isAdminPage = pathname?.startsWith("/admin");
+  const isRootDashboard = pathname === "/";
 
   // If rendering Admin Console, provide an Exclusive Executive Studio Layout
   if (isAdminPage) {
@@ -77,19 +78,16 @@ export default function DashboardLayout({
     );
   }
 
-  // Normal Student Dashboard Layout
+  // Normal Student Dashboard Layout (Full Widescreen Studio Grade)
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-gray-100 pb-24 md:pb-8">
-      {/* Header Bar */}
+    <div className="min-h-screen bg-[#0B0F19] text-gray-100 pb-24 md:pb-8 flex flex-col">
+      {/* Universal Top Header with Navigation Tabs */}
       <Header />
 
-      {/* Main Body Layout */}
-      <div className="mx-auto flex max-w-7xl">
-        {/* Desktop Sidebar */}
-        <Sidebar />
-
-        {/* Dynamic Content */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0">
+      {/* Main Body: Full Widescreen Studio on Dashboard, with Sidebar on sub-routes */}
+      <div className="w-full flex-1 max-w-[1700px] mx-auto flex">
+        {!isRootDashboard && <Sidebar />}
+        <main className={`flex-1 p-4 sm:p-6 lg:p-8 min-w-0 ${isRootDashboard ? "w-full" : ""}`}>
           {children}
         </main>
       </div>
