@@ -33,25 +33,32 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
+  // Allow auth callbacks, api routes, and public assets
+  if (pathname.startsWith("/auth/callback") || pathname.startsWith("/api")) {
+    return supabaseResponse;
+  }
+
   // Protected routes list
   const protectedRoutes = [
-    "/",
     "/curriculum",
     "/flashcards",
     "/mistakes",
     "/exams",
     "/shared-qa",
+    "/ai-hub",
+    "/ai-schedule",
+    "/placement",
+    "/skill-tree",
+    "/friends",
+    "/league",
+    "/settings",
   ];
 
-  const isProtectedRoute = protectedRoutes.some(
-    (route) => pathname === route || (route !== "/" && pathname.startsWith(route))
-  );
-
+  const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route)) || pathname === "/";
   const isAuthenticated = !!user;
 
   // If user is trying to access protected route without being authenticated
   if (isProtectedRoute && !isAuthenticated) {
-
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);

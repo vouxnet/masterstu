@@ -26,12 +26,8 @@ export default function OnboardingPage() {
   const { resetAllTopics } = useCurriculumStore();
 
   React.useEffect(() => {
-    if (typeof window !== "undefined") {
-      const onboarded = localStorage.getItem("asimptot_onboarded");
-      if (onboarded === "true") {
-        window.location.href = "/";
-      }
-    }
+    // Sync user state on mount
+    useAuthStore.getState().initAuth();
   }, []);
 
   const [name, setName] = useState(currentUser.name || "Aday");
