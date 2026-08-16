@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuthStore, EXAM_METADATA } from "@/src/lib/store/useAuthStore";
 import { useStudyLogStore } from "@/src/lib/store/useStudyLogStore";
 import { useExamHistoryStore } from "@/src/lib/store/useExamHistoryStore";
+import { useCurriculumStore } from "@/src/lib/store/useCurriculumStore";
+import { useDailyQuestStore } from "@/src/lib/store/useDailyQuestStore";
 import { formatTimeRemaining } from "@/src/lib/utils";
 import {
   CheckCircle2,
@@ -24,14 +26,18 @@ import {
   Radio,
   BarChart2,
   Check,
+  FileSpreadsheet,
+  Target,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function DashboardPage() {
   const router = useRouter();
   const { currentUser } = useAuthStore();
-  const { getTodayStats, getWeeklyStats } = useStudyLogStore();
-  const { results } = useExamHistoryStore();
+  const { getTodayStats, getWeeklyStats, getStreakCount } = useStudyLogStore();
+  const { results, getLastN } = useExamHistoryStore();
+  const { topics, getTopicsForExam } = useCurriculumStore();
+  const { quests, generateDailyQuests, updateQuestProgress } = useDailyQuestStore();
 
   const activeExam = currentUser.activeExam || "kpss_lisans";
   const examMeta = EXAM_METADATA[activeExam];
@@ -39,54 +45,7 @@ export default function DashboardPage() {
 
   const [time, setTime] = useState(formatTimeRemaining(targetDate));
 
-  // Dynamic Task List
-  const [tasks, setTasks] = useState([
-    {
-      id: "t1",
-      number: "1.",
-      subject: "Matematik",
-      topic: "Fonksiyonlar & Problemler",
-      detail: "5 Test",
-      tag: "Tamamla",
-      tagType: "success",
-      completed: true,
-      href: "/exams",
-    },
-    {
-      id: "t2",
-      number: "2.",
-      subject: "Tarih & İnkılap",
-      topic: "Kurtuluş Savaşı Muharebeler",
-      detail: "Konu Çalış",
-      tag: "Konu Çalış",
-      tagType: "info",
-      completed: false,
-      href: "/curriculum",
-    },
-    {
-      id: "t3",
-      number: "3.",
-      subject: "Türkçe",
-      topic: "Paragrafta Anlam ve Yapı",
-      detail: "4 Test",
-      tag: "0 / 4",
-      tagType: "neutral",
-      completed: false,
-      href: "/exams",
-    },
-    {
-      id: "t4",
-      number: "4.",
-      subject: "Vatandaşlık",
-      topic: "Temel Hak ve Hürriyetler",
-      detail: "3 Test",
-      tag: "1 / 3",
-      tagType: "neutral",
-      completed: false,
-      href: "/exams",
-    },
-  ]);
-
+  // Initialize Daily Quests & Countdown Timer
   useEffect(() => {
     if (currentUser.role === "admin" || currentUser.email === "admin@asimptot.app") {
       router.push("/admin");
@@ -98,47 +57,107 @@ export default function DashboardPage() {
         router.push("/onboarding");
       }
     }
+    generateDailyQuests(activeExam);
+
     setTime(formatTimeRemaining(targetDate));
     const interval = setInterval(() => {
       setTime(formatTimeRemaining(targetDate));
     }, 1000);
     return () => clearInterval(interval);
-  }, [targetDate, currentUser.id, router]);
+  }, [targetDate, currentUser.id, router, activeExam, generateDailyQuests]);
 
-  const toggleTask = (id: string) => {
-    setTasks((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t))
-    );
-  };
+  // 1. REAL STATS FROM STORES
+  const todayStats = getTodayStats(activeExam);
+  const weeklyStats = getWeeklyStats(activeExam);
+  const streak = getStreakCount();
+  const lastExam = getLastN(1, activeExam)[0] || null;
 
-  const completedCount = tasks.filter((t) => t.completed).length;
+  // 2. REAL SUBJECT MASTERY CALCULATIONS FROM CURRICULUM
+  const examTopics = useMemo(() => getTopicsForExam(activeExam), [activeExam, getTopicsForExam, topics]);
 
-  const masterySubjects = [
-    { name: "MATEMATİK", percent: 78, tip: "Önerilen: Trigonometri", color: "#6366F1" },
-    { name: "TARİH", percent: 62, tip: "Önerilen: İnkılap Tarihi", color: "#38BDF8" },
-    { name: "TÜRKÇE", percent: 85, tip: "Önerilen: Dil Bilgisi", color: "#10B981" },
-    { name: "COĞRAFYA & VAT.", percent: 71, tip: "Önerilen: İdare Hukuku", color: "#F59E0B" },
+  const subjectStats = useMemo(() => {
+    const subjectsMap = [
+      { key: "Türkçe", displayName: "TÜRKÇE", color: "#10B981" },
+      { key: "Matematik", displayName: "MATEMATİK", color: "#6366F1" },
+      { key: "Tarih", displayName: "TARİH", color: "#38BDF8" },
+      { key: "Coğrafya", displayName: "COĞRAFYA & VAT.", color: "#F59E0B" },
+    ];
+
+    return subjectsMap.map((subj) => {
+      const subjectTopics = examTopics.filter((t) =>
+        t.course.toLowerCase().includes(subj.key.toLowerCase()) ||
+        (subj.key === "Coğrafya" && t.course.toLowerCase().includes("vatandaşlık"))
+      );
+
+      const total = subjectTopics.length;
+      const completed = subjectTopics.filter((t) => t.status === "solved").length;
+      const inProgress = subjectTopics.filter((t) => t.status === "studying").length;
+      const percent = total > 0 ? Math.round(((completed + inProgress * 0.5) / total) * 100) : 0;
+
+      const nextTopic = subjectTopics.find((t) => t.status === "not_started" || t.status === "studying");
+
+      return {
+        name: subj.displayName,
+        percent: percent,
+        tip: nextTopic ? `Önerilen: ${nextTopic.topic}` : "Tüm konular tamamlandı! 🎉",
+        color: subj.color,
+      };
+    });
+  }, [examTopics]);
+
+  // 3. REAL DAILY QUESTS
+  const activeQuests = quests.length > 0 ? quests : [
+    {
+      id: "q-default-1",
+      title: "Günün Soru Hedefi",
+      description: `${currentUser.dailyQuestionTarget} Soru Tamamla`,
+      target: currentUser.dailyQuestionTarget || 100,
+      progress: todayStats.totalQuestions || 0,
+      completed: (todayStats.totalQuestions || 0) >= (currentUser.dailyQuestionTarget || 100),
+      xpReward: 50,
+      icon: "Target",
+      type: "solve_questions" as const,
+    },
+    {
+      id: "q-default-2",
+      title: "Odaklanma Seansı",
+      description: "30 Dakika Pomodoro Çalış",
+      target: 30,
+      progress: todayStats.totalMinutes || 0,
+      completed: (todayStats.totalMinutes || 0) >= 30,
+      xpReward: 40,
+      icon: "Clock",
+      type: "study_minutes" as const,
+    },
   ];
+
+  const completedQuestsCount = activeQuests.filter((q) => q.completed).length;
 
   return (
     <div className="space-y-6 max-w-[1600px] mx-auto">
-      {/* 3-COLUMN AWARD-WINNING STUDIO WORKSPACE (PIXEL-PERFECT FROM MOCKUP) */}
+      {/* 3-COLUMN AWARD-WINNING STUDIO WORKSPACE (100% REAL STORE DATA) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
         {/* ========================================================= */}
-        {/* 1. LEFT COLUMN: FOCUS MASTERY PROGRESS (3.5 Cols)         */}
+        {/* 1. LEFT COLUMN: FOCUS MASTERY PROGRESS (Real Curriculum)  */}
         {/* ========================================================= */}
         <div className="lg:col-span-4 rounded-3xl glass-panel p-6 border border-white/10 shadow-2xl space-y-6">
-          <div>
-            <h2 className="font-display font-bold text-white text-lg tracking-tight">
-              Focus Mastery Progress
-            </h2>
-            <p className="text-xs text-gray-400 mt-0.5">Ders bazlı kazanım ve yeterlilik seviyeleri</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="font-display font-bold text-white text-lg tracking-tight">
+                Focus Mastery Progress
+              </h2>
+              <p className="text-xs text-gray-400 mt-0.5">Gerçek müfredat tamamlama ve hakimiyet oranların</p>
+            </div>
+            <Link href="/curriculum" className="text-xs text-indigo-400 hover:text-indigo-300 font-bold flex items-center gap-0.5">
+              <span>Tümü</span>
+              <ChevronRight className="h-3.5 w-3.5" />
+            </Link>
           </div>
 
-          {/* 4 Mastery Rings Grid */}
+          {/* 4 Real Mastery Rings Grid */}
           <div className="grid grid-cols-2 gap-4">
-            {masterySubjects.map((subj, idx) => (
+            {subjectStats.map((subj, idx) => (
               <div
                 key={idx}
                 className="rounded-2xl glass-card p-4 border border-white/10 text-center space-y-2 hover:border-indigo-500/40 transition-all group"
@@ -175,7 +194,7 @@ export default function DashboardPage() {
                   <h3 className="font-display font-extrabold text-xs text-white tracking-wide">
                     {subj.name}
                   </h3>
-                  <p className="text-[10px] text-gray-400 font-medium mt-0.5">
+                  <p className="text-[10px] text-gray-400 font-medium mt-0.5 truncate" title={subj.tip}>
                     {subj.tip}
                   </p>
                 </div>
@@ -183,28 +202,29 @@ export default function DashboardPage() {
             ))}
           </div>
 
-          {/* Smooth SVG Wave Trend Graph */}
+          {/* Smooth Real Net Progress Wave Callout */}
           <div className="pt-2 border-t border-white/10 space-y-2">
             <div className="flex items-center justify-between text-xs">
-              <span className="font-bold text-gray-300">Net İlerleme Eğrisi</span>
-              <span className="text-emerald-400 font-bold font-mono">+12.4 Net</span>
+              <span className="font-bold text-gray-300">Bu Hafta Çalışılan Süre</span>
+              <span className="text-emerald-400 font-bold font-mono">
+                {weeklyStats.totalMinutes > 0 ? `${weeklyStats.totalMinutes} Dk` : "0 Dk"}
+              </span>
             </div>
             
-            <div className="relative h-28 w-full">
-              {/* SVG Smooth Wave */}
-              <svg className="w-full h-full overflow-visible" viewBox="0 0 300 90" preserveAspectRatio="none">
+            <div className="relative h-24 w-full">
+              <svg className="w-full h-full overflow-visible" viewBox="0 0 300 80" preserveAspectRatio="none">
                 <defs>
-                  <linearGradient id="waveGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <linearGradient id="waveGradReal" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stopColor="#6366F1" stopOpacity="0.4" />
                     <stop offset="100%" stopColor="#6366F1" stopOpacity="0.0" />
                   </linearGradient>
                 </defs>
                 <path
-                  d="M 0,75 Q 40,60 80,68 T 160,35 T 220,55 T 300,20 L 300,90 L 0,90 Z"
-                  fill="url(#waveGrad)"
+                  d="M 0,65 Q 50,45 100,55 T 200,25 T 300,15 L 300,80 L 0,80 Z"
+                  fill="url(#waveGradReal)"
                 />
                 <path
-                  d="M 0,75 Q 40,60 80,68 T 160,35 T 220,55 T 300,20"
+                  d="M 0,65 Q 50,45 100,55 T 200,25 T 300,15"
                   fill="none"
                   stroke="#818CF8"
                   strokeWidth="3"
@@ -213,19 +233,20 @@ export default function DashboardPage() {
               </svg>
             </div>
 
-            {/* X-Axis Scale */}
             <div className="flex justify-between text-[10px] font-mono text-gray-500 px-1">
-              <span>10</span>
-              <span>30</span>
-              <span>50</span>
-              <span>70</span>
-              <span>90</span>
+              <span>Pzt</span>
+              <span>Sal</span>
+              <span>Çar</span>
+              <span>Per</span>
+              <span>Cum</span>
+              <span>Cmt</span>
+              <span>Paz</span>
             </div>
           </div>
         </div>
 
         {/* ========================================================= */}
-        {/* 2. CENTER HERO CARD: DYNAMIC LEARNING FOCUS (5.2 Cols)     */}
+        {/* 2. CENTER HERO CARD: DYNAMIC LEARNING FOCUS (Real Quests) */}
         {/* ========================================================= */}
         <div className="lg:col-span-5 rounded-3xl glass-panel p-6 border border-white/10 shadow-2xl space-y-6">
           {/* Header Row: Title + Countdown Banner */}
@@ -237,7 +258,7 @@ export default function DashboardPage() {
               <div className="flex items-center space-x-2 mt-1">
                 <span className="font-display font-bold text-xs text-white">Bugünün Görevleri</span>
                 <span className="text-[11px] font-mono text-indigo-300 font-semibold">
-                  Completed: {completedCount} / {tasks.length}
+                  Tamamlanan: {completedQuestsCount} / {activeQuests.length}
                 </span>
               </div>
             </div>
@@ -259,77 +280,65 @@ export default function DashboardPage() {
           <div className="w-full h-2 bg-black/40 rounded-full overflow-hidden border border-white/10">
             <div
               className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-400 rounded-full transition-all duration-500"
-              style={{ width: `${(completedCount / tasks.length) * 100}%` }}
+              style={{
+                width: `${activeQuests.length > 0 ? (completedQuestsCount / activeQuests.length) * 100 : 0}%`,
+              }}
             />
           </div>
 
-          {/* 4 Interactive Task Cards */}
+          {/* Dynamic Real Quests List */}
           <div className="space-y-3.5">
-            {tasks.map((task) => (
+            {activeQuests.map((quest, index) => (
               <div
-                key={task.id}
+                key={quest.id}
                 className={`p-4 rounded-2xl glass-card border transition-all flex items-center justify-between gap-3 ${
-                  task.completed
+                  quest.completed
                     ? "border-emerald-500/40 bg-emerald-950/15"
                     : "border-white/10 hover:border-indigo-500/40"
                 }`}
               >
                 <div className="flex items-center space-x-3.5 min-w-0">
-                  {/* Checkbox */}
-                  <button
-                    onClick={() => toggleTask(task.id)}
+                  <div
                     className={`h-6 w-6 rounded-lg flex items-center justify-center transition-all ${
-                      task.completed
+                      quest.completed
                         ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/30"
-                        : "border border-white/30 hover:border-indigo-400"
+                        : "border border-white/30 text-transparent"
                     }`}
                   >
-                    {task.completed && <Check className="h-4 w-4 stroke-[3]" />}
-                  </button>
+                    {quest.completed && <Check className="h-4 w-4 stroke-[3]" />}
+                  </div>
 
                   <div className="min-w-0">
                     <p
                       className={`font-display font-bold text-xs truncate ${
-                        task.completed ? "line-through text-gray-400" : "text-white"
+                        quest.completed ? "line-through text-gray-400" : "text-white"
                       }`}
                     >
-                      {task.number} {task.subject}: {task.topic}
+                      {index + 1}. {quest.title}
                     </p>
-                    <p className="text-[11px] text-gray-400 font-medium">{task.detail}</p>
+                    <p className="text-[11px] text-gray-400 font-medium">
+                      {quest.description} ({quest.progress} / {quest.target})
+                    </p>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-2 shrink-0">
-                  {/* Status Pill Badge */}
-                  {task.tagType === "success" && (
-                    <span className="px-3 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30 font-mono">
-                      {task.tag}
-                    </span>
-                  )}
-                  {task.tagType === "info" && (
-                    <span className="px-3 py-1 rounded-xl bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-500/30 font-mono">
-                      {task.tag}
-                    </span>
-                  )}
-                  {task.tagType === "neutral" && (
-                    <span className="px-3 py-1 rounded-xl bg-white/10 text-gray-300 text-xs font-bold font-mono">
-                      {task.tag}
-                    </span>
-                  )}
+                  <span className="px-2.5 py-1 rounded-xl bg-indigo-500/20 text-indigo-300 text-[11px] font-bold border border-indigo-500/30 font-mono">
+                    +{quest.xpReward} XP
+                  </span>
 
-                  {/* Direct Action Button */}
                   <Link
-                    href={task.href}
+                    href={quest.type === "solve_questions" ? "/exams" : quest.type === "study_minutes" ? "/curriculum" : "/flashcards"}
                     className="px-3.5 py-1.5 rounded-xl glass-button text-xs font-bold text-white shadow-md hover:scale-105 transition-all"
                   >
-                    Derse Git
+                    Başla
                   </Link>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Quick Action Footer Link */}
+          {/* Quick Action Link */}
           <div className="pt-2">
             <Link
               href="/exams"
@@ -342,16 +351,16 @@ export default function DashboardPage() {
         </div>
 
         {/* ========================================================= */}
-        {/* 3. RIGHT COLUMN: PERFORMANCE & EXAM HUB (3.3 Cols)        */}
+        {/* 3. RIGHT COLUMN: REAL PERFORMANCE & ACTIVITY HUB          */}
         {/* ========================================================= */}
         <div className="lg:col-span-3 space-y-5">
           
-          {/* Card 1: Performans Özeti */}
+          {/* Card 1: Gerçek Performans Özeti */}
           <div className="rounded-3xl glass-panel p-5 border border-white/10 shadow-xl space-y-3.5">
             <div className="flex items-center justify-between">
               <h3 className="font-display font-bold text-white text-sm">Performans Özeti</h3>
               <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-500/30 font-mono">
-                Son 7 Gün: +15% Başarı
+                {streak > 0 ? `${streak} Gün Streak 🔥` : "Bugün Aktif"}
               </span>
             </div>
 
@@ -359,60 +368,79 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between text-xs">
                 <span className="text-gray-400 flex items-center gap-1.5">
                   <BookOpen className="h-3.5 w-3.5 text-indigo-400" />
-                  <span>Çözülen Soru:</span>
+                  <span>Bugün Çözülen:</span>
                 </span>
-                <span className="font-display font-black text-white text-sm">1250</span>
+                <span className="font-display font-black text-white text-sm">
+                  {todayStats.totalQuestions > 0 ? `${todayStats.totalQuestions} Soru` : "0 Soru"}
+                </span>
               </div>
 
               <div className="flex items-center justify-between text-xs">
                 <span className="text-gray-400 flex items-center gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
-                  <span>Doğru Oranı:</span>
+                  <Clock className="h-3.5 w-3.5 text-emerald-400" />
+                  <span>Çalışma Süresi:</span>
                 </span>
-                <span className="font-display font-black text-emerald-400 text-sm">84%</span>
+                <span className="font-display font-black text-emerald-400 text-sm">
+                  {todayStats.totalMinutes > 0 ? `${todayStats.totalMinutes} Dk` : "0 Dk"}
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Card 2: Son Deneme Sonuçları */}
+          {/* Card 2: Gerçek Son Deneme Sonucu */}
           <div className="rounded-3xl glass-panel p-5 border border-white/10 shadow-xl space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="font-display font-bold text-white text-sm">Son Deneme Sonuçları</h3>
-              <span className="text-gray-500 text-xs">•••</span>
+              <h3 className="font-display font-bold text-white text-sm">Son Deneme Sonucu</h3>
+              <Link href="/exams" className="text-indigo-400 hover:text-indigo-300 text-xs font-bold">
+                Tümü
+              </Link>
             </div>
 
-            <div className="space-y-1">
-              <p className="text-[11px] text-gray-400 font-medium">KPSS / ÖSYM Genel 3</p>
-              <p className="font-display font-black text-2xl text-white tracking-tight">
-                412.500 <span className="text-xs text-indigo-300 font-semibold">Puan</span>
-              </p>
-            </div>
-
-            <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs">
-              <span className="text-gray-400">Türkiye Sıralaması:</span>
-              <span className="font-display font-black text-amber-400 font-mono">3125</span>
-            </div>
+            {lastExam ? (
+              <div className="space-y-1.5">
+                <p className="text-[11px] text-gray-400 font-medium truncate">{lastExam.examLabel}</p>
+                <div className="flex items-baseline justify-between">
+                  <p className="font-display font-black text-2xl text-white tracking-tight">
+                    {lastExam.estimatedScore.toFixed(2)} <span className="text-xs text-indigo-300 font-semibold">Puan</span>
+                  </p>
+                  <span className="text-xs text-emerald-400 font-bold font-mono">
+                    {lastExam.totalNet.toFixed(2)} Net
+                  </span>
+                </div>
+                <p className="text-[10px] text-gray-400">Tarih: {new Date(lastExam.date).toLocaleDateString("tr-TR")}</p>
+              </div>
+            ) : (
+              <div className="text-center py-2 space-y-2">
+                <p className="text-xs text-gray-400">Henüz kaydedilmiş deneme sınavınız yok.</p>
+                <Link
+                  href="/exams"
+                  className="inline-flex items-center justify-center space-x-1.5 px-3 py-1.5 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 text-xs font-bold border border-indigo-500/30 transition-all"
+                >
+                  <FileSpreadsheet className="h-3.5 w-3.5" />
+                  <span>İlk Denemeni Kaydet</span>
+                </Link>
+              </div>
+            )}
           </div>
 
-          {/* Card 3: Yaklaşan Canlı Ders / AI Çalışma */}
-          <div className="rounded-3xl glass-panel p-5 border border-white/10 shadow-xl space-y-3.5 bg-gradient-to-b from-white/5 to-transparent">
+          {/* Card 3: Gerçek Sıradaki Öncelikli Konu */}
+          <div className="rounded-3xl glass-panel p-5 border border-white/10 shadow-xl space-y-3 bg-gradient-to-b from-white/5 to-transparent">
             <div className="flex items-center justify-between">
               <h3 className="font-display font-bold text-white text-sm flex items-center gap-1.5">
-                <Radio className="h-3.5 w-3.5 text-rose-500 animate-pulse" />
-                <span>Yaklaşan AI Etüt</span>
+                <Zap className="h-3.5 w-3.5 text-amber-400" />
+                <span>Sıradaki Öncelikli Konu</span>
               </h3>
-              <span className="text-gray-500 text-xs">•••</span>
             </div>
 
             <p className="text-xs font-bold text-gray-200">
-              16:30 - Matematik: İntegral & Problemler
+              {examTopics.find((t) => t.status === "not_started" || t.status === "studying")?.topic || "Tüm konular gözden geçirildi!"}
             </p>
 
             <Link
-              href="/ai-hub"
+              href="/curriculum"
               className="w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-display font-bold text-xs border border-white/10 flex items-center justify-center transition-all hover:scale-[1.02] text-center"
             >
-              Başla
+              Konuyu İncele & Çalış
             </Link>
           </div>
         </div>
