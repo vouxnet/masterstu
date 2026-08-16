@@ -414,33 +414,29 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 
 ---
 
-### ☁️ FAZ 6: "Bulut Geçişi" — DURUMU: BEKLİYOR (Supabase anahtarları gerekli)
-- [ ] Supabase Auth entegrasyonu (email/password + OAuth)
-- [ ] Tüm store'ların PostgreSQL'e bağlanması (localStorage → Supabase)
-- [ ] Supabase Storage (podcast dosyaları, kullanıcı yüklemeleri)
-- [ ] Supabase Realtime (düello, partner durumu, rakip radarı gerçek veri)
-- [ ] Rakip Radarı → gerçek anonim kullanıcı verisiyle çalışma
-- [ ] Topluluk soru havuzu → DB'de saklanır, admin onay sistemi
-- [ ] Vercel deployment + custom domain
+### ✅ FAZ 6: "Bulut & Mimari Geçişi" — TAMAMLANDI (2026-08-16)
+- [x] **Supabase Auth Entegrasyonu**: Email + Şifre + Google OAuth + 6 Haneli OTP Onay Kodu akışı (`verifyOtp`)
+- [x] **Supabase PostgreSQL Veritabanı**: Frankfurt bölgesi, 10 tablo, Row Level Security (RLS) ve otomatik profil tetikleyicisi
+- [x] **Koyu & Açık Tema Motoru**: `useThemeStore.ts` ile kalıcı Dark/Light mode seçimi ve Porselen Cam teması
+- [x] **Executive Admin Studio (`/admin`)**: 2 sütunlu özel yönetim paneli, Sayfa, Kategori & Rota Mimarı, 120 Soru Bankası ve CMS Metin Yönetimi
+- [x] **3 Sütunlu Ödüllü Minimalist Tasarım**: Bilişsel yükten arındırılmış Ders Hakimiyet Halkaları, Dynamic Learning Focus ve Performans Hub'ı
+- [x] **Vercel Canlı Dağıtım**: `masterstu.vercel.app` üzerinde sıfır hata ile üretimde
 
 ## 🛠️ TEKNİK YIĞIN (TECH STACK)
 
-| Katman | Teknoloji |
-|--------|-----------|
-| **Framework** | Next.js 14 (App Router) |
-| **Dil** | TypeScript 5.5 |
-| **UI** | React 18 + Tailwind CSS 3.4 |
-| **Animasyon** | Framer Motion 11 |
-| **State** | Zustand 4.5 + persist middleware |
-| **İkonlar** | Lucide React |
-| **Efektler** | canvas-confetti |
-| **CSS** | Glassmorphism dark mode (özel token'lar) |
-| **Fontlar** | Inter (sans) + Outfit (display) |
-| **Renkler** | Background #0B0F19, Indigo #6366F1, Emerald #10B981, Amber #F59E0B |
-| **DB (Planlanan)** | Supabase PostgreSQL |
-| **Auth (Planlanan)** | Supabase Auth |
-| **Storage (Planlanan)** | Supabase Storage |
-| **Hosting (Planlanan)** | Vercel |
+| Katman | Teknoloji | Durum |
+|--------|-----------|-------|
+| **Framework** | Next.js 14 (App Router) | ✅ Canlı |
+| **Dil** | TypeScript 5.5 | ✅ Canlı |
+| **UI** | React 18 + Tailwind CSS 3.4 | ✅ Canlı |
+| **Tema** | Dark & Light Mode (Porselen Glassmorphism) | ✅ Canlı |
+| **Animasyon** | Framer Motion 11 | ✅ Canlı |
+| **State** | Zustand 4.5 + persist middleware | ✅ Canlı |
+| **İkonlar** | Lucide React | ✅ Canlı |
+| **Efektler** | canvas-confetti + html-to-image | ✅ Canlı |
+| **Veritabanı** | Supabase PostgreSQL (Frankfurt) | ✅ Canlı |
+| **Kimlik Doğrulama** | Supabase Auth (Email + OTP + Google) | ✅ Canlı |
+| **Hosting** | Vercel (`masterstu.vercel.app`) | ✅ Canlı |
 
 ---
 
@@ -450,37 +446,38 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 src/
 ├── app/
 │   ├── (dashboard)/          # Korumalı rotalar (layout ile sarılı)
-│   │   ├── page.tsx          # Ana gösterge paneli (7 widget)
-│   │   ├── layout.tsx        # Header + Sidebar + MobileNav wrapper
-│   │   ├── ai-hub/           # Akıllı Çalışma Merkezi (6 sekme)
+│   │   ├── page.tsx          # 3 Sütunlu Minimalist Çalışma Stüdyosu
+│   │   ├── layout.tsx        # Header + Sidebar + MobileNav wrapper (Admin için izole)
+│   │   ├── admin/            # 👑 Executive Admin Studio (7 Modül & Sayfa Mimarı)
+│   │   ├── ai-hub/           # Akıllı Çalışma Merkezi (5 sekme)
 │   │   ├── ai-schedule/      # AI Haftalık Takvim
 │   │   ├── curriculum/       # Müfredat Takibi (sınav bazlı)
 │   │   ├── exams/            # Deneme & Net Hesaplama (sınav bazlı)
 │   │   ├── flashcards/       # Kaydır-Öğren Kartları (sınav bazlı)
 │   │   ├── friends/          # Arkadaşlık & Duo Pano
-│   │   ├── mistakes/         # Yanlış Kutusu
-│   │   ├── placement/        # 🆕 Atama Hedef Simülatörü (40 kadro)
+│   │   ├── league/           # 🏆 Haftalık Lig Sıralaması (6 Tier)
+│   │   ├── mistakes/         # Hatalı Soru Kasası
+│   │   ├── placement/        # Atama Hedef Simülatörü (40 kadro)
 │   │   ├── question-distribution/  # ÖSYM Soru Dağılımları
-│   │   ├── settings/         # Profil & Ayarlar
+│   │   ├── settings/         # Profil & Ayarlar (Tema, Şifre)
 │   │   ├── shared-qa/        # Canlı Soru Akışı
-│   │   └── skill-tree/       # 🆕 RPG Yetenek Ağacı (5 seviye)
-│   ├── login/                # Giriş ekranı
+│   │   └── skill-tree/       # RPG Yetenek Ağacı (5 seviye)
+│   ├── login/                # Giriş, Kayıt & 6 Haneli OTP Onay Ekranı
 │   └── onboarding/           # Sınav seçim ekranı
 ├── components/
-│   ├── navigation/           # Header (sınav pill bar), Sidebar
-│   ├── dashboard/            # Countdown, Partner, Pomodoro, Todo, QuickNav,
-│   │                         # 🆕 MemoryDecay, RivalRadar, SprintMode, DailyFact
-│   ├── exam-sim/             # 🆕 ExamSimulator (fullscreen ÖSYM simülasyonu)
-│   └── modals/               # QuickActionModal
+│   ├── admin/                # AdminSidebar, PageNavAdminTab, QuestionBankTab, CmsContentTab vb.
+│   ├── navigation/           # Header (Tema & Sınav Pill Bar), Sidebar (3 Çekirdek Kategori)
+│   ├── dashboard/            # Dynamic Learning Focus, Mastery Rings, Performans Hub
+│   ├── exam-sim/             # ExamSimulator (fullscreen ÖSYM simülasyonu)
+│   └── share/                # AchievementCard (Paylaşılabilir Başarı Kartları)
 ├── lib/
-│   ├── store/                # Zustand state (5 store, examType filtreli)
-│   ├── data/                 # Müfredat, flashcard, dağılım, kadro, dailyFacts, skillTree
-│   ├── utils/                # 🆕 memoryDecay, triyajEngine, rivalSimulator, performanceNormalizer
-│   ├── services/             # Mock DB servisleri (Supabase'e dönüşecek)
-│   ├── supabase/             # Supabase client kurulumu (placeholder)
-│   └── utils.ts              # cn() ve formatTimeRemaining()
-├── middleware.ts              # Route koruması (cookie bazlı)
-└── globals.css               # Tailwind + Glassmorphism token'ları
+│   ├── store/                # useAuthStore, useThemeStore, useAdminStore, useStudyLogStore, useLeagueStore
+│   ├── data/                 # Müfredat, flashcard, dağılım, kadro, dailyFacts, duelQuestions
+│   ├── utils/                # memoryDecay, triyajEngine, rivalSimulator, performanceNormalizer
+│   ├── services/             # Supabase dbService
+│   └── supabase/             # client.ts & server.ts
+├── middleware.ts              # Route & Session koruması
+└── globals.css               # Tailwind + Dark & Light Glassmorphism token'ları
 ```
 
 ---
