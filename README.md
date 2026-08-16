@@ -25,7 +25,7 @@ Sınav günü geldiğinde ÖSYM'nin baskısını ilk kez hissetmezsin — çünk
 ## 🚀 Deployment ve Kaynak Kod
 
 - **Canlı Sistem:** [masterstu.vercel.app](https://masterstu.vercel.app)
-- **Kaynak Kod:** [github.com/asimptotnet/masterstu](https://github.com/asimptotnet/masterstu)
+- **Kaynak Kod:** [github.com/vouxnet/masterstu](https://github.com/vouxnet/masterstu)
 - **Veritabanı:** Supabase PostgreSQL (Frankfurt)
 - **Auth:** Supabase Auth (Email + Google OAuth)
 
