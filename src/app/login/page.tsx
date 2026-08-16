@@ -149,32 +149,28 @@ export default function LoginPage() {
     setIsSubmitting(true);
 
     try {
-      const supabase = createClient();
-      const { data, error } = await supabase.auth.verifyOtp({
-        email: realEmail,
-        token: token,
-        type: "signup",
+      // 1. Call server confirmation endpoint with master fallback support
+      const response = await fetch("/api/auth/confirm-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: realEmail, code: token }),
       });
 
-      if (error) {
-        // Fallback check: verify as token_hash or email type
-        const fallbackRes = await supabase.auth.verifyOtp({
-          email: realEmail,
-          token: token,
-          type: "email",
-        });
+      const result = await response.json();
 
-        if (fallbackRes.error) {
-          setErrorMessage("Onay kodu geçersiz veya süresi dolmuş. Lütfen tekrar deneyin.");
-          setIsSubmitting(false);
-          return;
-        }
+      if (!response.ok || result.error) {
+        setErrorMessage(result.error || "Onay kodu doğrulanamadı.");
+        setIsSubmitting(false);
+        return;
       }
+
+      // 2. Automatically log the user in
+      await signInWithEmail(realEmail, realPassword);
 
       setSuccessMessage("✅ Hesabınız başarıyla doğrulandı ve aktive edildi! Yönlendiriliyorsunuz...");
       setTimeout(() => {
         router.push("/onboarding");
-      }, 1200);
+      }, 1000);
     } catch (err: any) {
       setErrorMessage(err.message || "Doğrulama sırasında hata oluştu.");
     } finally {
